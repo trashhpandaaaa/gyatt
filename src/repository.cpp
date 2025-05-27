@@ -835,38 +835,160 @@ bool Repository::downloadGitHubRepo(const std::string& repoName, const std::stri
             }
         }
         
-        // Try to download repository with different branch names
-        std::vector<std::string> branchesToTry = {"main", "master", "develop", "trunk"};
+        // First check if the repository exists by querying the GitHub API
+        std::string apiUrl = "https://api.github.com/repos/" + repoName;
+        std::cout << "Checking repository: " << apiUrl << "\n";
+        
+        std::vector<std::string> headers = {"Accept: application/vnd.github.v3+json"};
+        
+        // Add GitHub token if available
+        const char* token = std::getenv("GITHUB_TOKEN");
+        if (token) {
+            std::string authHeader = "Authorization: token " + std::string(token);
+            headers.push_back(authHeader);
+        }
+        
+        Utils::HttpResponse repoCheckResponse = Utils::httpGet(apiUrl, headers);
+        
+        if (!repoCheckResponse.success) {
+            std::cerr << "error: repository not found or inaccessible: " << repoName << "\n";
+            std::cerr << "HTTP Status: " << repoCheckResponse.responseCode << "\n";
+            
+            if (repoCheckResponse.responseCode == 404) {
+                std::cerr << "The repository does not exist. Please check the repository name and your access rights.\n";
+                std::cerr << "Repository URL: https://github.com/" << repoName << "\n";
+            } else if (repoCheckResponse.responseCode == 401 || repoCheckResponse.responseCode == 403) {
+                std::cerr << "Authentication error. This might be a private repository.\n";
+                std::cerr << "Try setting a GitHub token: gyatt github-token <your-token>\n";
+                std::cerr << "Or export GITHUB_TOKEN=<your-token> in your shell environment\n";
+            } else {
+                std::cerr << "GitHub API error: " << repoCheckResponse.error << "\n";
+                std::cerr << "Please check your internet connection and try again later.\n";
+            }
+            
+            return false;
+        }
+        
+        // Try to get the default branch from the API
+        std::string defaultBranch = "main"; // Default fallback
+        try {
+            // Simple JSON parsing for default_branch
+            size_t pos = repoCheckResponse.content.find("\"default_branch\"");
+            if (pos != std::string::npos) {
+                pos = repoCheckResponse.content.find(":", pos);
+                if (pos != std::string::npos) {
+                    pos = repoCheckResponse.content.find("\"", pos);
+                    if (pos != std::string::npos) {
+                        size_t endPos = repoCheckResponse.content.find("\"", pos + 1);
+                        if (endPos != std::string::npos) {
+                            defaultBranch = repoCheckResponse.content.substr(pos + 1, endPos - pos - 1);
+                        }
+                    }
+                }
+            }
+        } catch (const std::exception& e) {
+            std::cout << "Warning: Could not parse default branch from API response\n";
+        }
+        
+        std::cout << "Repository default branch: " << defaultBranch << "\n";
+        
+        // Try to get a list of branches from the API
+        std::vector<std::string> branchList;
+        std::string branchesUrl = "https://api.github.com/repos/" + repoName + "/branches";
+        std::cout << "Checking available branches: " << branchesUrl << "\n";
+        
+        Utils::HttpResponse branchesResponse = Utils::httpGet(branchesUrl, headers);
+        if (branchesResponse.success) {
+            // Very simple JSON array parsing - looking for "name": "branch-name" patterns
+            std::string content = branchesResponse.content;
+            size_t pos = 0;
+            while ((pos = content.find("\"name\":", pos)) != std::string::npos) {
+                pos = content.find("\"", pos + 7); // Skip past "name":
+                if (pos != std::string::npos) {
+                    size_t endPos = content.find("\"", pos + 1);
+                    if (endPos != std::string::npos) {
+                        std::string branchName = content.substr(pos + 1, endPos - pos - 1);
+                        branchList.push_back(branchName);
+                        pos = endPos;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        if (!branchList.empty()) {
+            std::cout << "Found " << branchList.size() << " branches: ";
+            for (size_t i = 0; i < branchList.size(); ++i) {
+                std::cout << branchList[i];
+                if (i < branchList.size() - 1) {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << "\n";
+        } else {
+            std::cout << "Could not retrieve branch list, will try common branch names\n";
+        }
+        
+        // Build list of branches to try, starting with branches we found via API
+        std::vector<std::string> branchesToTry = branchList;
+        
+        // If the default branch is not already in our list, add it first
+        if (std::find(branchesToTry.begin(), branchesToTry.end(), defaultBranch) == branchesToTry.end()) {
+            branchesToTry.insert(branchesToTry.begin(), defaultBranch);
+        }
+        
+        // Add other common branch names if they're different from what we already have
+        std::vector<std::string> commonBranches = {"main", "master", "develop", "trunk"};
+        for (const auto& branch : commonBranches) {
+            if (std::find(branchesToTry.begin(), branchesToTry.end(), branch) == branchesToTry.end()) {
+                branchesToTry.push_back(branch);
+            }
+        }
         
         // If a specific branch was requested, try that first
         if (!targetDir.empty() && targetDir != repoName.substr(repoName.find('/') + 1)) {
             // The target directory name might be the branch name
             branchesToTry.insert(branchesToTry.begin(), targetDir);
         }
+        
         Utils::HttpResponse response;
         std::string usedBranch;
         
-    for (const auto& branch : branchesToTry) {
-        std::string downloadUrl = getGitHubDownloadUrl(repoName, branch);
-        std::cout << "Trying branch '" << branch << "': " << downloadUrl << "\n";
-        
-        response = Utils::httpGet(downloadUrl);
-        if (response.success) {
-            usedBranch = branch;
-            std::cout << "Successfully found branch: " << branch << "\n";
-            std::cout << "Received " << response.content.length() << " bytes\n";
-            break;
-        } else {
-            std::cout << "Branch '" << branch << "' not found (HTTP " << response.responseCode << ")\n";
+        for (const auto& branch : branchesToTry) {
+            std::string downloadUrl = getGitHubDownloadUrl(repoName, branch);
+            std::cout << "Trying branch '" << branch << "': " << downloadUrl << "\n";
+            
+            response = Utils::httpGet(downloadUrl);
+            if (response.success) {
+                usedBranch = branch;
+                std::cout << "Successfully found branch: " << branch << "\n";
+                std::cout << "Received " << response.content.length() << " bytes\n";
+                break;
+            } else {
+                std::cout << "Branch '" << branch << "' not found (HTTP " << response.responseCode << ")\n";
+            }
         }
-    }
-    
-    if (!response.success) {
-        std::cerr << "error: failed to download repository from any branch\n";
-        std::cerr << "Last error: " << response.error << "\n";
-        std::cerr << "Please check that the repository exists and is public: https://github.com/" << repoName << "\n";
-        return false;
-    }
+        
+        if (!response.success) {
+            std::cerr << "error: failed to download repository from any branch\n";
+            std::cerr << "Last error: " << response.error << "\n";
+            std::cerr << "The repository exists but no branches could be found or accessed.\n";
+            std::cerr << "This could be because:\n";
+            std::cerr << "1. The repository is empty (has no commits)\n";
+            std::cerr << "2. The branches have different names than the ones we tried\n";
+            std::cerr << "3. The repository is private and requires authentication\n";
+            
+            if (getenv("GITHUB_TOKEN") == nullptr) {
+                std::cerr << "\nIf this is a private repository, try setting a GitHub token:\n";
+                std::cerr << "  gyatt github-token <your-token>\n";
+                std::cerr << "Or export GITHUB_TOKEN=<your-token> in your shell environment\n";
+            }
+            
+            return false;
+        }
     
     // Check if we got a valid ZIP file
     if (response.content.length() < 100) {

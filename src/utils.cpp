@@ -242,7 +242,14 @@ bool isHttpUrl(const std::string& url) {
 }
 
 bool isGitHubUrl(const std::string& url) {
-    return url.find("github.com") != std::string::npos;
+    // Check if the URL contains github.com
+    if (url.find("github.com") == std::string::npos) {
+        return false;
+    }
+    
+    // Use regex to validate the GitHub URL format
+    std::regex githubRegex(R"((?:https?://)?(?:www\.)?github\.com/[^/]+/[^/]+?(?:\.git)?/?$)");
+    return std::regex_match(url, githubRegex);
 }
 
 std::string parseGitHubRepoName(const std::string& url) {
