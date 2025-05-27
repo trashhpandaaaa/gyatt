@@ -10,6 +10,7 @@ void printUsage() {
     std::cout << "Usage: gyatt <command> [options]\n\n";
     std::cout << "Commands:\n";
     std::cout << "  init                     Initialize a new repository\n";
+    std::cout << "  clone <url> [dir]       Clone a repository\n";
     std::cout << "  add <file>              Add file to staging area\n";
     std::cout << "  commit -m <message>     Commit staged changes\n";
     std::cout << "  status                  Show repository status\n";
@@ -17,7 +18,14 @@ void printUsage() {
     std::cout << "  diff                    Show differences\n";
     std::cout << "  branch [name]           List or create branches\n";
     std::cout << "  checkout <branch>       Switch to a branch\n";
+    std::cout << "  push [remote] [branch]  Push changes to remote\n";
+    std::cout << "  remote add <n> <url> Add a remote repository\n";
+    std::cout << "  remote -v               List remote repositories\n";
     std::cout << "  show <object>           Show object content\n";
+    std::cout << "  github-token <token>    Set GitHub personal access token\n";
+    std::cout << "  gyattignore              Create a default .gyattignore file\n";
+    std::cout << "  check-ignore <file>      Check if a file is ignored\n";
+    std::cout << "  add-ignore <pattern>     Add a pattern to .gyattignore\n";
     std::cout << "  help                    Show this help message\n";
 }
 
@@ -43,6 +51,24 @@ int main(int argc, char* argv[]) {
                 return 0;
             } else {
                 std::cerr << "Failed to initialize repository\n";
+                return 1;
+            }
+        }
+        
+        else if (command == "clone") {
+            if (args.empty()) {
+                std::cerr << "Usage: gyatt clone <repository> [directory]\n";
+                return 1;
+            }
+            
+            std::string sourceUrl = args[0];
+            std::string targetDir = args.size() > 1 ? args[1] : "";
+            
+            gyatt::Repository cloneRepo(".");
+            if (cloneRepo.clone(sourceUrl, targetDir)) {
+                return 0;
+            } else {
+                std::cerr << "Failed to clone repository\n";
                 return 1;
             }
         }
@@ -142,6 +168,119 @@ int main(int argc, char* argv[]) {
                 return 0;
             } else {
                 std::cerr << "Failed to show object: " << args[0] << "\n";
+                return 1;
+            }
+        }
+        
+        else if (command == "push") {
+            std::string remoteName = args.size() > 0 ? args[0] : "origin";
+            std::string branchName = args.size() > 1 ? args[1] : "";
+            
+            if (repo.push(remoteName, branchName)) {
+                return 0;
+            } else {
+                std::cerr << "Failed to push\n";
+                return 1;
+            }
+        }
+        
+        else if (command == "remote") {
+            if (args.empty()) {
+                std::cerr << "Usage: gyatt remote add <n> <url> | gyatt remote -v\n";
+                return 1;
+            }
+            
+            if (args[0] == "add") {
+                if (args.size() < 3) {
+                    std::cerr << "Usage: gyatt remote add <n> <url>\n";
+                    return 1;
+                }
+                
+                if (repo.addRemote(args[1], args[2])) {
+                    return 0;
+                } else {
+                    std::cerr << "Failed to add remote\n";
+                    return 1;
+                }
+            }
+            else if (args[0] == "-v") {
+                repo.listRemotes();
+                return 0;
+            }
+            else {
+                std::cerr << "Unknown remote command: " << args[0] << "\n";
+                return 1;
+            }
+        }
+        
+        else if (command == "github-token") {
+            if (args.empty()) {
+                std::cerr << "Usage: gyatt github-token <token>\n";
+                std::cerr << "Use 'gyatt github-token clear' to remove the token\n";
+                return 1;
+            }
+            
+            std::string token = args[0];
+            if (token == "clear") {
+                token = "";
+            }
+            
+            if (repo.setGitHubToken(token)) {
+                if (token.empty()) {
+                    std::cout << "GitHub token cleared\n";
+                } else {
+                    std::cout << "GitHub token set successfully\n";
+                }
+                return 0;
+            } else {
+                std::cerr << "Failed to set GitHub token\n";
+                return 1;
+            }
+        }
+        
+        else if (command == "gyattignore") {
+            if (repo.createIgnoreFile()) {
+                std::cout << "Created .gyattignore file in " << repo.getRepoPath() << "\n";
+                std::cout << "This file specifies patterns for files that gyatt should ignore.\n";
+                return 0;
+            } else {
+                std::cerr << "Failed to create .gyattignore file\n";
+                return 1;
+            }
+        }
+        
+        else if (command == "check-ignore") {
+            if (args.empty()) {
+                std::cerr << "Usage: gyatt check-ignore <file>\n";
+                return 1;
+            }
+            
+            std::string filepath = args[0];
+            if (repo.isIgnored(filepath)) {
+                std::cout << filepath << " is ignored\n";
+            } else {
+                std::cout << filepath << " is not ignored\n";
+            }
+            return 0;
+        }
+        
+        else if (command == "add-ignore") {
+            if (args.empty()) {
+                std::cerr << "Usage: gyatt add-ignore <pattern>\n";
+                return 1;
+            }
+            
+            std::string pattern = args[0];
+            try {
+                if (repo.addIgnorePattern(pattern)) {
+                    std::cout << "Added pattern to .gyattignore: " << pattern << "\n";
+                    return 0;
+                } else {
+                    std::cerr << "Failed to add pattern to .gyattignore\n";
+                    return 1;
+                }
+            } catch (const std::exception& e) {
+                std::cerr << "Error: " << e.what() << "\n";
                 return 1;
             }
         }

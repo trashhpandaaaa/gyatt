@@ -101,7 +101,7 @@ std::vector<std::string> GitObject::listObjects() {
 
 std::string GitObject::computeHash(const std::string& content, ObjectType type) {
     std::string typeStr = objectTypeToString(type);
-    std::string formatted = typeStr + " " + std::to_string(content.length()) + "\0" + content;
+    std::string formatted = typeStr + " " + std::to_string(content.length()) + std::string(1, '\0') + content;
     return Utils::sha1Hash(formatted);
 }
 
@@ -170,7 +170,7 @@ std::string GitObject::loadObject(const std::string& hash) {
 
 std::string GitObject::formatObjectContent(const std::string& content, ObjectType type) {
     std::string typeStr = objectTypeToString(type);
-    return typeStr + " " + std::to_string(content.length()) + "\0" + content;
+    return typeStr + " " + std::to_string(content.length()) + std::string(1, '\0') + content;
 }
 
 std::pair<ObjectType, std::string> GitObject::parseObjectContent(const std::string& content) {

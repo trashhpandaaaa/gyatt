@@ -1,2 +1,0 @@
-This file should only exist on the master branch.
-It was created after switching to master.

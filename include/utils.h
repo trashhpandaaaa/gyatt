@@ -46,6 +46,25 @@ namespace Utils {
     std::string getUserName();
     std::string getUserEmail();
     std::string getAuthorString();
+    
+    // HTTP utilities
+    struct HttpResponse {
+        std::string content;
+        long responseCode;
+        bool success;
+        std::string error;
+    };
+    
+    bool isHttpUrl(const std::string& url);
+    bool isGitHubUrl(const std::string& url);
+    std::string parseGitHubRepoName(const std::string& url);
+    HttpResponse httpGet(const std::string& url, const std::vector<std::string>& headers = {});
+    HttpResponse httpPost(const std::string& url, const std::string& data, const std::vector<std::string>& headers = {});
+    std::string urlEncode(const std::string& str);
+    
+    // Archive utilities
+    bool extractZipData(const std::string& zipData, const std::string& targetDir);
+    bool writeDataToFile(const std::string& filepath, const std::string& data);
 }
 
 } // namespace gyatt
