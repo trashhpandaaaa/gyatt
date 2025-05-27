@@ -1,7 +1,0 @@
-/home/trashhpandaaaa/Documents/Code/Cpp/gyatt/build/CMakeFiles/gyatt.dir
-/home/trashhpandaaaa/Documents/Code/Cpp/gyatt/build/CMakeFiles/edit_cache.dir
-/home/trashhpandaaaa/Documents/Code/Cpp/gyatt/build/CMakeFiles/rebuild_cache.dir
-/home/trashhpandaaaa/Documents/Code/Cpp/gyatt/build/CMakeFiles/list_install_components.dir
-/home/trashhpandaaaa/Documents/Code/Cpp/gyatt/build/CMakeFiles/install.dir
-/home/trashhpandaaaa/Documents/Code/Cpp/gyatt/build/CMakeFiles/install/local.dir
-/home/trashhpandaaaa/Documents/Code/Cpp/gyatt/build/CMakeFiles/install/strip.dir

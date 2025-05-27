@@ -62,6 +62,10 @@ namespace Utils {
     HttpResponse httpPost(const std::string& url, const std::string& data, const std::vector<std::string>& headers = {});
     std::string urlEncode(const std::string& str);
     
+    // Encoding utilities
+    std::string base64Encode(const std::string& data);
+    std::string base64Decode(const std::string& encoded);
+    
     // Archive utilities
     bool extractZipData(const std::string& zipData, const std::string& targetDir);
     bool writeDataToFile(const std::string& filepath, const std::string& data);

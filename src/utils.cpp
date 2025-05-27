@@ -364,6 +364,60 @@ std::string urlEncode(const std::string& str) {
     return result;
 }
 
+// Encoding utilities implementation
+std::string base64Encode(const std::string& data) {
+    static const std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    
+    std::string result;
+    
+    for (size_t i = 0; i < data.length(); i += 3) {
+        int n = (data[i] << 16) + ((i + 1 < data.length()) ? (data[i + 1] << 8) : 0) + ((i + 2 < data.length()) ? data[i + 2] : 0);
+        
+        result += chars[(n >> 18) & 63];
+        result += chars[(n >> 12) & 63];
+        result += (i + 1 < data.length()) ? chars[(n >> 6) & 63] : '=';
+        result += (i + 2 < data.length()) ? chars[n & 63] : '=';
+    }
+    
+    return result;
+}
+
+std::string base64Decode(const std::string& encoded) {
+    static const int T[128] = {
+        -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+        -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+        -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, -1,-1,-1,63,
+        52,53,54,55, 56,57,58,59, 60,61,-1,-1, -1,-1,-1,-1,
+        -1, 0, 1, 2,  3, 4, 5, 6,  7, 8, 9,10, 11,12,13,14,
+        15,16,17,18, 19,20,21,22, 23,24,25,-1, -1,-1,-1,-1,
+        -1,26,27,28, 29,30,31,32, 33,34,35,36, 37,38,39,40,
+        41,42,43,44, 45,46,47,48, 49,50,51,-1, -1,-1,-1,-1
+    };
+    
+    std::string result;
+    int pad = 0;
+    
+    for (size_t i = 0; i < encoded.length(); i += 4) {
+        int n = 0;
+        for (int j = 0; j < 4; ++j) {
+            if (i + j < encoded.length()) {
+                char c = encoded[i + j];
+                if (c == '=') {
+                    pad++;
+                } else if (static_cast<unsigned char>(c) < 128) {
+                    n = (n << 6) + T[static_cast<unsigned char>(c)];
+                }
+            }
+        }
+        
+        if (pad < 2) result += char((n >> 16) & 255);
+        if (pad < 1) result += char((n >> 8) & 255);
+        if (pad < 1) result += char(n & 255);
+    }
+    
+    return result;
+}
+
 // Archive utilities implementation
 bool extractZipData(const std::string& zipData, const std::string& targetDir) {
     try {

@@ -1085,57 +1085,259 @@ bool Repository::uploadToGitHub(const std::string& repoName, const std::string& 
         }
     }
     
-    // For a proper implementation, we would need to:
-    // 1. Get the current repository state
-    // 2. Create blobs for each file
-    // 3. Create a tree with those blobs
-    // 4. Create a commit with that tree
-    // 5. Update the branch reference
+    // Get the current branch reference to see if it exists
+    std::string refUrl = "https://api.github.com/repos/" + repoName + "/git/ref/heads/" + branch;
+    Utils::HttpResponse refResponse = Utils::httpGet(refUrl, headers);
     
-    // For now, we'll use a simpler approach by creating a ZIP file and pushing it
+    std::string currentSha;
+    if (refResponse.success) {
+        // Parse SHA from response
+        size_t shaPos = refResponse.content.find("\"sha\":");
+        if (shaPos != std::string::npos) {
+            shaPos = refResponse.content.find("\"", shaPos + 6);
+            if (shaPos != std::string::npos) {
+                size_t shaEnd = refResponse.content.find("\"", shaPos + 1);
+                if (shaEnd != std::string::npos) {
+                    currentSha = refResponse.content.substr(shaPos + 1, shaEnd - shaPos - 1);
+                }
+            }
+        }
+        std::cout << "Branch '" << branch << "' exists with SHA: " << Utils::shortHash(currentSha) << "\n";
+    } else {
+        std::cout << "Branch '" << branch << "' does not exist, will create it\n";
+    }
     
-    // Create a temporary directory to prepare the upload
-    std::string tempDir = "/tmp/gyatt_" + std::to_string(std::time(nullptr));
-    if (!Utils::createDirectories(tempDir)) {
-        std::cerr << "error: failed to create temporary directory\n";
+    // Step 1: Create blobs for all files in the repository
+    std::cout << "Step 1: Creating blobs for repository files...\n";
+    std::map<std::string, std::string> fileBlobMap;
+    
+    Index index(repoPath);
+    auto stagedFiles = index.getStagedFiles();
+    
+    if (stagedFiles.empty()) {
+        std::cerr << "error: no files in repository to push\n";
         return false;
     }
     
-    // Copy the repository files to the temporary directory
-    std::string command = "cd '" + repoPath + "' && tar --exclude=.gyatt -czf '" + tempDir + "/repo.tar.gz' .";
-    int result = system(command.c_str());
-    if (result != 0) {
-        std::cerr << "error: failed to create repository archive\n";
+    for (const auto& entry : stagedFiles) {
+        std::string filePath = entry.filepath;
+        std::string fileContent;
+        
+        try {
+            fileContent = Utils::readFile(Utils::joinPath(repoPath, filePath));
+        } catch (const std::exception& e) {
+            std::cerr << "warning: could not read file '" << filePath << "': " << e.what() << "\n";
+            continue;
+        }
+        
+        // Create blob via GitHub API
+        std::string blobUrl = "https://api.github.com/repos/" + repoName + "/git/blobs";
+        std::string encodedContent = Utils::base64Encode(fileContent);
+        
+        std::string blobData = "{\"content\":\"" + encodedContent + "\",\"encoding\":\"base64\"}";
+        
+        std::vector<std::string> blobHeaders = headers;
+        blobHeaders.push_back("Content-Type: application/json");
+        
+        Utils::HttpResponse blobResponse = Utils::httpPost(blobUrl, blobData, blobHeaders);
+        
+        if (!blobResponse.success) {
+            std::cerr << "error: failed to create blob for file '" << filePath << "' (HTTP " << blobResponse.responseCode << ")\n";
+            return false;
+        }
+        
+        // Parse SHA from response
+        size_t shaPos = blobResponse.content.find("\"sha\":");
+        if (shaPos != std::string::npos) {
+            shaPos = blobResponse.content.find("\"", shaPos + 6);
+            if (shaPos != std::string::npos) {
+                size_t shaEnd = blobResponse.content.find("\"", shaPos + 1);
+                if (shaEnd != std::string::npos) {
+                    std::string blobSha = blobResponse.content.substr(shaPos + 1, shaEnd - shaPos - 1);
+                    fileBlobMap[filePath] = blobSha;
+                    std::cout << "  " << filePath << " -> " << Utils::shortHash(blobSha) << "\n";
+                }
+            }
+        }
+        
+        if (fileBlobMap.find(filePath) == fileBlobMap.end()) {
+            std::cerr << "error: could not parse blob SHA for file '" << filePath << "'\n";
+            return false;
+        }
+    }
+    
+    // Step 2: Create a tree with all the blobs
+    std::cout << "Step 2: Creating tree...\n";
+    std::string treeUrl = "https://api.github.com/repos/" + repoName + "/git/trees";
+    
+    std::ostringstream treeJson;
+    treeJson << "{\"tree\":[";
+    
+    bool first = true;
+    for (const auto& [filePath, blobSha] : fileBlobMap) {
+        if (!first) treeJson << ",";
+        treeJson << "{\"path\":\"" << filePath << "\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"" << blobSha << "\"}";
+        first = false;
+    }
+    
+    treeJson << "]}";
+    
+    std::vector<std::string> treeHeaders = headers;
+    treeHeaders.push_back("Content-Type: application/json");
+    
+    Utils::HttpResponse treeResponse = Utils::httpPost(treeUrl, treeJson.str(), treeHeaders);
+    
+    if (!treeResponse.success) {
+        std::cerr << "error: failed to create tree (HTTP " << treeResponse.responseCode << ")\n";
+        std::cerr << "Response: " << treeResponse.content << "\n";
         return false;
     }
     
-    // Upload the archive to GitHub
-    std::string uploadUrl = "https://api.github.com/repos/" + repoName + "/git/blobs";
-    std::string archiveData = Utils::readFile(tempDir + "/repo.tar.gz");
+    // Parse tree SHA
+    std::string treeSha;
+    size_t shaPos = treeResponse.content.find("\"sha\":");
+    if (shaPos != std::string::npos) {
+        shaPos = treeResponse.content.find("\"", shaPos + 6);
+        if (shaPos != std::string::npos) {
+            size_t shaEnd = treeResponse.content.find("\"", shaPos + 1);
+            if (shaEnd != std::string::npos) {
+                treeSha = treeResponse.content.substr(shaPos + 1, shaEnd - shaPos - 1);
+            }
+        }
+    }
     
-    // Convert binary data to base64
-    CURL* curl = curl_easy_init();
-    if (!curl) {
-        std::cerr << "error: failed to initialize curl\n";
+    if (treeSha.empty()) {
+        std::cerr << "error: could not parse tree SHA\n";
         return false;
     }
     
-    // Simulate successful upload for now
-    // In a full implementation, we would encode the archive in base64 and send it to GitHub
-    std::cout << "Archive created: " << tempDir << "/repo.tar.gz (" << archiveData.size() << " bytes)\n";
-    std::cout << "To complete the implementation, the archive would be uploaded using the GitHub API\n";
-    std::cout << "This would require multiple API calls to create blobs, trees, and commits\n";
+    std::cout << "Created tree: " << Utils::shortHash(treeSha) << "\n";
     
-    // Clean up
-    curl_easy_cleanup(curl);
-    std::filesystem::remove_all(tempDir);
+    // Step 3: Create a commit with the tree
+    std::cout << "Step 3: Creating commit...\n";
+    std::string commitUrl = "https://api.github.com/repos/" + repoName + "/git/commits";
     
-    std::cout << "Push to GitHub completed successfully (partially implemented)\n";
-    std::cout << "To complete this functionality:\n";
-    std::cout << "1. Create blobs for each file\n";
-    std::cout << "2. Create a tree with those blobs\n";
-    std::cout << "3. Create a commit with that tree\n";
-    std::cout << "4. Update the branch reference\n";
+    // Read commit info from local repository
+    Commit commitObj(repoPath);
+    auto commitInfo = commitObj.readCommit(currentCommit);
+    
+    std::ostringstream commitJson;
+    commitJson << "{";
+    commitJson << "\"message\":\"" << commitInfo.message << "\",";
+    commitJson << "\"tree\":\"" << treeSha << "\",";
+    commitJson << "\"author\":{\"name\":\"" << Utils::getUserName() << "\",\"email\":\"" << Utils::getUserEmail() << "\"}";
+    
+    if (!currentSha.empty()) {
+        commitJson << ",\"parents\":[\"" << currentSha << "\"]";
+    }
+    
+    commitJson << "}";
+    
+    std::vector<std::string> commitHeaders = headers;
+    commitHeaders.push_back("Content-Type: application/json");
+    
+    Utils::HttpResponse commitResponse = Utils::httpPost(commitUrl, commitJson.str(), commitHeaders);
+    
+    if (!commitResponse.success) {
+        std::cerr << "error: failed to create commit (HTTP " << commitResponse.responseCode << ")\n";
+        std::cerr << "Response: " << commitResponse.content << "\n";
+        return false;
+    }
+    
+    // Parse commit SHA
+    std::string commitSha;
+    shaPos = commitResponse.content.find("\"sha\":");
+    if (shaPos != std::string::npos) {
+        shaPos = commitResponse.content.find("\"", shaPos + 6);
+        if (shaPos != std::string::npos) {
+            size_t shaEnd = commitResponse.content.find("\"", shaPos + 1);
+            if (shaEnd != std::string::npos) {
+                commitSha = commitResponse.content.substr(shaPos + 1, shaEnd - shaPos - 1);
+            }
+        }
+    }
+    
+    if (commitSha.empty()) {
+        std::cerr << "error: could not parse commit SHA\n";
+        return false;
+    }
+    
+    std::cout << "Created commit: " << Utils::shortHash(commitSha) << "\n";
+    
+    // Step 4: Update the branch reference
+    std::cout << "Step 4: Updating branch reference...\n";
+    
+    std::ostringstream refJson;
+    refJson << "{\"sha\":\"" << commitSha << "\"}";
+    
+    std::vector<std::string> refHeaders = headers;
+    refHeaders.push_back("Content-Type: application/json");
+    
+    Utils::HttpResponse refUpdateResponse;
+    
+    if (currentSha.empty()) {
+        // Create new reference
+        std::string createRefUrl = "https://api.github.com/repos/" + repoName + "/git/refs";
+        std::ostringstream createRefJson;
+        createRefJson << "{\"ref\":\"refs/heads/" << branch << "\",\"sha\":\"" << commitSha << "\"}";
+        
+        refUpdateResponse = Utils::httpPost(createRefUrl, createRefJson.str(), refHeaders);
+    } else {
+        // Update existing reference - Use PATCH
+        // Since we don't have a PATCH method, we'll use a different approach
+        // by creating a new HTTP method or using a workaround
+        refUrl = "https://api.github.com/repos/" + repoName + "/git/refs/heads/" + branch;
+        
+        // We need to implement PATCH for this, for now let's use POST with a workaround
+        CURL* curl = curl_easy_init();
+        if (!curl) {
+            std::cerr << "error: failed to initialize CURL for PATCH request\n";
+            return false;
+        }
+        
+        std::string response_string;
+        curl_easy_setopt(curl, CURLOPT_URL, refUrl.c_str());
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, refJson.str().c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* contents, size_t size, size_t nmemb, std::string* userp) -> size_t {
+            size_t totalSize = size * nmemb;
+            userp->append(static_cast<char*>(contents), totalSize);
+            return totalSize;
+        });
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
+        
+        struct curl_slist* headerList = nullptr;
+        for (const auto& header : refHeaders) {
+            headerList = curl_slist_append(headerList, header.c_str());
+        }
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
+        
+        CURLcode res = curl_easy_perform(curl);
+        long response_code = 0;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+        
+        refUpdateResponse.success = (res == CURLE_OK && response_code >= 200 && response_code < 300);
+        refUpdateResponse.responseCode = response_code;
+        refUpdateResponse.content = response_string;
+        if (res != CURLE_OK) {
+            refUpdateResponse.error = curl_easy_strerror(res);
+        }
+        
+        if (headerList) {
+            curl_slist_free_all(headerList);
+        }
+        curl_easy_cleanup(curl);
+    }
+    
+    if (!refUpdateResponse.success) {
+        std::cerr << "error: failed to update branch reference (HTTP " << refUpdateResponse.responseCode << ")\n";
+        std::cerr << "Response: " << refUpdateResponse.content << "\n";
+        return false;
+    }
+    
+    std::cout << "Successfully pushed to GitHub!\n";
+    std::cout << "Repository: https://github.com/" << repoName << "\n";
+    std::cout << "Branch: " << branch << " -> " << Utils::shortHash(commitSha) << "\n";
     
     return true;
 }
