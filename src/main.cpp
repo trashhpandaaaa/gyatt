@@ -9,10 +9,10 @@ void printUsage() {
     std::cout << "Gyatt - A Git Implementation in C++\n\n";
     std::cout << "Usage: gyatt <command> [options]\n\n";
     std::cout << "Commands:\n";
-    std::cout << "  init                     Initialize a new repository\n";
+    std::cout << "  damnit                     Initialize a new repository\n";
     std::cout << "  clone <url> [dir]       Clone a repository\n";
-    std::cout << "  add <file>              Add file to staging area\n";
-    std::cout << "  commit -m <message>     Commit staged changes\n";
+    std::cout << "  yeet <file>              Add file to staging area\n";
+    std::cout << "  fr -m <message>     Commit staged changes\n";
     std::cout << "  status                  Show repository status\n";
     std::cout << "  log                     Show commit history\n";
     std::cout << "  diff                    Show differences\n";
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
     gyatt::Repository repo;
     
     try {
-        if (command == "init") {
+        if (command == "init" || command == "damnit") {
             if (repo.init()) {
                 std::cout << "Initialized empty Gyatt repository in " << repo.getRepoPath() << "/.gyatt\n";
                 return 0;

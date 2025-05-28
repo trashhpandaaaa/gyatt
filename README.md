@@ -48,9 +48,12 @@ gyatt init
 # Add files to staging area
 gyatt add <file>
 gyatt add .
+gyatt yeet <file>
+gyatt yeet .
 
 # Commit changes
 gyatt commit -m "Your commit message"
+gyatt fr -m "Your commit message"
 
 # View status
 gyatt status
