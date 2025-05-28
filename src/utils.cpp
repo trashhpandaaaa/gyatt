@@ -391,6 +391,52 @@ HttpResponse httpPatch(const std::string& url, const std::string& data, const st
     return response;
 }
 
+HttpResponse httpPut(const std::string& url, const std::string& data, const std::vector<std::string>& headers) {
+    HttpResponse response;
+    response.success = false;
+    response.responseCode = 0;
+    
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        response.error = "Failed to initialize CURL";
+        return response;
+    }
+    
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response.content);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, "gyatt/1.0");
+    
+    // Add custom headers
+    struct curl_slist* headerList = nullptr;
+    for (const auto& header : headers) {
+        headerList = curl_slist_append(headerList, header.c_str());
+    }
+    if (headerList) {
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
+    }
+    
+    CURLcode res = curl_easy_perform(curl);
+    
+    if (res == CURLE_OK) {
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response.responseCode);
+        response.success = (response.responseCode >= 200 && response.responseCode < 300);
+    } else {
+        response.error = curl_easy_strerror(res);
+    }
+    
+    if (headerList) {
+        curl_slist_free_all(headerList);
+    }
+    curl_easy_cleanup(curl);
+    
+    return response;
+}
+
 std::string urlEncode(const std::string& str) {
     CURL* curl = curl_easy_init();
     if (!curl) return str;
