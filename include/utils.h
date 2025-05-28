@@ -60,6 +60,7 @@ namespace Utils {
     std::string parseGitHubRepoName(const std::string& url);
     HttpResponse httpGet(const std::string& url, const std::vector<std::string>& headers = {});
     HttpResponse httpPost(const std::string& url, const std::string& data, const std::vector<std::string>& headers = {});
+    HttpResponse httpPatch(const std::string& url, const std::string& data, const std::vector<std::string>& headers = {});
     std::string urlEncode(const std::string& str);
     
     // Encoding utilities

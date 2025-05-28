@@ -15,23 +15,19 @@ class GitObject {
 public:
     GitObject(const std::string& repoPath);
     
-    // Object creation
     std::string createBlob(const std::string& content);
     std::string createTree(const std::string& content);
     std::string createCommit(const std::string& content);
     
-    // Object reading
     std::string readObject(const std::string& hash, ObjectType& type);
     std::string readBlob(const std::string& hash);
     std::string readTree(const std::string& hash);
     std::string readCommit(const std::string& hash);
     
-    // Object utilities
     bool objectExists(const std::string& hash);
     ObjectType getObjectType(const std::string& hash);
     std::vector<std::string> listObjects();
     
-    // Hash utilities
     static std::string computeHash(const std::string& content, ObjectType type);
     static std::string objectTypeToString(ObjectType type);
     static ObjectType stringToObjectType(const std::string& typeStr);

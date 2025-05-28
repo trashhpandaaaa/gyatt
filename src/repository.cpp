@@ -35,8 +35,8 @@ bool Repository::init() {
         return false;
     }
     
-    // Create initial HEAD pointing to master branch
-    if (!writeHead("ref: refs/heads/master")) {
+    // Create initial HEAD pointing to main branch
+    if (!writeHead("ref: refs/heads/main")) {
         return false;
     }
     
@@ -353,7 +353,7 @@ std::string Repository::getCurrentBranch() const {
         }
     }
     
-    return "master"; // Default branch
+    return "main"; // Default branch
 }
 
 bool Repository::isRepository() const {
@@ -1284,49 +1284,9 @@ bool Repository::uploadToGitHub(const std::string& repoName, const std::string& 
         refUpdateResponse = Utils::httpPost(createRefUrl, createRefJson.str(), refHeaders);
     } else {
         // Update existing reference - Use PATCH
-        // Since we don't have a PATCH method, we'll use a different approach
-        // by creating a new HTTP method or using a workaround
         refUrl = "https://api.github.com/repos/" + repoName + "/git/refs/heads/" + branch;
         
-        // We need to implement PATCH for this, for now let's use POST with a workaround
-        CURL* curl = curl_easy_init();
-        if (!curl) {
-            std::cerr << "error: failed to initialize CURL for PATCH request\n";
-            return false;
-        }
-        
-        std::string response_string;
-        curl_easy_setopt(curl, CURLOPT_URL, refUrl.c_str());
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, refJson.str().c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* contents, size_t size, size_t nmemb, std::string* userp) -> size_t {
-            size_t totalSize = size * nmemb;
-            userp->append(static_cast<char*>(contents), totalSize);
-            return totalSize;
-        });
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
-        
-        struct curl_slist* headerList = nullptr;
-        for (const auto& header : refHeaders) {
-            headerList = curl_slist_append(headerList, header.c_str());
-        }
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
-        
-        CURLcode res = curl_easy_perform(curl);
-        long response_code = 0;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-        
-        refUpdateResponse.success = (res == CURLE_OK && response_code >= 200 && response_code < 300);
-        refUpdateResponse.responseCode = response_code;
-        refUpdateResponse.content = response_string;
-        if (res != CURLE_OK) {
-            refUpdateResponse.error = curl_easy_strerror(res);
-        }
-        
-        if (headerList) {
-            curl_slist_free_all(headerList);
-        }
-        curl_easy_cleanup(curl);
+        refUpdateResponse = Utils::httpPatch(refUrl, refJson.str(), refHeaders);
     }
     
     if (!refUpdateResponse.success) {

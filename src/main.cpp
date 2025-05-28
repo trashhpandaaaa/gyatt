@@ -78,13 +78,12 @@ int main(int argc, char* argv[]) {
             return 0;
         }
         
-        // For all other commands, we need an existing repository
         if (!repo.isRepository()) {
             std::cerr << "fatal: not a gyatt repository (or any of the parent directories): .gyatt\n";
             return 1;
         }
         
-        if (command == "add") {
+        if (command == "add" || command == "yeet") {
             if (args.empty()) {
                 std::cerr << "Nothing specified, nothing added.\n";
                 return 1;
@@ -99,9 +98,9 @@ int main(int argc, char* argv[]) {
             return 0;
         }
         
-        else if (command == "commit") {
+        else if (command == "commit" || command == "fr") {
             if (args.size() < 2 || args[0] != "-m") {
-                std::cerr << "Usage: gyatt commit -m <message>\n";
+                std::cerr << "Usage: gyatt " << command << " -m <message>\n";
                 return 1;
             }
             

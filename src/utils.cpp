@@ -84,7 +84,6 @@ std::string readFile(const std::string& filepath) {
 
 bool writeFile(const std::string& filepath, const std::string& content) {
     try {
-        // Create parent directories if they don't exist
         std::filesystem::path path(filepath);
         if (path.has_parent_path()) {
             createDirectories(path.parent_path().string());
@@ -110,7 +109,6 @@ std::vector<std::string> listDirectory(const std::string& dirpath) {
             files.push_back(entry.path().filename().string());
         }
     } catch (const std::filesystem::filesystem_error&) {
-        // Return empty vector on error
     }
     
     std::sort(files.begin(), files.end());
@@ -230,7 +228,6 @@ std::string getAuthorString() {
     return getUserName() + " <" + getUserEmail() + ">";
 }
 
-// HTTP utilities implementation
 static size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* userp) {
     size_t totalSize = size * nmemb;
     userp->append(static_cast<char*>(contents), totalSize);
@@ -242,12 +239,10 @@ bool isHttpUrl(const std::string& url) {
 }
 
 bool isGitHubUrl(const std::string& url) {
-    // Check if the URL contains github.com
     if (url.find("github.com") == std::string::npos) {
         return false;
     }
     
-    // Use regex to validate the GitHub URL format
     std::regex githubRegex(R"((?:https?://)?(?:www\.)?github\.com/[^/]+/[^/]+?(?:\.git)?/?$)");
     return std::regex_match(url, githubRegex);
 }
@@ -281,7 +276,6 @@ HttpResponse httpGet(const std::string& url, const std::vector<std::string>& hea
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
     curl_easy_setopt(curl, CURLOPT_USERAGENT, "gyatt/1.0");
     
-    // Add custom headers
     struct curl_slist* headerList = nullptr;
     for (const auto& header : headers) {
         headerList = curl_slist_append(headerList, header.c_str());
@@ -319,6 +313,51 @@ HttpResponse httpPost(const std::string& url, const std::string& data, const std
     }
     
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response.content);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, "gyatt/1.0");
+    
+    struct curl_slist* headerList = nullptr;
+    for (const auto& header : headers) {
+        headerList = curl_slist_append(headerList, header.c_str());
+    }
+    if (headerList) {
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
+    }
+    
+    CURLcode res = curl_easy_perform(curl);
+    
+    if (res == CURLE_OK) {
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response.responseCode);
+        response.success = (response.responseCode >= 200 && response.responseCode < 300);
+    } else {
+        response.error = curl_easy_strerror(res);
+    }
+    
+    if (headerList) {
+        curl_slist_free_all(headerList);
+    }
+    curl_easy_cleanup(curl);
+    
+    return response;
+}
+
+HttpResponse httpPatch(const std::string& url, const std::string& data, const std::vector<std::string>& headers) {
+    HttpResponse response;
+    response.success = false;
+    response.responseCode = 0;
+    
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        response.error = "Failed to initialize CURL";
+        return response;
+    }
+    
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response.content);
@@ -364,7 +403,6 @@ std::string urlEncode(const std::string& str) {
     return result;
 }
 
-// Encoding utilities implementation
 std::string base64Encode(const std::string& data) {
     static const std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     
