@@ -5,7 +5,80 @@
 #include <map>
 #include <memory>
 #include <filesystem>
+#include <chrono>
+#include <functional>
 #include "ignore.h"
+
+// Enhanced remote repository management structures
+namespace gyatt {
+
+enum class RemoteProtocol {
+    HTTP,
+    HTTPS,
+    SSH,
+    LOCAL,
+    UNKNOWN
+};
+
+enum class AuthMethod {
+    NONE,
+    TOKEN,
+    SSH_KEY,
+    USERNAME_PASSWORD,
+    OAUTH
+};
+
+enum class SyncMode {
+    FULL,
+    SELECTIVE,
+    INCREMENTAL,
+    SMART
+};
+
+struct RemoteCredentials {
+    AuthMethod method = AuthMethod::NONE;
+    std::string username;
+    std::string token;
+    std::string sshKeyPath;
+    std::string oauthToken;
+    bool rememberCredentials = false;
+    std::chrono::system_clock::time_point expiryTime;
+};
+
+struct RemoteRepository {
+    std::string name;
+    std::string url;
+    RemoteProtocol protocol;
+    bool isGyattRepo = false;
+    bool isHealthy = true;
+    std::string lastError;
+    std::chrono::system_clock::time_point lastSync;
+    RemoteCredentials credentials;
+    std::map<std::string, std::string> branches; // local -> remote mapping
+    std::vector<std::string> syncProfiles;
+};
+
+struct SyncProfile {
+    std::string name;
+    SyncMode mode;
+    std::vector<std::string> includePaths;
+    std::vector<std::string> excludePaths;
+    bool autoSync = false;
+    std::chrono::minutes syncInterval{60};
+    std::function<void(const std::string&)> progressCallback;
+};
+
+struct PushProgress {
+    size_t totalFiles = 0;
+    size_t processedFiles = 0;
+    size_t totalBytes = 0;
+    size_t transferredBytes = 0;
+    std::string currentOperation;
+    bool isComplete = false;
+    std::string errorMessage;
+};
+
+}
 
 // Forward declarations for feature systems
 namespace gyatt {
@@ -51,33 +124,89 @@ public:
     // File operations
     bool show(const std::string& objectRef);
     
-    // Remote operations
+    // Enhanced Remote operations
     bool clone(const std::string& sourceUrl, const std::string& targetDir = "");
     bool push(const std::string& remoteName = "origin", const std::string& branchName = "");
     bool addRemote(const std::string& name, const std::string& url);
     bool listRemotes();
     
-    // Ignore file operations
-    bool createIgnoreFile();
-    bool isIgnored(const std::string& filepath) const;
-    bool addIgnorePattern(const std::string& pattern);
+    // Enhanced Remote Repository Management
+    bool addRemoteWithAuth(const std::string& name, const std::string& url, const RemoteCredentials& credentials);
+    bool removeRemote(const std::string& name);
+    bool renameRemote(const std::string& oldName, const std::string& newName);
+    std::vector<RemoteRepository> getRemoteRepositories() const;
+    RemoteRepository* getRemote(const std::string& name);
+    bool updateRemoteCredentials(const std::string& remoteName, const RemoteCredentials& credentials);
     
-    // GitHub-specific operations
-    bool cloneFromGitHub(const std::string& repoUrl, const std::string& targetDir = "");
-    bool pushToGitHub(const std::string& remoteName = "origin", const std::string& branchName = "");
-    bool downloadGitHubRepo(const std::string& repoName, const std::string& targetDir);
-    bool uploadToGitHub(const std::string& repoName, const std::string& branch = "main");
-    bool setGitHubToken(const std::string& token);
+    // Remote Repository Health and Diagnostics
+    bool checkRemoteHealth(const std::string& remoteName);
+    std::string getRemoteHealthReport(const std::string& remoteName);
+    bool runRemoteDiagnostics(const std::string& remoteName);
+    std::vector<std::string> getRemoteIssues(const std::string& remoteName);
+    bool fixRemoteIssues(const std::string& remoteName, bool autoFix = false);
     
-    // Advanced feature system accessors
-    MarkdownCommit* getMarkdownCommit() const { return markdownCommit.get(); }
-    SemanticBranching* getSemanticBranching() const { return semanticBranching.get(); }
-    SectionBasedStaging* getSectionStaging() const { return sectionStaging.get(); }
-    ProjectMapper* getProjectMapper() const { return projectMapper.get(); }
-    CheckpointSystem* getCheckpointSystem() const { return checkpointSystem.get(); }
-    OopsShield* getOopsShield() const { return oopsShield.get(); }
-    RewindMode* getRewindMode() const { return rewindMode.get(); }
-    GuardrailSystem* getGuardrails() const { return guardrails.get(); }
+    // Enhanced Push/Pull with Progress
+    bool pushWithProgress(const std::string& remoteName, const std::string& branchName, 
+                         std::function<void(const PushProgress&)> progressCallback = nullptr);
+    bool pullWithProgress(const std::string& remoteName, const std::string& branchName,
+                         std::function<void(const PushProgress&)> progressCallback = nullptr);
+    bool pushWithRetry(const std::string& remoteName, const std::string& branchName, 
+                      int maxRetries = 3, int delaySeconds = 5);
+    
+    // Branch Tracking and Synchronization
+    bool setBranchUpstream(const std::string& localBranch, const std::string& remoteName, 
+                          const std::string& remoteBranch);
+    std::string getBranchUpstream(const std::string& branchName);
+    std::vector<std::string> getRemoteBranches(const std::string& remoteName);
+    bool synchronizeBranches(const std::string& remoteName, bool dryRun = false);
+    
+    // Conflict Detection and Resolution
+    bool detectPushConflicts(const std::string& remoteName, const std::string& branchName);
+    std::vector<std::string> getPushConflicts(const std::string& remoteName, const std::string& branchName);
+    bool stashAndPull(const std::string& remoteName, const std::string& branchName);
+    bool popStashAfterPull();
+    
+    // Sync Profiles and Automation
+    bool createSyncProfile(const SyncProfile& profile);
+    bool deleteSyncProfile(const std::string& profileName);
+    std::vector<SyncProfile> getSyncProfiles() const;
+    bool applySyncProfile(const std::string& profileName, const std::string& remoteName);
+    bool enableAutoSync(const std::string& remoteName, const std::string& profileName);
+    bool disableAutoSync(const std::string& remoteName);
+    
+    // Protocol Detection and URL Validation
+    RemoteProtocol detectProtocol(const std::string& url);
+    bool validateRemoteUrl(const std::string& url);
+    bool isRemoteAccessible(const std::string& url, const RemoteCredentials& credentials);
+    std::string normalizeRemoteUrl(const std::string& url);
+    
+    // Credential Management
+    bool storeCredentials(const std::string& remoteName, const RemoteCredentials& credentials);
+    RemoteCredentials loadCredentials(const std::string& remoteName);
+    bool clearCredentials(const std::string& remoteName);
+    bool refreshCredentials(const std::string& remoteName);
+    
+    // Enhanced Remote Repository Management
+    bool addRemoteWithAuth(const std::string& name, const std::string& url, const RemoteCredentials& credentials);
+    bool removeRemote(const std::string& name);
+    bool renameRemote(const std::string& oldName, const std::string& newName);
+    std::vector<RemoteRepository> getRemoteRepositories() const;
+    RemoteRepository* getRemote(const std::string& name);
+    bool updateRemoteCredentials(const std::string& remoteName, const RemoteCredentials& credentials);
+    
+    // Remote Repository Health and Diagnostics
+    bool checkRemoteHealth(const std::string& remoteName);
+    std::string getRemoteHealthReport(const std::string& remoteName);
+    bool runRemoteDiagnostics(const std::string& remoteName);
+    std::vector<std::string> getRemoteIssues(const std::string& remoteName);
+    bool fixRemoteIssues(const std::string& remoteName, bool autoFix = false);
+    
+    // Enhanced Push/Pull with Progress
+    bool pushWithProgress(const std::string& remoteName, const std::string& branchName, 
+                         std::function<void(const PushProgress&)> progressCallback = nullptr);
+    bool pullWithProgress(const std::string& remoteName, const std::string& branchName,
+                         std::function<void(const PushProgress&)> progressCallback = nullptr);
+    bool pushWithRetry(const std::string& remoteName, const std::string&
     PluginManager* getPluginManager() const { return pluginManager.get(); }
     SessionRecorder* getSessionRecorder() const { return sessionRecorder.get(); }
     CommentThread* getCommentSystem() const { return commentSystem.get(); }
