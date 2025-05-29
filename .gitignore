@@ -1,0 +1,32 @@
+# Build artifacts
+build/
+*.o
+gyatt
+gyatt_debug
+
+# Sensitive files - should not be committed
+.gyatt/github_token
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+tmp/
+
+# Cache directories
+__pycache__/
+node_modules/
+.cache/
+
+# Backup files
+*.bak
+*.backup
