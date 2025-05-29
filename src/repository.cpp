@@ -1151,6 +1151,12 @@ bool Repository::uploadToGitHub(const std::string& repoName, const std::string& 
             continue;
         }
         
+        // Skip system directories and files that shouldn't be uploaded to GitHub
+        if (shouldExcludeFromGitHubUpload(filePath)) {
+            std::cout << "Skipping system file during GitHub upload: " << filePath << "\n";
+            continue;
+        }
+        
         std::string fileContent;
         
         try {
@@ -1413,6 +1419,44 @@ std::string Repository::getGitHubToken() {
     return "";
 }
 
+bool Repository::shouldExcludeFromGitHubUpload(const std::string& filePath) {
+    // Exclude system directories and files that shouldn't be on GitHub
+    if (filePath.find(".git/") == 0 || filePath.find(".git\\") == 0) {
+        return true; // Git system files
+    }
+    
+    if (filePath.find(".gyatt/") == 0 || filePath.find(".gyatt\\") == 0) {
+        return true; // Gyatt system files
+    }
+    
+    // Exclude other common system files and directories
+    if (filePath == ".DS_Store" || filePath.find(".DS_Store/") != std::string::npos) {
+        return true; // macOS system files
+    }
+    
+    if (filePath == "Thumbs.db" || filePath == "desktop.ini") {
+        return true; // Windows system files
+    }
+    
+    if (filePath.find("__pycache__/") == 0 || filePath.find("__pycache__\\") == 0) {
+        return true; // Python cache
+    }
+    
+    if (filePath.find(".vscode/") == 0 || filePath.find(".vscode\\") == 0) {
+        return true; // VS Code settings (unless wanted)
+    }
+    
+    if (filePath.find("node_modules/") == 0 || filePath.find("node_modules\\") == 0) {
+        return true; // Node.js dependencies
+    }
+    
+    if (filePath.find(".tmp/") == 0 || filePath.find("tmp/") == 0) {
+        return true; // Temporary files
+    }
+    
+    return false;
+}
+
 bool Repository::setGitHubToken(const std::string& token) {
     if (!isRepository()) {
         std::cerr << "error: not a valid gyatt repository\n";
@@ -1546,6 +1590,12 @@ bool Repository::uploadToEmptyGitHubRepo(const std::string& repoName, const std:
         // Skip files that should be ignored according to .gyattignore patterns
         if (isIgnored(filePath)) {
             std::cout << "Skipping ignored file during GitHub upload: " << filePath << "\n";
+            continue;
+        }
+        
+        // Skip system directories and files that shouldn't be uploaded to GitHub
+        if (shouldExcludeFromGitHubUpload(filePath)) {
+            std::cout << "Skipping system file during GitHub upload: " << filePath << "\n";
             continue;
         }
         

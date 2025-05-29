@@ -129,8 +129,6 @@ bool MarkdownCommit::exportToMarkdown(const std::string& filename) {
     return true;
 }
 
-// ...existing helper methods...
-
 std::string MarkdownCommit::formatMarkdownCommit(const MarkdownCommitInfo& info) {
     std::ostringstream ss;
     

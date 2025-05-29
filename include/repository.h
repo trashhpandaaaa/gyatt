@@ -147,6 +147,7 @@ private:
     bool createGitHubRepo(const std::string& repoName);
     bool uploadFilesToGitHub(const std::string& repoName, const std::string& branch);
     bool uploadToEmptyGitHubRepo(const std::string& repoName, const std::string& branch, const std::string& token);
+    bool shouldExcludeFromGitHubUpload(const std::string& filePath);
 };
 
 } // namespace gyatt
