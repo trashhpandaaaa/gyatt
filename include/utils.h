@@ -41,6 +41,7 @@ namespace Utils {
     // Git-specific utilities
     bool isValidHash(const std::string& hash);
     std::string shortHash(const std::string& hash, size_t length = 7);
+    std::string getGitConfigValue(const std::string& key);
     
     // User utilities
     std::string getUserName();

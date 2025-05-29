@@ -1,4 +1,4 @@
-#!/bin/bash
++#!/bin/bash
 
 # Advanced GitHub integration test for Gyatt
 echo "=========================================="
@@ -32,9 +32,9 @@ create_response=$(curl -s -H "Authorization: token $TOKEN" \
      https://api.github.com/user/repos)
 
 if echo "$create_response" | grep -q '"name"'; then
-    echo -e "${GREEN|ᜓ Repository created successfully${NC}"
+    echo -e "${GREEN|⛓ Repository created successfully${NC}"
 else
-    echo -e "${RED|᜗ Failed to create repository${NC}"
+    echo -e "${RED|⛗ Failed to create repository${NC}"
     echo "Response: $create_response"
     exit 1
 fi
@@ -67,9 +67,9 @@ echo -e "\n${YELLOW}Test 3: Adding GitHub remote${NC}"
 # Test 4: Test GitHub push functionality
 echo -e "\n${YELLOW}Test 4: Testing GitHub push (uploadToGitHub)${NC}"
 if "$GYATT_PATH" push origin main; then
-    echo -e "${GREEN|⛓ Push to GitHub successful${NC}"
+    echo -e "${GREEN}ᛓ Push to GitHub successful${NC}"
 else
-    echo -e "${RED|⛗ Push to GitHub failed${NC}"
+    echo -e "${RED}ᛗ Push to GitHub failed${NC}"
 fi
 
 # Test 5: Verify the push by checking GitHub API
@@ -80,9 +80,9 @@ contents_response=$(curl -s -H "Authorization: token $TOKEN" \
      "https://api.github.com/repos/trashhpandaaaa/$TEST_REPO/contents/README.md")
 
 if echo "$contents_response" | grep -q '"name": "README.md"'; then
-    echo -e "${GREEN|⛓ File verified on GitHub${NC}"
+    echo -e "${GREEN}ᛓ File verified on GitHub${NC}"
 else
-    echo -e "${RED}ᛗ File not found on GitHub${NC}"
+    echo -e "${RED|᜗ File not found on GitHub${NC}"
     echo "Response: $contents_response"
 fi
 
@@ -91,18 +91,18 @@ echo -e "\n${YELLOW}Test 6: Testing GitHub clone functionality${NC}"
 cd /tmp
 CLONE_DIR="gyatt_clone_test_$(date +%s)"
 if "$GYATT_PATH" clone "https://github.com/trashhpandaaaa/$TEST_REPO" "$CLONE_DIR"; then
-    echo -e "${GREEN}ᛓ Clone from GitHub successful${NC}"
+    echo -e "${GREEN|ᜓ Clone from GitHub successful${NC}"
     
     # Verify cloned content
     if [ -f "$CLONE_DIR/README.md" ]; then
-        echo -e "${GREEN|⛓ Cloned content verified${NC}"
+        echo -e "${GREEN}ᛓ Cloned content verified${NC}"
     else
-        echo -e "${RED|⛗ Cloned content not found${NC}"
+        echo -e "${RED}ᛗ Cloned content not found${NC}"
     fi
     
     rm -rf "$CLONE_DIR"
 else
-    echo -e "${RED|᜗ Clone from GitHub failed${NC}"
+    echo -e "${RED|⛗ Clone from GitHub failed${NC}"
 fi
 
 # Cleanup
@@ -116,9 +116,9 @@ delete_response=$(curl -s -X DELETE -H "Authorization: token $TOKEN" \
      "https://api.github.com/repos/trashhpandaaaa/$TEST_REPO")
 
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN|ᜓ Test repository deleted${NC}"
+    echo -e "${GREEN|⛓ Test repository deleted${NC}"
 else
-    echo -e "${YELLOW|♠ Test repository may need manual deletion${NC}"
+    echo -e "${YELLOW}ᙠ Test repository may need manual deletion${NC}"
 fi
 
 echo -e "\n${GREEN}GitHub integration test completed!${NC}"

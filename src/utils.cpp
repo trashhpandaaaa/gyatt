@@ -205,10 +205,41 @@ std::string shortHash(const std::string& hash, size_t length) {
     return hash.substr(0, std::min(length, hash.length()));
 }
 
+std::string getGitConfigValue(const std::string& key) {
+    std::string command = "git config --get " + key + " 2>/dev/null";
+    
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) {
+        return "";
+    }
+    
+    char buffer[128];
+    std::string result = "";
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+        result += buffer;
+    }
+    pclose(pipe);
+    
+    // Remove trailing newline
+    if (!result.empty() && result.back() == '\n') {
+        result.pop_back();
+    }
+    
+    return result;
+}
+
 std::string getUserName() {
+    // Try to read from git config first
+    std::string gitName = getGitConfigValue("user.name");
+    if (!gitName.empty()) {
+        return gitName;
+    }
+    
+    // Fall back to environment variable
     const char* name = std::getenv("USER");
     if (name) return std::string(name);
     
+    // Fall back to system user
     struct passwd* pw = getpwuid(getuid());
     if (pw && pw->pw_name) {
         return std::string(pw->pw_name);
@@ -218,9 +249,17 @@ std::string getUserName() {
 }
 
 std::string getUserEmail() {
+    // Try to read from git config first
+    std::string gitEmail = getGitConfigValue("user.email");
+    if (!gitEmail.empty()) {
+        return gitEmail;
+    }
+    
+    // Fall back to environment variable
     const char* email = std::getenv("EMAIL");
     if (email) return std::string(email);
     
+    // Fall back to default (but this should ideally not happen)
     return getUserName() + "@localhost";
 }
 
