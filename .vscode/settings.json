@@ -3,6 +3,7 @@
         "chrono": "cpp",
         "ranges": "cpp",
         "variant": "cpp",
-        "text_encoding": "cpp"
+        "text_encoding": "cpp",
+        "ostream": "cpp"
     }
 }

@@ -111,58 +111,128 @@ cd build
 cmake ..
 make
 make install
+```
 
-Dependencies
-C++17 or later
-CMake 3.15 or later
-OpenSSL
-libcurl
-jsoncpp
+## Usage
 
+```bash
+# Initialize a new repository
+gyatt init
 
+# Add files to staging area
+gyatt add <file>
+gyatt add .
 
-# Initialize a new repository with a project template
-gyatt init react
+# Commit changes
+gyatt commit -m "Your commit message"
 
-# Create a semantic branch
-gyatt start feature/login
+# View status
+gyatt status
 
-# Add files with fun commands
-gyatt yeet .
+# View commit history
+gyatt log
 
-# Interactive commit with markdown
-gyatt fr
+# Create a new branch
+gyatt branch <branch-name>
 
-# Show project map
-gyatt map
+# Switch to a branch
+gyatt checkout <branch-name>
 
-# Create a development checkpoint
-gyatt mark alpha-release
+# Show differences
+gyatt diff
 
-# Rewind without losing changes
-gyatt rewind 3 --soft
+# Show file content
+gyatt show <commit-hash>:<file>
 
-# Tag files by category
-gyatt label core src/core/*.cpp
+# Create .gyattignore file
+gyatt gyattignore
 
-# View files by label
-gyatt log --label=core
+# Check if a file is ignored
+gyatt check-ignore <file>
 
-# Add a sticky note
-gyatt note "TODO: Refactor this section"
+# Add a pattern to .gyattignore
+gyatt add-ignore <pattern>
 
-# Export development history
-gyatt export changelog
+# Clone a repository (local or GitHub)
+gyatt clone <url> [directory]
 
+# Add a remote repository
+gyatt remote add <name> <url>
 
-Terminal UI Features
-Gyatt includes a modern terminal UI with:
+# List remote repositories
+gyatt remote -v
 
-Animations and visual elements
-Color schemes and theming
-Interactive menus and wizards
-Progress indicators
-Contributing
+# Push changes to a remote repository
+gyatt push [remote] [branch]
+
+# Set GitHub personal access token
+gyatt github-token <token>
+```
+
+## GitHub Integration
+
+Gyatt includes support for GitHub repositories:
+
+1. **Cloning GitHub repositories**:
+   ```bash
+   gyatt clone https://github.com/username/repo.git
+   ```
+
+2. **Setting up GitHub authentication**:
+   ```bash
+   gyatt github-token <your-github-token>
+   ```
+   To create a token, visit: https://github.com/settings/tokens
+
+3. **Pushing to GitHub**:
+   ```bash
+   gyatt push origin main
+   ```
+
+## Ignore System
+
+Gyatt provides a `.gyattignore` system similar to Git's `.gitignore`:
+
+1. A default `.gyattignore` file is created automatically when initializing a repository
+2. Use `gyatt gyattignore` to create a default ignore file if one doesn't exist
+3. Use `gyatt check-ignore <file>` to check if a file is ignored
+4. Use `gyatt add-ignore <pattern>` to add patterns to the ignore file
+
+Default ignored patterns include:
+- `.gyatt/` directory
+- Compiled files (*.o, *.exe, etc.)
+- Build directories (build/, bin/, lib/)
+- Log and database files
+- OS-specific files
+
+## Architecture
+
+The project is structured as follows:
+
+- `src/main.cpp` - Entry point and command parsing
+- `src/repository.cpp` - Repository management
+- `src/commit.cpp` - Commit handling
+- `src/index.cpp` - Staging area management
+- `src/object.cpp` - Git object handling
+- `src/utils.cpp` - Utility functions
+- `src/ignore.cpp` - Ignore file handling
+- `include/` - Header files
+
+### Core Components
+
+1. **Repository**: Manages the overall repository structure and operations
+2. **Index**: Handles the staging area and tracking of file changes
+3. **Commit**: Creates and manages commit objects
+4. **Object**: Handles Git-style object storage (blobs, trees, commits)
+5. **Utils**: Provides utility functions for file operations, hashing, etc.
+6. **Ignore**: Manages the `.gyattignore` system for ignoring files
+
+## License
+
+MIT License
+
+## Contributing
+
 Contributions are welcome! Feel free to submit pull requests or open issues for bugs and feature requests.
 
 License
