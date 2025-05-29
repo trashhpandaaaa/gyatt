@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "chrono": "cpp",
+        "ranges": "cpp",
+        "variant": "cpp",
+        "text_encoding": "cpp"
+    }
+}

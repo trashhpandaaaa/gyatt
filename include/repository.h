@@ -7,11 +7,33 @@
 #include <filesystem>
 #include "ignore.h"
 
+// Forward declarations for feature systems
+namespace gyatt {
+class MarkdownCommit;
+class SemanticBranching;
+class SectionBasedStaging;
+class ProjectMapper;
+class CheckpointSystem;
+class OopsShield;
+class RewindMode;
+class GuardrailSystem;
+class PluginManager;
+class SessionRecorder;
+class CommentThread;
+class StickyNotes;
+class LabelSystem;
+class InitTemplates;
+class CommitStoryMode;
+class ContainerizedSnapshots;
+class TerminalUI;
+}
+
 namespace gyatt {
 
 class Repository {
 public:
     Repository(const std::string& path = ".");
+    ~Repository();
     
     // Core operations
     bool init();
@@ -47,6 +69,25 @@ public:
     bool uploadToGitHub(const std::string& repoName, const std::string& branch = "main");
     bool setGitHubToken(const std::string& token);
     
+    // Advanced feature system accessors
+    MarkdownCommit* getMarkdownCommit() const { return markdownCommit.get(); }
+    SemanticBranching* getSemanticBranching() const { return semanticBranching.get(); }
+    SectionBasedStaging* getSectionStaging() const { return sectionStaging.get(); }
+    ProjectMapper* getProjectMapper() const { return projectMapper.get(); }
+    CheckpointSystem* getCheckpointSystem() const { return checkpointSystem.get(); }
+    OopsShield* getOopsShield() const { return oopsShield.get(); }
+    RewindMode* getRewindMode() const { return rewindMode.get(); }
+    GuardrailSystem* getGuardrails() const { return guardrails.get(); }
+    PluginManager* getPluginManager() const { return pluginManager.get(); }
+    SessionRecorder* getSessionRecorder() const { return sessionRecorder.get(); }
+    CommentThread* getCommentSystem() const { return commentSystem.get(); }
+    StickyNotes* getStickyNotes() const { return stickyNotes.get(); }
+    LabelSystem* getLabelSystem() const { return labelSystem.get(); }
+    InitTemplates* getInitTemplates() const { return initTemplates.get(); }
+    CommitStoryMode* getStoryMode() const { return storyMode.get(); }
+    ContainerizedSnapshots* getSnapshots() const { return snapshots.get(); }
+    TerminalUI* getTerminalUI() const { return terminalUI.get(); }
+    
     // Getters
     std::string getRepoPath() const { return repoPath; }
     std::string getCurrentBranch() const;
@@ -63,6 +104,28 @@ private:
     std::string configFile;
     std::string indexFile;
     std::string headFile;
+    
+    // Advanced feature systems - initialized lazily
+    mutable std::unique_ptr<MarkdownCommit> markdownCommit;
+    mutable std::unique_ptr<SemanticBranching> semanticBranching;
+    mutable std::unique_ptr<SectionBasedStaging> sectionStaging;
+    mutable std::unique_ptr<ProjectMapper> projectMapper;
+    mutable std::unique_ptr<CheckpointSystem> checkpointSystem;
+    mutable std::unique_ptr<OopsShield> oopsShield;
+    mutable std::unique_ptr<RewindMode> rewindMode;
+    mutable std::unique_ptr<GuardrailSystem> guardrails;
+    mutable std::unique_ptr<PluginManager> pluginManager;
+    mutable std::unique_ptr<SessionRecorder> sessionRecorder;
+    mutable std::unique_ptr<CommentThread> commentSystem;
+    mutable std::unique_ptr<StickyNotes> stickyNotes;
+    mutable std::unique_ptr<LabelSystem> labelSystem;
+    mutable std::unique_ptr<InitTemplates> initTemplates;
+    mutable std::unique_ptr<CommitStoryMode> storyMode;
+    mutable std::unique_ptr<ContainerizedSnapshots> snapshots;
+    mutable std::unique_ptr<TerminalUI> terminalUI;
+    
+    // Initialization methods for feature systems
+    void initializeFeatureSystems() const;
     
     bool createDirectoryStructure();
     bool writeHead(const std::string& ref);
@@ -83,6 +146,7 @@ private:
     std::string getGitHubToken();
     bool createGitHubRepo(const std::string& repoName);
     bool uploadFilesToGitHub(const std::string& repoName, const std::string& branch);
+    bool uploadToEmptyGitHubRepo(const std::string& repoName, const std::string& branch, const std::string& token);
 };
 
 } // namespace gyatt

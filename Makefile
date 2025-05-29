@@ -2,7 +2,7 @@
 
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -Iinclude
-LDFLAGS = -lssl -lcrypto -lcurl
+LDFLAGS = -lssl -lcrypto -lcurl -ljsoncpp
 
 SRCDIR = src
 INCDIR = include

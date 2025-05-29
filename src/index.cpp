@@ -20,15 +20,12 @@ bool Index::addFile(const std::string& filepath) {
         return false;
     }
     
-    // Calculate file hash
     std::string hash = hashFile(filepath);
     
-    // Store as blob object
     if (!storeBlob(filepath, hash)) {
         return false;
     }
     
-    // Add to index
     IndexEntry entry;
     entry.filepath = filepath;
     entry.hash = hash;
@@ -79,7 +76,7 @@ std::vector<Index::IndexEntry> Index::getAllFiles() {
 
 bool Index::loadIndex() {
     if (!Utils::fileExists(indexFile)) {
-        return true; // Empty index is valid
+        return true; 
     }
     
     try {
@@ -100,14 +97,11 @@ bool Index::loadIndex() {
                 entry.size = std::stoull(parts[2]);
                 entry.staged = (parts[3] == "1");
                 
-                // Parse modification time if available
                 if (parts.size() >= 5) {
                     try {
-                        // Just validate the time format, use file system time
                         Utils::parseTime(parts[4]);
                         entry.modTime = std::filesystem::last_write_time(entry.filepath);
                     } catch (...) {
-                        // Use current time if parsing fails
                         entry.modTime = std::filesystem::file_time_type::clock::now();
                     }
                 } else {
@@ -164,7 +158,6 @@ std::string Index::createTree() {
 std::map<std::string, Index::FileStatus> Index::getFileStatuses() {
     std::map<std::string, FileStatus> statuses;
     
-    // Check tracked files
     for (const auto& [path, entry] : entries) {
         if (Utils::fileExists(path)) {
             std::string currentHash = hashFile(path);
