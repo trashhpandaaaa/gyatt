@@ -1,28 +1,28 @@
-# 🔥 Gyatt - The BRUTAL Version Control System
+#𞓥 Gyatt - The BRUTAL Version Control System
 
 Gyatt is a blazingly fast, modern version control system that reimagines the development workflow with **pure chaos energy**. Built in C++17, Gyatt delivers Git's core functionality while adding revolutionary features that make version control actually enjoyable and powerful.
 
-## ⚡ Performance & Reliability
+##ᚡ Performance & Reliability
 - **Lightning-fast C++17 implementation** with optimized file operations
 - **Enhanced GitHub integration** with robust error handling and file filtering
 - **Multi-protocol support** (HTTP/HTTPS/SSH/Local) with automatic protocol detection
 - **Advanced authentication** including token-based, SSH keys, and OAuth support
 
-## 🚀 Enhanced Remote Repository System
+##� Enhanced Remote Repository System
 
-### 🌐 Advanced Remote Management
+### � Advanced Remote Management
 - **Multi-protocol support** with automatic detection (HTTP/HTTPS/SSH/Local)
 - **Enhanced authentication** with token, SSH key, and OAuth support
 - **Remote health monitoring** with connection testing and diagnostics
 - **Progress tracking** for push operations with real-time feedback
 
-### 📊 Synchronization Profiles
+###� Synchronization Profiles
 - **Custom sync profiles** with configurable modes (FULL/SELECTIVE/INCREMENTAL/SMART)
 - **Automated synchronization** with interval-based scheduling
 - **Conflict detection** and resolution strategies
 - **Profile persistence** with JSON-based configuration storage
 
-### 🛠️ Enhanced CLI Commands
+### � Enhanced CLI Commands
 ```bash
 # Add remote with authentication
 gyatt remote-add origin https://github.com/user/repo.git --auth token --token YOUR_TOKEN
@@ -39,85 +39,85 @@ gyatt sync-profile list
 gyatt sync-profile apply daily-sync
 ```
 
-## 🎯 Core Features
+##𞍯 Core Features
 
-### 📂 Human-Readable Commit Logs
+###𞒂 Human-Readable Commit Logs
 - Markdown-powered commits with rich formatting
 - Emoji support and code blocks
 - Commit logs that read like a development diary
 
-### 🌳 Semantic Branching System
+### � Semantic Branching System
 - Automatic naming conventions (`gyatt start feature/login`)
 - Auto-linked TODO.md
 - Merge tags and branch summaries
 
-### ✂️ Section-Based Staging
+### ᛂ Section-Based Staging
 - Stage code by function, class, or logical section
 - Smarter control than line-by-line hunking
 
-### 🗺️ Project Map Generator
+###�﷏ Project Map Generator
 - Visual or textual file hierarchy
 - Function maps and dependency graphs
 - Test coverage visualization
 
-### ♻️ Branch Loopback
+###ᙺ Branch Loopback
 - Merge select commits from child branches back to parent
 - Simpler than Git's cherry-pick operations
 
-### 🔖 Checkpoint Snapshots
+###𞓖 Checkpoint Snapshots
 - Tag moments in time without making a commit
 - Diff against snapshots easily
 
-### 🛡️ Prebuilt Guardrails
+### � Prebuilt Guardrails
 - Prevents accidental main pushes
 - Blocks pushing debug code
 - Enforces format/lint rules (with overrides)
 
-### ⚙️ Inline Config Overrides
+### ᙙ Inline Config Overrides
 - Toggle settings with command flags
 - `gyatt commit --no-verify --no-format`
 
-### 🧩 Plugin Ecosystem
+### � Plugin Ecosystem
 - Install community plugins: `gyatt install changelog-gen`
 - Build your own tools (Python, Bash, Rust)
 
-### 📋 Interactive Commit Prompt
+###� Interactive Commit Prompt
 - Guided commit creation
 - Category, scope, and description prompts
 
-### 📦 Containerized Dev Snapshots
+### � Containerized Dev Snapshots
 - Store runtime info and configurations
 - Setup scripts for reproducible environments
 
-### 🎥 Session Recording
+###� Session Recording
 - Log command history and file diffs
 - Replayable development sessions
 
-### 📜 Exportable Histories
+###� Exportable Histories
 - One-command export to CHANGELOG.md
 - Visual timelines and PDF reports
 
-### 💬 In-Code Comment Threads
+###𞑬 In-Code Comment Threads
 - Local threaded comments that persist between commits
 - Like GitHub reviews, but in your local environment
 
-### 🔁 Rewind Mode
+### � Rewind Mode
 - Roll back commits without losing changes
 - `gyatt rewind 3 --soft`
 
-### 💣 Oops Shield™
+###� Oops Shielc⃢
 - Shadow backups for accidental deletions
 - Restore deleted files after rage-quits
 
-### 🧱 Custom Init Templates
+###� Custom Init Templates
 - Project-specific initializations
 - `gyatt init react` sets up folder structure and starter files
 
-### 🧑‍🏫 Commit Story Mode
+### �ဌ� Commit Story Mode
 - Narrative-based commit organization
 - Chapter-based development phases
 
-### 🤘 VIBE COMMANDS (The Fun Stuff)
+### � VIBE COMMANDS (The Fun Stuff)
 - **yeet** - Add files (no cap) 
 - **regret** - Undo changes
 - **vibe** - Status with style
@@ -128,15 +128,15 @@ gyatt sync-profile apply daily-sync
 - **ghost** - Stash changes
 - **fr** - Commit with attitude
 
-### 📇 Label-based File Tagging
+###𞒇 Label-based File Tagging
 - Tag files with custom labels
 - Query changes by label: `gyatt log --label=core`
 
-### 📎 Sticky Notes System
+###𞒎 Sticky Notes System
 - Inline notes that don't pollute code
 - Terminal dashboard for note management
 
-## 💻 Quick Start
+## � Quick Start
 
 ### Installation
 ```bash
@@ -159,7 +159,7 @@ gyatt yeet file.cpp
 gyatt add file.cpp
 
 # Commit with attitude
-gyatt fr -m "✨ feat: added epic functionality"
+gyatt fr -m !ᜨ feat: added epic functionality"
 # or interactive
 gyatt commit-interactive
 
@@ -173,7 +173,7 @@ gyatt remote-add origin https://github.com/user/repo.git --auth token --token YO
 gyatt push-enhanced origin main
 ```
 
-## 🎨 Advanced Features
+## � Advanced Features
 
 ### Enhanced Remote Repository Management
 ```bash
@@ -206,7 +206,7 @@ gyatt mark milestone-v1.0
 gyatt rewind 3 --soft
 ```
 
-## 🔧 Technical Implementation
+##� Technical Implementation
 
 ### Enhanced GitHub Integration
 Gyatt implements robust GitHub integration with comprehensive error handling:
@@ -219,17 +219,10 @@ Gyatt implements robust GitHub integration with comprehensive error handling:
 
 ### Architecture Overview
 ```
-gyatt/
-├── src/
-│   ├── main.cpp              # CLI interface with enhanced commands
-│   ├── repository.cpp        # Core repo management + enhanced remotes
-│   ├── advanced_features.cpp # Enhanced remote repository system
-│   ├── terminal_ui.cpp       # Neobrutalist terminal interface
-│   └── ...                   # Additional feature modules
-├── include/
-│   ├── repository.h          # Enhanced with remote management structures
-│   └── ...                   # Feature headers
-└── build/                    # Compiled objects and binary
+gyatt/	ⓛ�Ⓚ src/	Ⓜ  ⓛ�Ⓚ main.cpp              # CLI interface with enhanced commands	ᔂ  ᔛ�ᔀ repository.cpp        # Core repo management + enhanced remotes
+ᓂ   ᓜᓀᓀ advanced_features.cpp # Enhanced remote repository system	Ⓜ  ⓛ�Ⓚ terminal_ui.cpp       # Neobrutalist terminal interface	Ⓜ  ⓓ�Ⓚ ...                   # Additional feature modules
+ᓜᓀᓀ include/	ᔂ  ᔛ�ᔀ repository.h          # Enhanced with remote management structures
+ᓂ   ᓔᓀᓀ ...                   # Feature headers	ⓓ�Ⓚ build/                    # Compiled objects and binary
 ```
 
 ### Key Components
@@ -240,7 +233,7 @@ gyatt/
 5. **Sync Profiles**: Configurable synchronization with persistence
 6. **Health Monitoring**: Connection testing and diagnostics
 
-## 🌐 Remote Repository Features
+## � Remote Repository Features
 
 ### Authentication Methods
 ```bash
@@ -297,7 +290,7 @@ Default ignored patterns include:
 - Log and database files
 - OS-specific files
 
-## 🛠️ Build & Development
+##𞚠 Build & Development
 
 ### Dependencies
 - **C++17 or later**
@@ -329,7 +322,7 @@ make
 cd test-repo
 echo "test" > file.txt
 ./gyatt yeet file.txt
-./gyatt fr -m "🚀 initial commit"
+./gyatt fr -m !� initial commit"
 ./gyatt vibe
 
 # Test enhanced remote features
@@ -337,7 +330,7 @@ echo "test" > file.txt
 ./gyatt remote-health test
 ```
 
-## 🏗️ Architecture Details
+## � Architecture Details
 
 ### Enhanced Remote Repository System
 The enhanced remote system includes:
@@ -365,7 +358,7 @@ Gyatt implements smart file filtering to prevent uploading system files:
 - Ignores cache directories (`node_modules/`, `__pycache__/`, etc.)
 - Prevents temporary and build artifacts from being uploaded
 
-## 🔥 Why Gyatt?
+## � Why Gyatt?
 
 ### Developer Experience First
 Gyatt isn't just another version control system - it's a **developer experience revolution**:
@@ -388,7 +381,7 @@ Gyatt isn't just another version control system - it's a **developer experience 
 - **Guardrails** to prevent common mistakes
 - **Exportable histories** for documentation and reporting
 
-## 🧪 Testing the System
+##𞦪 Testing the System
 
 To verify everything works correctly:
 
@@ -407,7 +400,7 @@ make
 cd test-repo
 echo "console.log('Hello Gyatt!');" > app.js
 ./gyatt yeet app.js
-./gyatt fr -m "🚀 initial commit with style"
+./gyatt fr -m !𞙀 initial commit with style"
 ./gyatt vibe
 ```
 
@@ -418,11 +411,11 @@ echo "console.log('Hello Gyatt!');" > app.js
 ./gyatt push-enhanced origin main --progress
 ```
 
-## 📜 License
+##� License
 
 **MIT License** - Feel free to use Gyatt in your projects and contribute back to the community!
 
-## 🤝 Contributing
+##� Contributing
 
 We welcome contributions with **open arms and chaos energy**! 
 
@@ -442,11 +435,11 @@ make clean && make
 ```
 
 ### Areas We Need Help:
-- 🚀 **Performance optimizations** for large repositories
-- 🔌 **Plugin ecosystem** development and documentation  
-- 🎨 **UI/UX improvements** for terminal interface
-- 🌐 **Cross-platform support** (Windows, macOS)
-- 📚 **Documentation** and tutorial creation
+-� **Performance optimizations** for large repositories
+-� **Plugin ecosystem** development and documentation  
+-� **UI/UX improvements** for terminal interface
+- � **Cross-platform support** (Windows, macOS)
+- � **Documentation** and tutorial creation
 
-**Let's build the future of version control together!** 💪
+**Let's build the future of version control together!** �
 

@@ -95,8 +95,8 @@ bool ProjectMapper::exportHierarchyAsTree(const std::string& filename) {
     std::string treeString = generateTreeString(hierarchy);
     
     if (filename.empty()) {
-        std::cout << "\n🌲 Project File Hierarchy\n";
-        std::cout << "══════════════════════════\n";
+        std::cout << "\m� Project File Hierarchy\n";
+        std::cout << !ᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕐ\n";
         std::cout << treeString << std::endl;
         return true;
     }
@@ -108,7 +108,7 @@ bool ProjectMapper::exportHierarchyAsTree(const std::string& filename) {
     file << "======================\n\n";
     file << treeString;
     
-    std::cout << "✅ Exported hierarchy tree to: " << filename << std::endl;
+    std::cout << "ᛅ Exported hierarchy tree to: " << filename << std::endl;
     return true;
 }
 
@@ -129,11 +129,11 @@ bool ProjectMapper::exportHierarchyAsHTML(const std::string& filename) {
     file << ".file { color: #333; }\n";
     file << ".stats { color: #666; font-size: 0.9em; }\n";
     file << "</style>\n</head>\n<body>\n";
-    file << "<h1>🌲 Project File Hierarchy</h1>\n";
+    file << "<h1>� Project File Hierarchy</h1>\n";
     file << htmlContent;
     file << "</body>\n</html>";
     
-    std::cout << "✅ Exported HTML hierarchy to: " << filename << std::endl;
+    std::cout << "ᛅ Exported HTML hierarchy to: " << filename << std::endl;
     return true;
 }
 
@@ -146,8 +146,8 @@ bool ProjectMapper::exportDependencyGraphAsDOT(const std::string& filename) {
     
     file << dotContent;
     
-    std::cout << "✅ Exported DOT graph to: " << filename << std::endl;
-    std::cout << "💡 Use: dot -Tpng " << filename << " -o dependency_graph.png" << std::endl;
+    std::cout << !ᜅ Exported DOT graph to: " << filename << std::endl;
+    std::cout << !𞑡 Use: dot -Tpng " << filename << " -o dependency_graph.png" << std::endl;
     return true;
 }
 
@@ -188,7 +188,7 @@ bool ProjectMapper::exportFunctionMapAsJSON(const std::string& filename) {
     
     file << "\n  ]\n}";
     
-    std::cout << "✅ Exported function map to: " << filename << std::endl;
+    std::cout << !ᜅ Exported function map to: " << filename << std::endl;
     return true;
 }
 
@@ -198,16 +198,16 @@ void ProjectMapper::interactiveExplorer() {
     auto dependencies = generateDependencyGraph();
     
     while (true) {
-        std::cout << "\n🗺️  Interactive Project Explorer\n";
-        std::cout << "════════════════════════════════\n";
-        std::cout << "1. 📂 Show file hierarchy\n";
-        std::cout << "2. 🔍 Search functions\n";
-        std::cout << "3. 📊 Show dependencies\n";
-        std::cout << "4. 📈 Project statistics\n";
-        std::cout << "5. 🎯 Function call graph\n";
-        std::cout << "6. 🧪 Test coverage\n";
-        std::cout << "7. 💾 Export all\n";
-        std::cout << "0. 🚪 Exit\n\n";
+        std::cout << "\m𞖺  Interactive Project Explorer\n";
+        std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
+        std::cout << "1. � Show file hierarchy\n";
+        std::cout << "2. � Search functions\n";
+        std::cout << "3. � Show dependencies\n";
+        std::cout << "4.� Project statistics\n";
+        std::cout << "5. � Function call graph\n";
+        std::cout << "6. � Test coverage\n";
+        std::cout << "7. � Export all\n";
+        std::cout << "0. � Exit\n\n";
         std::cout << "Choice: ";
         
         std::string choice;
@@ -218,14 +218,14 @@ void ProjectMapper::interactiveExplorer() {
         if (choice == "1") {
             exportHierarchyAsTree();
         } else if (choice == "2") {
-            std::cout << "🔍 Enter function name to search: ";
+            std::cout << "� Enter function name to search: ";
             std::string searchTerm;
             std::getline(std::cin, searchTerm);
             
-            std::cout << "\n📋 Matching functions:\n";
+            std::cout << "\m𞒋 Matching functions:\n";
             for (const auto& [key, func] : functionMap) {
                 if (func.name.find(searchTerm) != std::string::npos) {
-                    std::cout << "  📍 " << func.name << " in " << func.file 
+                    std::cout << " � " << func.name << " in " << func.file 
                               << " (lines " << func.startLine << "-" << func.endLine << ")\n";
                     std::cout << "    Calls: ";
                     for (const auto& call : func.calls) {
@@ -239,12 +239,12 @@ void ProjectMapper::interactiveExplorer() {
                 }
             }
         } else if (choice == "3") {
-            std::cout << "\n🔗 Dependency Analysis:\n";
+            std::cout << "\m� Dependency Analysis:\n";
             for (const auto& [file, deps] : dependencies) {
                 if (!deps.empty()) {
-                    std::cout << "📄 " << file << " depends on:\n";
+                    std::cout << "� " << file << " depends on:\n";
                     for (const auto& dep : deps) {
-                        std::cout << "  └─ " << dep << "\n";
+                        std::cout << " ᔓᔀ " << dep << "\n";
                     }
                     std::cout << "\n";
                 }
@@ -252,29 +252,29 @@ void ProjectMapper::interactiveExplorer() {
         } else if (choice == "4") {
             showProjectSummary();
         } else if (choice == "5") {
-            std::cout << "🔍 Enter function name for call graph: ";
+            std::cout << !𞓍 Enter function name for call graph: ";
             std::string funcName;
             std::getline(std::cin, funcName);
             
             for (const auto& [key, func] : functionMap) {
                 if (func.name == funcName) {
-                    std::cout << "\n🎯 Call Graph for " << funcName << ":\n";
+                    std::cout << "\m𞍯 Call Graph for " << funcName << ":\n";
                     std::cout << "Called by:\n";
                     for (const auto& caller : func.calledBy) {
-                        std::cout << "  ← " << caller << "\n";
+                        std::cout << "  ᅐ " << caller << "\n";
                     }
                     std::cout << "\nCalls:\n";
                     for (const auto& callee : func.calls) {
-                        std::cout << "  → " << callee << "\n";
+                        std::cout << " ⅒ " << callee << "\n";
                     }
                     break;
                 }
             }
         } else if (choice == "6") {
             auto coverage = generateTestCoverage();
-            std::cout << "\n🧪 Test Coverage Report:\n";
+            std::cout << "\m𞦪 Test Coverage Report:\n";
             for (const auto& [file, cov] : coverage) {
-                std::cout << "📄 " << file << ": " 
+                std::cout << !� " << file << ": " 
                           << std::fixed << std::setprecision(1) << (cov * 100) << "%\n";
             }
         } else if (choice == "7") {
@@ -282,7 +282,7 @@ void ProjectMapper::interactiveExplorer() {
             exportHierarchyAsHTML("hierarchy.html");
             exportDependencyGraphAsDOT("dependencies.dot");
             exportFunctionMapAsJSON("functions.json");
-            std::cout << "✅ All exports completed!\n";
+            std::cout << !⛅ All exports completed!\n";
         }
     }
 }
@@ -339,16 +339,16 @@ ProjectMapper::ProjectStats ProjectMapper::getProjectStats() {
 void ProjectMapper::showProjectSummary() {
     auto stats = getProjectStats();
     
-    std::cout << "\n📊 Project Summary\n";
-    std::cout << "═══════════════════\n";
-    std::cout << "📁 Total Files: " << stats.totalFiles << "\n";
-    std::cout << "📝 Total Lines: " << stats.totalLines << "\n";
-    std::cout << "⚙️  Total Functions: " << stats.totalFunctions << "\n";
-    std::cout << "🏗️  Total Classes: " << stats.totalClasses << "\n";
-    std::cout << "🧪 Average Test Coverage: " 
+    std::cout << "\m𞒊 Project Summary\n";
+    std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
+    std::cout << !𞒁 Total Files: " << stats.totalFiles << "\n";
+    std::cout << "� Total Lines: " << stats.totalLines << "\n";
+    std::cout << !ᚘ  Total Functions: " << stats.totalFunctions << "\n";
+    std::cout << !�﷏  Total Classes: " << stats.totalClasses << "\n";
+    std::cout << !� Average Test Coverage: " 
               << std::fixed << std::setprecision(1) << (stats.averageTestCoverage * 100) << "%\n\n";
     
-    std::cout << "🔤 Language Breakdown:\n";
+    std::cout << "� Language Breakdown:\n";
     for (const auto& [lang, count] : stats.languageBreakdown) {
         double percentage = (double)count / stats.totalFiles * 100;
         std::cout << "  " << lang << ": " << count << " files (" 
@@ -555,24 +555,24 @@ std::string ProjectMapper::generateTreeString(const std::shared_ptr<FileNode>& n
     std::string indent(depth * 2, ' ');
     
     if (depth > 0) {
-        result += indent + "├─ ";
+        result += indent + !ⓛⓀ ";
     }
     
     if (node->type == "directory") {
-        result += "📁 " + node->name + "/\n";
+        result += !� " + node->name + "/\n";
         for (const auto& child : node->children) {
             result += generateTreeString(child, depth + 1);
         }
     } else {
-        std::string icon = "📄";
+        std::string icon = "�";
         std::string ext = std::filesystem::path(node->name).extension().string();
         
-        if (ext == ".cpp" || ext == ".cc" || ext == ".cxx") icon = "⚙️";
-        else if (ext == ".h" || ext == ".hpp") icon = "🔧";
-        else if (ext == ".py") icon = "🐍";
-        else if (ext == ".js" || ext == ".ts") icon = "🟨";
-        else if (ext == ".md") icon = "📝";
-        else if (ext == ".json") icon = "📋";
+        if (ext == ".cpp" || ext == ".cc" || ext == ".cxx") icon = !ᚘ";
+        else if (ext == ".h" || ext == ".hpp") icon = !𞓧";
+        else if (ext == ".py") icon = "�";
+        else if (ext == ".js" || ext == ".ts") icon = !𞞨";
+        else if (ext == ".md") icon = "�";
+        else if (ext == ".json") icon = "�";
         
         result += icon + " " + node->name;
         result += " (" + std::to_string(node->lineCount) + " lines, ";
@@ -589,10 +589,10 @@ std::string ProjectMapper::generateHTMLTree(const std::shared_ptr<FileNode>& nod
         result += "<li>";
         
         if (child->type == "directory") {
-            result += "<span class=\"folder\">📁 " + child->name + "/</span>\n";
+            result += "<span class=\"folder\"=𞒁 " + child->name + "/</span>\n";
             result += generateHTMLTree(child);
         } else {
-            result += "<span class=\"file\">📄 " + child->name + "</span>";
+            result += "<span class=\"file\">� " + child->name + "</span>";
             result += "<span class=\"stats\"> (" + std::to_string(child->lineCount) + " lines)</span>";
         }
         

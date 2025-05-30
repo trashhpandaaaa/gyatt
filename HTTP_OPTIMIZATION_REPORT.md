@@ -124,12 +124,11 @@ config.maxRetries = 3;                // Retry failed requests
 
 ### Real-time Performance Display
 ```
-âœ… Blob creation completed in 551ms (108.89 files/sec)
-ðŸ“Š HTTP Optimization Stats:
-   â€¢ Cache hits: 0/60 (0%)
-   â€¢ Average response time: 1.67ms
-   â€¢ Total bytes transferred: 2.5 MB
-   â€¢ Active connections: 4/8
+á›… Blob creation completed in 551ms (108.89 files/sec)	ðž’Š HTTP Optimization Stats:
+  â¢ Cache hits: 0/60 (0%)
+  á€¢ Average response time: 1.67ms
+  â¢ Total bytes transferred: 2.5 MB
+  â¢ Active connections: 4/8
 ```
 
 ### Comprehensive Statistics Tracking

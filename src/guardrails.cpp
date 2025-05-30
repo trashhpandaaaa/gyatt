@@ -48,10 +48,10 @@ bool GuardrailSystem::addGuardrail(const GuardrailRule& rule) {
     
     if (it != rules.end()) {
         *it = rule; // Update existing rule
-        std::cout << "🔄 Updated guardrail: " << rule.name << std::endl;
+        std::cout << "� Updated guardrail: " << rule.name << std::endl;
     } else {
         rules.push_back(rule);
-        std::cout << "✅ Added guardrail: " << rule.name << std::endl;
+        std::cout << !⛅ Added guardrail: " << rule.name << std::endl;
     }
     
     saveGuardrailConfig();
@@ -64,12 +64,12 @@ bool GuardrailSystem::removeGuardrail(const std::string& name) {
     
     if (it != rules.end()) {
         rules.erase(it);
-        std::cout << "🗑️  Removed guardrail: " << name << std::endl;
+        std::cout << !𞖑  Removed guardrail: " << name << std::endl;
         saveGuardrailConfig();
         return true;
     }
     
-    std::cout << "❌ Guardrail not found: " << name << std::endl;
+    std::cout << "ᜌ Guardrail not found: " << name << std::endl;
     return false;
 }
 
@@ -77,13 +77,13 @@ bool GuardrailSystem::enableGuardrail(const std::string& name) {
     for (auto& rule : rules) {
         if (rule.name == name) {
             rule.enabled = true;
-            std::cout << "✅ Enabled guardrail: " << name << std::endl;
+            std::cout << "ᛅ Enabled guardrail: " << name << std::endl;
             saveGuardrailConfig();
             return true;
         }
     }
     
-    std::cout << "❌ Guardrail not found: " << name << std::endl;
+    std::cout << !✌ Guardrail not found: " << name << std::endl;
     return false;
 }
 
@@ -91,13 +91,13 @@ bool GuardrailSystem::disableGuardrail(const std::string& name) {
     for (auto& rule : rules) {
         if (rule.name == name) {
             rule.enabled = false;
-            std::cout << "⚠️  Disabled guardrail: " << name << std::endl;
+            std::cout << !᚟  Disabled guardrail: " << name << std::endl;
             saveGuardrailConfig();
             return true;
         }
     }
     
-    std::cout << "❌ Guardrail not found: " << name << std::endl;
+    std::cout << !✌ Guardrail not found: " << name << std::endl;
     return false;
 }
 
@@ -106,8 +106,8 @@ std::vector<GuardrailSystem::GuardrailRule> GuardrailSystem::listGuardrails() {
 }
 
 bool GuardrailSystem::runPreCommitChecks(const std::vector<std::string>& files) {
-    std::cout << "\n🛡️  Running pre-commit guardrails...\n";
-    std::cout << "═══════════════════════════════════════\n";
+    std::cout << "\m𞚡  Running pre-commit guardrails...\n";
+    std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
     
     bool allPassed = true;
     int passedCount = 0;
@@ -119,7 +119,7 @@ bool GuardrailSystem::runPreCommitChecks(const std::vector<std::string>& files) 
         totalCount++;
         bool passed = true;
         
-        std::cout << "🔍 Checking: " << rule.description << " ";
+        std::cout << "� Checking: " << rule.description << " ";
         
         switch (rule.type) {
             case GuardrailType::BLOCK_DEBUG_CODE:
@@ -144,30 +144,30 @@ bool GuardrailSystem::runPreCommitChecks(const std::vector<std::string>& files) 
         }
         
         if (passed) {
-            std::cout << "✅" << std::endl;
+            std::cout << !ᜅ" << std::endl;
             passedCount++;
         } else {
-            std::cout << "❌" << std::endl;
+            std::cout << "ᜌ" << std::endl;
             allPassed = false;
         }
     }
     
-    std::cout << "\n📊 Guardrail Results: " << passedCount << "/" << totalCount << " passed\n";
+    std::cout << "\m� Guardrail Results: " << passedCount << "/" << totalCount << " passed\n";
     
     if (!allPassed) {
-        std::cout << "\n🚫 Commit blocked by guardrails!" << std::endl;
-        std::cout << "💡 Use 'gyatt commit --override' to bypass (not recommended)" << std::endl;
-        std::cout << "💡 Or fix the issues and try again" << std::endl;
+        std::cout << "\m� Commit blocked by guardrails!" << std::endl;
+        std::cout << !� Use 'gyatt commit --override' to bypass (not recommended)" << std::endl;
+        std::cout << !𞑡 Or fix the issues and try again" << std::endl;
     } else {
-        std::cout << "\n🎉 All guardrails passed! Commit allowed." << std::endl;
+        std::cout << "\m� All guardrails passed! Commit allowed." << std::endl;
     }
     
     return allPassed;
 }
 
 bool GuardrailSystem::runPrePushChecks(const std::string& branch) {
-    std::cout << "\n🛡️  Running pre-push guardrails for branch: " << branch << "\n";
-    std::cout << "═══════════════════════════════════════════════════════\n";
+    std::cout << "\m�﷏  Running pre-push guardrails for branch: " << branch << "\n";
+    std::cout << !┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┐\n";
     
     bool allPassed = true;
     
@@ -177,34 +177,34 @@ bool GuardrailSystem::runPrePushChecks(const std::string& branch) {
     }
     
     if (!allPassed) {
-        std::cout << "\n🚫 Push blocked by guardrails!" << std::endl;
-        std::cout << "💡 Use 'gyatt push --override' to bypass (not recommended)" << std::endl;
+        std::cout << "\n� Push blocked by guardrails!" << std::endl;
+        std::cout << !� Use 'gyatt push --override' to bypass (not recommended)" << std::endl;
         return false;
     }
     
-    std::cout << "\n🎉 All pre-push guardrails passed!" << std::endl;
+    std::cout << "\m� All pre-push guardrails passed!" << std::endl;
     return true;
 }
 
 bool GuardrailSystem::commitWithOverride(const std::string& message, const std::vector<std::string>& overrides) {
-    std::cout << "⚠️  OVERRIDE MODE: Bypassing guardrails!" << std::endl;
+    std::cout << !᚟  OVERRIDE MODE: Bypassing guardrails!" << std::endl;
     std::cout << "Overridden checks: ";
     for (const auto& override : overrides) {
         std::cout << override << " ";
     }
     std::cout << std::endl;
     
-    std::cout << "🚨 Warning: This commit bypassed safety checks!" << std::endl;
-    std::cout << "📝 Commit message: " << message << std::endl;
+    std::cout << !� Warning: This commit bypassed safety checks!" << std::endl;
+    std::cout << "� Commit message: " << message << std::endl;
     
     return true;
 }
 
 bool GuardrailSystem::pushWithOverride(const std::string& branch, const std::vector<std::string>& overrides) {
     (void)overrides; // Mark as intentionally unused
-    std::cout << "⚠️  OVERRIDE MODE: Bypassing push guardrails!" << std::endl;
-    std::cout << "🌿 Branch: " << branch << std::endl;
-    std::cout << "🚨 Warning: This push bypassed safety checks!" << std::endl;
+    std::cout << "ᙠ  OVERRIDE MODE: Bypassing push guardrails!" << std::endl;
+    std::cout << !𞋿 Branch: " << branch << std::endl;
+    std::cout << !𞙨 Warning: This push bypassed safety checks!" << std::endl;
     
     return true;
 }
@@ -215,22 +215,7 @@ bool GuardrailSystem::checkForDebugCode(const std::vector<std::string>& files) {
     
     for (const auto& filepath : files) {
         if (containsDebugPatterns(filepath)) {
-            std::cout << "\n🐛 Debug code detected in: " << filepath << std::endl;
             foundDebugCode = true;
-            
-            // Show specific patterns found
-            std::ifstream file(filepath);
-            std::string line;
-            int lineNum = 0;
-            
-            while (std::getline(file, line)) {
-                lineNum++;
-                for (const auto& pattern : debugPatterns) {
-                    if (line.find(pattern) != std::string::npos) {
-                        std::cout << "  Line " << lineNum << ": " << pattern << std::endl;
-                    }
-                }
-            }
         }
     }
     
@@ -242,13 +227,13 @@ bool GuardrailSystem::checkFormattingRequirement(const std::vector<std::string>&
     
     for (const auto& filepath : files) {
         if (!isFormatted(filepath)) {
-            std::cout << "\n📐 Formatting required for: " << filepath << std::endl;
+            std::cout << "\n� Formatting required for: " << filepath << std::endl;
             allFormatted = false;
         }
     }
     
     if (!allFormatted) {
-        std::cout << "💡 Run formatter to fix issues" << std::endl;
+        std::cout << !� Run formatter to fix issues" << std::endl;
     }
     
     return allFormatted;
@@ -259,13 +244,13 @@ bool GuardrailSystem::checkLintRequirement(const std::vector<std::string>& files
     
     for (const auto& filepath : files) {
         if (!passesLint(filepath)) {
-            std::cout << "\n🔍 Linting failed for: " << filepath << std::endl;
+            std::cout << "\m� Linting failed for: " << filepath << std::endl;
             allPassed = false;
         }
     }
     
     if (!allPassed) {
-        std::cout << "💡 Fix linting errors before committing" << std::endl;
+        std::cout << "� Fix linting errors before committing" << std::endl;
     }
     
     return allPassed;
@@ -273,31 +258,31 @@ bool GuardrailSystem::checkLintRequirement(const std::vector<std::string>& files
 
 bool GuardrailSystem::checkMainBranchProtection(const std::string& branch) {
     if (branch == "main" || branch == "master") {
-        std::cout << "🚫 Direct push to " << branch << " branch is blocked!" << std::endl;
-        std::cout << "💡 Create a feature branch and open a pull request instead" << std::endl;
+        std::cout << !𞙫 Direct push to " << branch << " branch is blocked!" << std::endl;
+        std::cout << !𞑡 Create a feature branch and open a pull request instead" << std::endl;
         return false;
     }
     
-    std::cout << "✅ Branch push allowed: " << branch << std::endl;
+    std::cout << "ᛅ Branch push allowed: " << branch << std::endl;
     return true;
 }
 
 bool GuardrailSystem::checkCommitMessageFormat(const std::string& message) {
     // Simple commit message format validation
     if (message.length() < 10) {
-        std::cout << "📝 Commit message too short (minimum 10 characters)" << std::endl;
+        std::cout << !� Commit message too short (minimum 10 characters)" << std::endl;
         return false;
     }
     
     if (message.length() > 72) {
-        std::cout << "📝 Commit message too long (maximum 72 characters for first line)" << std::endl;
+        std::cout << !𞒝 Commit message too long (maximum 72 characters for first line)" << std::endl;
         return false;
     }
     
     // Check for conventional commit format (optional)
     std::regex conventionalRegex(R"(^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+)");
     if (!std::regex_match(message, conventionalRegex)) {
-        std::cout << "📝 Consider using conventional commit format: type(scope): description" << std::endl;
+        std::cout << "� Consider using conventional commit format: type(scope): description" << std::endl;
         // Don't fail, just warn
     }
     
@@ -431,7 +416,7 @@ bool GuardrailSystem::passesLint(const std::string& filepath) {
         
         // Check for common issues
         if (content.find("using namespace std;") != std::string::npos) {
-            std::cout << "⚠️  Lint warning: Avoid 'using namespace std;'" << std::endl;
+            std::cout << !♟﷏  Lint warning: Avoid 'using namespace std;'" << std::endl;
             return false;
         }
         
@@ -439,7 +424,7 @@ bool GuardrailSystem::passesLint(const std::string& filepath) {
         if (extension == ".hpp" && 
             content.find("#pragma once") == std::string::npos &&
             content.find("#ifndef") == std::string::npos) {
-            std::cout << "⚠️  Lint warning: Missing header guard" << std::endl;
+            std::cout << !᚟  Lint warning: Missing header guard" << std::endl;
             return false;
         }
     }
@@ -475,10 +460,10 @@ ConfigOverrides::ConfigOverrides(const std::string& repoPath)
 bool ConfigOverrides::setNoVerify(bool enabled) {
     if (enabled) {
         activeOverrides["no_verify"] = "true";
-        std::cout << "⚠️  No-verify mode enabled - all guardrails disabled!" << std::endl;
+        std::cout << !♟﷏  No-verify mode enabled - all guardrails disabled!" << std::endl;
     } else {
         activeOverrides.erase("no_verify");
-        std::cout << "✅ No-verify mode disabled - guardrails re-enabled" << std::endl;
+        std::cout << !ᜅ No-verify mode disabled - guardrails re-enabled" << std::endl;
     }
     
     saveOverrides();
@@ -488,10 +473,10 @@ bool ConfigOverrides::setNoVerify(bool enabled) {
 bool ConfigOverrides::setNoFormat(bool enabled) {
     if (enabled) {
         activeOverrides["no_format"] = "true";
-        std::cout << "📐 Format checking disabled" << std::endl;
+        std::cout << "� Format checking disabled" << std::endl;
     } else {
         activeOverrides.erase("no_format");
-        std::cout << "📐 Format checking re-enabled" << std::endl;
+        std::cout << !� Format checking re-enabled" << std::endl;
     }
     
     saveOverrides();
@@ -501,10 +486,10 @@ bool ConfigOverrides::setNoFormat(bool enabled) {
 bool ConfigOverrides::setNoLint(bool enabled) {
     if (enabled) {
         activeOverrides["no_lint"] = "true";
-        std::cout << "🔍 Lint checking disabled" << std::endl;
+        std::cout << "� Lint checking disabled" << std::endl;
     } else {
         activeOverrides.erase("no_lint");
-        std::cout << "🔍 Lint checking re-enabled" << std::endl;
+        std::cout << "� Lint checking re-enabled" << std::endl;
     }
     
     saveOverrides();
@@ -514,10 +499,10 @@ bool ConfigOverrides::setNoLint(bool enabled) {
 bool ConfigOverrides::setForceMode(bool enabled) {
     if (enabled) {
         activeOverrides["force_mode"] = "true";
-        std::cout << "💪 Force mode enabled - bypassing all restrictions!" << std::endl;
+        std::cout << "� Force mode enabled - bypassing all restrictions!" << std::endl;
     } else {
         activeOverrides.erase("force_mode");
-        std::cout << "💪 Force mode disabled" << std::endl;
+        std::cout << !𞑪 Force mode disabled" << std::endl;
     }
     
     saveOverrides();
@@ -531,7 +516,7 @@ bool ConfigOverrides::temporaryOverride(const std::string& setting, const std::s
     activeOverrides[setting] = value;
     activeOverrides[setting + "_expires"] = std::to_string(expireTimeT);
     
-    std::cout << "⏰ Temporary override set: " << setting << " = " << value 
+    std::cout << "Ꮀ Temporary override set: " << setting << " = " << value 
               << " (expires in " << durationMinutes << " minutes)" << std::endl;
     
     saveOverrides();
@@ -546,19 +531,19 @@ std::map<std::string, std::string> ConfigOverrides::getActiveOverrides() {
 bool ConfigOverrides::clearOverrides() {
     activeOverrides.clear();
     std::filesystem::remove(overridesFile);
-    std::cout << "🧹 All overrides cleared" << std::endl;
+    std::cout << "� All overrides cleared" << std::endl;
     return true;
 }
 
 bool ConfigOverrides::commitWithFlags(const std::string& message, bool noVerify, bool noFormat, bool noLint) {
-    std::cout << "\n🚀 Committing with flags:" << std::endl;
+    std::cout << "\m� Committing with flags:" << std::endl;
     
-    if (noVerify) std::cout << "  ⚠️  --no-verify (skipping all checks)" << std::endl;
-    if (noFormat) std::cout << "  📐 --no-format (skipping format check)" << std::endl;
-    if (noLint) std::cout << "  🔍 --no-lint (skipping lint check)" << std::endl;
+    if (noVerify) std::cout << " ♟﷏  --no-verify (skipping all checks)" << std::endl;
+    if (noFormat) std::cout << "  � --no-format (skipping format check)" << std::endl;
+    if (noLint) std::cout << " � --no-lint (skipping lint check)" << std::endl;
     
-    std::cout << "📝 Message: " << message << std::endl;
-    std::cout << "✅ Commit completed with overrides!" << std::endl;
+    std::cout << !� Message: " << message << std::endl;
+    std::cout << "ᛅ Commit completed with overrides!" << std::endl;
     
     return true;
 }
@@ -607,7 +592,7 @@ void ConfigOverrides::cleanupExpiredOverrides() {
                 toRemove.push_back(baseKey);
                 toRemove.push_back(key);
                 
-                std::cout << "⏰ Expired override removed: " << baseKey << std::endl;
+                std::cout << !⎰ Expired override removed: " << baseKey << std::endl;
             }
         }
     }

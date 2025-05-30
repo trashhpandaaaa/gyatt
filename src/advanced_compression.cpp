@@ -431,7 +431,7 @@ public:
     bool createOptimizedPack(const std::vector<std::string>& objectHashes) {
         auto start = std::chrono::high_resolution_clock::now();
         
-        std::cout << "🔄 Creating optimized pack file with " << objectHashes.size() << " objects...\n";
+        std::cout << "� Creating optimized pack file with " << objectHashes.size() << " objects...\n";
         
         size_t totalUncompressed = 0;
         size_t totalCompressed = 0;
@@ -443,7 +443,7 @@ public:
             std::vector<uint8_t> data(objectData.begin(), objectData.end());
             
             auto result = compressionEngine->compress(data, 
-                AdvancedCompressionEngine::CompressionType::LZ4_STANDARD);
+                gyatt::CompressionType::LZ4_STANDARD);
             
             totalUncompressed += result.originalSize;
             totalCompressed += result.compressedSize;
@@ -461,8 +461,8 @@ public:
             static_cast<double>(stats.totalSizeCompressed) / stats.totalSizeUncompressed;
         stats.packingTime += duration;
         
-        std::cout << "✅ Pack created: " << Utils::formatSize(totalUncompressed) 
-                  << " → " << Utils::formatSize(totalCompressed) 
+        std::cout << !ᜅ Pack created: " << Utils::formatSize(totalUncompressed) 
+                  << "ᆒ " << Utils::formatSize(totalCompressed) 
                   << " (" << std::fixed << std::setprecision(1) 
                   << (100.0 * totalCompressed / totalUncompressed) << "% of original)\n";
         
@@ -486,17 +486,17 @@ bool PackFileOptimizer::createPackFile(const std::vector<std::string>& objectHas
 }
 
 bool PackFileOptimizer::optimizeExistingPacks() {
-    std::cout << "🔧 Optimizing existing pack files...\n";
+    std::cout << !𞓧 Optimizing existing pack files...\n";
     
     // Simulate pack optimization
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     
-    std::cout << "✅ Pack optimization completed\n";
+    std::cout << !ᜅ Pack optimization completed\n";
     return true;
 }
 
 bool PackFileOptimizer::repackRepository() {
-    std::cout << "📦 Repacking repository for optimal compression...\n";
+    std::cout << "� Repacking repository for optimal compression...\n";
     
     // Simulate full repack
     std::vector<std::string> allObjects = {"obj1", "obj2", "obj3", "obj4", "obj5"};
@@ -510,14 +510,14 @@ PackFileOptimizer::PackStats PackFileOptimizer::getPackStats() const {
 void PackFileOptimizer::printPackStatistics() const {
     const auto& stats = impl->stats;
     
-    std::cout << "\n📊 Pack File Statistics:\n";
-    std::cout << "  • Total packs: " << stats.totalPacks << "\n";
-    std::cout << "  • Total objects: " << stats.totalObjects << "\n";
-    std::cout << "  • Size uncompressed: " << Utils::formatSize(stats.totalSizeUncompressed) << "\n";
-    std::cout << "  • Size compressed: " << Utils::formatSize(stats.totalSizeCompressed) << "\n";
-    std::cout << "  • Compression ratio: " << std::fixed << std::setprecision(1) 
+    std::cout << "\n� Pack File Statistics:\n";
+    std::cout << "  �� Total packs: " << stats.totalPacks << "\n";
+    std::cout << " �� Total objects: " << stats.totalObjects << "\n";
+    std::cout << " �� Size uncompressed: " << Utils::formatSize(stats.totalSizeUncompressed) << "\n";
+    std::cout << " ဢ Size compressed: " << Utils::formatSize(stats.totalSizeCompressed) << "\n";
+    std::cout << " �� Compression ratio: " << std::fixed << std::setprecision(1) 
               << (stats.averageCompressionRatio * 100.0) << "%\n";
-    std::cout << "  • Packing time: " << stats.packingTime.count() << "ms\n";
+    std::cout << "  �� Packing time: " << stats.packingTime.count() << "ms\n";
 }
 
 // ============================================================================
@@ -541,7 +541,7 @@ public:
     bool performOptimization(const std::string& type) {
         optimizationRunning = true;
         
-        std::cout << "🚀 Starting " << type << " compression optimization...\n";
+        std::cout << "� Starting " << type << " compression optimization...\n";
         
         if (progressCallback) {
             progressCallback("Analyzing repository structure", 0.1);
@@ -556,13 +556,13 @@ public:
         // Configure compression based on optimization type
         if (type == "speed") {
             compressionEngine->setCompressionLevel(
-                AdvancedCompressionEngine::CompressionType::LZ4_FAST, 1);
+                gyatt::CompressionType::LZ4_FAST, 1);
         } else if (type == "size") {
             compressionEngine->setCompressionLevel(
-                AdvancedCompressionEngine::CompressionType::ZLIB_BEST, 9);
+                gyatt::CompressionType::ZLIB_BEST, 9);
         } else { // balance
             compressionEngine->setCompressionLevel(
-                AdvancedCompressionEngine::CompressionType::LZ4_STANDARD, 3);
+                gyatt::CompressionType::LZ4_STANDARD, 3);
         }
         
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -580,7 +580,7 @@ public:
         
         optimizationRunning = false;
         
-        std::cout << "✅ " << type << " optimization completed successfully\n";
+        std::cout << !ᜅ " << type << " optimization completed successfully\n";
         return true;
     }
 };
@@ -608,7 +608,7 @@ IntegratedCompressionManager::IntegratedCompressionManager(const std::string& re
     defaultProfile.packConfig.maxPackSize = 256 * 1024 * 1024;
     defaultProfile.packConfig.compressionThreshold = 0.1;
     defaultProfile.packConfig.enableParallelPacking = true;
-    defaultProfile.packConfig.windowSize = 10;
+    defaultProfile.packConfig.deltaWindowSize = 10;
     
     // Set up default storage configuration
     defaultProfile.storageConfig.storageRoot = repositoryPath + "/.gyatt/compressed";
@@ -628,12 +628,12 @@ IntegratedCompressionManager::~IntegratedCompressionManager() = default;
 
 bool IntegratedCompressionManager::enableCompression(bool enable) {
     if (enable) {
-        std::cout << "📦 Compression system enabled\n";
-        std::cout << "  • LZ4 fast compression: Active\n";
-        std::cout << "  • Adaptive algorithm selection: Enabled\n";
-        std::cout << "  • Pack file optimization: Ready\n";
+        std::cout << !� Compression system enabled\n";
+        std::cout << " ဢ LZ4 fast compression: Active\n";
+        std::cout << " �� Adaptive algorithm selection: Enabled\n";
+        std::cout << "  �� Pack file optimization: Ready\n";
     } else {
-        std::cout << "📦 Compression system disabled\n";
+        std::cout << !� Compression system disabled\n";
     }
     return true;
 }
@@ -651,7 +651,7 @@ bool IntegratedCompressionManager::optimizeForBalance() {
 }
 
 bool IntegratedCompressionManager::performFullOptimization() {
-    std::cout << "🔄 Performing comprehensive repository compression optimization...\n";
+    std::cout << "� Performing comprehensive repository compression optimization...\n";
     
     auto start = std::chrono::high_resolution_clock::now();
     
@@ -663,7 +663,7 @@ bool IntegratedCompressionManager::performFullOptimization() {
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     
-    std::cout << "✅ Full compression optimization completed in " << duration.count() << "ms\n";
+    std::cout << !ᜅ Full compression optimization completed in " << duration.count() << "ms\n";
     
     // Print comprehensive statistics
     printComprehensiveReport();
@@ -702,36 +702,36 @@ IntegratedCompressionManager::getOverallStats() const {
 void IntegratedCompressionManager::printComprehensiveReport() const {
     auto stats = getOverallStats();
     
-    std::cout << "\n═══════════════════════════════════════════════════════════════\n";
-    std::cout << "🏆 COMPREHENSIVE COMPRESSION PERFORMANCE REPORT\n";
-    std::cout << "═══════════════════════════════════════════════════════════════\n";
+    std::cout << "\mᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕐ\n";
+    std::cout << "� COMPREHENSIVE COMPRESSION PERFORMANCE REPORT\n";
+    std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
     
-    std::cout << "\n📦 Compression Engine Statistics:\n";
-    std::cout << "  • Total compressions: " << stats.compressionStats.totalCompressions << "\n";
-    std::cout << "  • Total decompressions: " << stats.compressionStats.totalDecompressions << "\n";
-    std::cout << "  • Bytes compressed: " << Utils::formatSize(stats.compressionStats.totalBytesCompressed) << "\n";
-    std::cout << "  • Bytes saved: " << Utils::formatSize(stats.compressionStats.totalSavedBytes) << "\n";
-    std::cout << "  • Average compression ratio: " << std::fixed << std::setprecision(1) 
+    std::cout << "\n� Compression Engine Statistics:\n";
+    std::cout << "  �� Total compressions: " << stats.compressionStats.totalCompressions << "\n";
+    std::cout << "  �� Total decompressions: " << stats.compressionStats.totalDecompressions << "\n";
+    std::cout << " ဢ Bytes compressed: " << Utils::formatSize(stats.compressionStats.totalBytesCompressed) << "\n";
+    std::cout << "  �� Bytes saved: " << Utils::formatSize(stats.compressionStats.totalSavedBytes) << "\n";
+    std::cout << " ဢ Average compression ratio: " << std::fixed << std::setprecision(1) 
               << (impl->compressionEngine->getOverallCompressionRatio() * 100.0) << "%\n";
     
     if (stats.compressionStats.totalCompressions > 0) {
         double avgCompTime = static_cast<double>(stats.compressionStats.totalCompressionTime) / 
                            stats.compressionStats.totalCompressions;
-        std::cout << "  • Average compression time: " << std::fixed << std::setprecision(2) 
+        std::cout << " ဢ Average compression time: " << std::fixed << std::setprecision(2) 
                   << avgCompTime << "ms\n";
     }
     
-    std::cout << "\n📊 Pack File Statistics:\n";
+    std::cout << "\n� Pack File Statistics:\n";
     impl->packOptimizer->printPackStatistics();
     
-    std::cout << "\n🎯 Overall Performance:\n";
-    std::cout << "  • Space savings: " << std::fixed << std::setprecision(1) 
+    std::cout << "\m𞍯 Overall Performance:\n";
+    std::cout << " ဢ Space savings: " << std::fixed << std::setprecision(1) 
               << stats.overallSpaceSavings << "%\n";
-    std::cout << "  • Performance gain: " << std::fixed << std::setprecision(1) 
+    std::cout << " �� Performance gain: " << std::fixed << std::setprecision(1) 
               << stats.performanceGain << "%\n";
     
-    std::cout << "\n✨ Optimization Status: ACTIVE\n";
-    std::cout << "═══════════════════════════════════════════════════════════════\n";
+    std::cout << "\mᜨ Optimization Status: ACTIVE\n";
+    std::cout << !ᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕐ\n";
 }
 
 } // namespace gyatt

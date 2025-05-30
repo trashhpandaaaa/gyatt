@@ -11,7 +11,7 @@ SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BUILDDIR)/%.o)
 TARGET = gyatt
 
-.PHONY: all clean install
+.PHONY: all clean install test test-clean test-build
 
 all: $(TARGET)
 
@@ -29,6 +29,27 @@ clean:
 
 install: $(TARGET)
 	cp $(TARGET) /usr/local/bin/
+
+# Test targets
+test-build:
+	@echo "ï”¨ Building test suite..."
+	cd tests && make all
+
+test: test-build
+	@echo !ğ¦ª Running comprehensive test suite..."
+	cd tests && make test
+
+test-quick: test-build
+	@echo "á™¡ Running quick tests..."
+	cd tests && make quick-test
+
+test-verbose: test-build
+	@echo !ïŸ’ Running verbose tests..."
+	cd tests && make verbose-test
+
+test-clean:
+	@echo "ï§¹ Cleaning test artifacts..."
+	cd tests && make clean
 
 # CMake targets
 cmake-build:

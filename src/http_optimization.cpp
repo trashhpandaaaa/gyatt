@@ -83,6 +83,10 @@ std::vector<HttpOptimization::OptimizedHttpResponse> HttpOptimization::executeRe
     
     std::vector<OptimizedHttpResponse> responses(requests.size());
     
+    if (requests.empty()) {
+        return responses;
+    }
+    
     // Sort requests by priority (higher priority first)
     std::vector<size_t> indices(requests.size());
     std::iota(indices.begin(), indices.end(), 0);
@@ -90,38 +94,101 @@ std::vector<HttpOptimization::OptimizedHttpResponse> HttpOptimization::executeRe
         return requests[a].priority > requests[b].priority;
     });
     
-    // Execute requests with optimal parallelism
-    const size_t maxParallel = std::min(config_.maxConnections, requests.size());
-    std::vector<std::future<OptimizedHttpResponse>> futures;
+    // Adaptive parallelism based on connection pool size and request count
+    const size_t optimalParallel = std::min({
+        config_.maxConnections,
+        requests.size(),
+        static_cast<size_t>(std::thread::hardware_concurrency() * 2)
+    });
+    
+    std::vector<std::pair<std::future<OptimizedHttpResponse>, size_t>> futures;
+    std::atomic<size_t> completedRequests{0};
     
     for (size_t i = 0; i < requests.size(); ++i) {
-        if (futures.size() >= maxParallel) {
-            // Wait for at least one to complete
+        // Dynamic throttling: wait if we have too many concurrent requests
+        while (futures.size() >= optimalParallel) {
+            bool foundCompleted = false;
+            
+            // Check for completed futures with timeout
             for (auto it = futures.begin(); it != futures.end(); ++it) {
-                if (it->wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
+                if (it->first.wait_for(std::chrono::milliseconds(1)) == std::future_status::ready) {
+                    try {
+                        responses[it->second] = it->first.get();
+                        ++completedRequests;
+                    } catch (const std::exception& e) {
+                        // Handle future exceptions
+                        OptimizedHttpResponse errorResponse;
+                        errorResponse.success = false;
+                        errorResponse.responseCode = 0;
+                        errorResponse.error = "Future exception: " + std::string(e.what());
+                        responses[it->second] = errorResponse;
+                    }
                     futures.erase(it);
+                    foundCompleted = true;
                     break;
                 }
             }
-            if (futures.size() >= maxParallel) {
-                futures.front().wait();
-                futures.erase(futures.begin());
+            
+            if (!foundCompleted) {
+                // Force wait on the oldest future to prevent deadlock
+                if (!futures.empty()) {
+                    try {
+                        responses[futures.front().second] = futures.front().first.get();
+                        ++completedRequests;
+                    } catch (const std::exception& e) {
+                        OptimizedHttpResponse errorResponse;
+                        errorResponse.success = false;
+                        errorResponse.responseCode = 0;
+                        errorResponse.error = "Future exception: " + std::string(e.what());
+                        responses[futures.front().second] = errorResponse;
+                    }
+                    futures.erase(futures.begin());
+                }
             }
         }
         
         size_t reqIdx = indices[i];
         const auto& req = requests[reqIdx];
         
-        auto future = std::async(std::launch::async, [this, req]() {
-            return performRequest(req.method, req.url, req.data, req.headers);
+        // Launch async request with proper error handling
+        auto future = std::async(std::launch::async, [this, req]() -> OptimizedHttpResponse {
+            try {
+                return performRequest(req.method, req.url, req.data, req.headers);
+            } catch (const std::exception& e) {
+                OptimizedHttpResponse errorResponse;
+                errorResponse.success = false;
+                errorResponse.responseCode = 0;
+                errorResponse.error = "Request exception: " + std::string(e.what());
+                return errorResponse;
+            } catch (...) {
+                OptimizedHttpResponse errorResponse;
+                errorResponse.success = false;
+                errorResponse.responseCode = 0;
+                errorResponse.error = "Unknown request exception";
+                return errorResponse;
+            }
         });
         
-        futures.push_back(std::move(future));
+        futures.push_back(std::make_pair(std::move(future), reqIdx));
+        
+        // Small delay to prevent overwhelming the connection pool
+        if (futures.size() > optimalParallel / 2) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
     }
     
-    // Wait for all remaining requests
-    for (auto& future : futures) {
-        future.wait();
+    // Wait for all remaining requests and collect their results
+    for (auto& future_pair : futures) {
+        try {
+            responses[future_pair.second] = future_pair.first.get();
+            ++completedRequests;
+        } catch (const std::exception& e) {
+            OptimizedHttpResponse errorResponse;
+            errorResponse.success = false;
+            errorResponse.responseCode = 0;
+            errorResponse.error = "Final future exception: " + std::string(e.what());
+            responses[future_pair.second] = errorResponse;
+        }
     }
     
     return responses;
@@ -134,17 +201,15 @@ std::map<std::string, std::string> HttpOptimization::createBlobsBatch(
     std::function<void(size_t completed, size_t total, const std::string& currentFile)> progressCallback) {
     
     std::map<std::string, std::string> results;
-    std::mutex resultsMutex;
-    std::atomic<size_t> completed{0};
     
-    // Prepare batch requests
+    // Prepare batch requests using the corrected batch system
     std::vector<BatchRequest> batchRequests;
     for (const auto& [filePath, fileContent] : files) {
         BatchRequest req;
         req.url = "https://api.github.com/repos/" + repoName + "/git/blobs";
         req.method = "POST";
         
-        // Prepare blob data with compression if beneficial
+        // Prepare blob data with base64 encoding
         std::string encodedContent = Utils::base64Encode(fileContent);
         req.data = "{\"content\":\"" + encodedContent + "\",\"encoding\":\"base64\"}";
         
@@ -160,66 +225,49 @@ std::map<std::string, std::string> HttpOptimization::createBlobsBatch(
         batchRequests.push_back(req);
     }
     
-    // Execute optimized parallel requests
-    const size_t numThreads = std::min(static_cast<size_t>(8), 
-                                      std::max(static_cast<size_t>(2), 
-                                      static_cast<size_t>(std::thread::hardware_concurrency())));
-    const size_t chunkSize = std::max(static_cast<size_t>(1), 
-                                     (files.size() + numThreads - 1) / numThreads);
+    // Execute batch requests using the corrected batch system
+    std::vector<OptimizedHttpResponse> responses = executeRequestBatch(batchRequests);
     
-    std::vector<std::future<void>> futures;
-    
-    for (size_t i = 0; i < files.size(); i += chunkSize) {
-        size_t endIdx = std::min(i + chunkSize, files.size());
+    // Process responses and extract blob SHAs
+    for (size_t i = 0; i < files.size() && i < responses.size(); ++i) {
+        const auto& [filePath, fileContent] = files[i];
+        const auto& response = responses[i];
         
-        auto future = std::async(std::launch::async, [=, &files, &results, &resultsMutex, 
-                                                     &completed, &progressCallback]() {
-            for (size_t j = i; j < endIdx; ++j) {
-                const auto& [filePath, fileContent] = files[j];
-                
-                // Use optimized HTTP request
-                OptimizedHttpResponse response = httpPost(
-                    "https://api.github.com/repos/" + repoName + "/git/blobs",
-                    "{\"content\":\"" + Utils::base64Encode(fileContent) + "\",\"encoding\":\"base64\"}",
-                    {
-                        "Authorization: token " + token,
-                        "Accept: application/vnd.github.v3+json",
-                        "Content-Type: application/json"
+        if (response.success && response.responseCode >= 200 && response.responseCode < 300) {
+            // Parse SHA from response
+            size_t shaPos = response.content.find("\"sha\":");
+            if (shaPos != std::string::npos) {
+                shaPos = response.content.find("\"", shaPos + 6);
+                if (shaPos != std::string::npos) {
+                    size_t shaEnd = response.content.find("\"", shaPos + 1);
+                    if (shaEnd != std::string::npos) {
+                        std::string blobSha = response.content.substr(shaPos + 1, shaEnd - shaPos - 1);
+                        results[filePath] = blobSha;
                     }
-                );
-                
-                if (response.success) {
-                    // Parse SHA from response
-                    size_t shaPos = response.content.find("\"sha\":");
-                    if (shaPos != std::string::npos) {
-                        shaPos = response.content.find("\"", shaPos + 6);
-                        if (shaPos != std::string::npos) {
-                            size_t shaEnd = response.content.find("\"", shaPos + 1);
-                            if (shaEnd != std::string::npos) {
-                                std::string blobSha = response.content.substr(shaPos + 1, shaEnd - shaPos - 1);
-                                
-                                {
-                                    std::lock_guard<std::mutex> lock(resultsMutex);
-                                    results[filePath] = blobSha;
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                size_t currentCompleted = ++completed;
-                if (progressCallback) {
-                    progressCallback(currentCompleted, files.size(), filePath);
                 }
             }
-        });
+            
+            if (results.find(filePath) == results.end()) {
+                std::cerr << "Warning: Failed to parse blob SHA for file: " << filePath << std::endl;
+                std::cerr << "Response content: " << response.content << std::endl;
+            }
+        } else {
+            std::cerr << "Error creating blob for file: " << filePath 
+                      << " - HTTP " << response.responseCode;
+            if (!response.error.empty()) {
+                std::cerr << " (" << response.error << ")";
+            }
+            std::cerr << std::endl;
+            
+            if (!response.content.empty()) {
+                std::cerr << "Response content: " << response.content << std::endl;
+            }
+        }
         
-        futures.push_back(std::move(future));
-    }
-    
-    // Wait for all threads to complete
-    for (auto& future : futures) {
-        future.wait();
+        // Update progress
+        if (progressCallback) {
+            progressCallback(i + 1, files.size(), filePath);
+        }
     }
     
     return results;
@@ -253,41 +301,68 @@ void HttpOptimization::clearCache() {
 HttpOptimization::CurlHandle* HttpOptimization::acquireConnection(const std::string& host) {
     applyRateLimit();
     
-    std::lock_guard<std::mutex> lock(poolMutex_);
+    std::unique_lock<std::mutex> lock(poolMutex_);
     
-    // Try to find an available connection for the same host (connection reuse)
-    for (auto& handle : connectionPool_) {
-        if (!handle->inUse && handle->lastHost == host) {
-            handle->inUse = true;
-            handle->lastUsed = std::chrono::steady_clock::now();
-            ++activeConnections_;
-            return handle.get();
+    // Use condition variable for better waiting instead of busy polling
+    auto timeout = std::chrono::steady_clock::now() + std::chrono::seconds(30); // Increased timeout
+    
+    while (std::chrono::steady_clock::now() < timeout) {
+        // Try to find an available connection for the same host (connection reuse)
+        for (auto& handle : connectionPool_) {
+            if (!handle->inUse && handle->lastHost == host) {
+                handle->inUse = true;
+                handle->lastUsed = std::chrono::steady_clock::now();
+                ++activeConnections_;
+                return handle.get();
+            }
         }
+        
+        // Find any available connection
+        for (auto& handle : connectionPool_) {
+            if (!handle->inUse) {
+                handle->inUse = true;
+                handle->lastHost = host;
+                handle->lastUsed = std::chrono::steady_clock::now();
+                ++activeConnections_;
+                return handle.get();
+            }
+        }
+        
+        // No connections available, create a temporary one if under limit
+        if (connectionPool_.size() < config_.maxConnections * 3) { // Increased expansion allowance
+            auto tempHandle = std::make_unique<CurlHandle>();
+            tempHandle->curl = curl_easy_init();
+            if (tempHandle->curl) {
+                initializeCurlHandle(tempHandle->curl);
+                tempHandle->inUse = true;
+                tempHandle->lastHost = host;
+                tempHandle->lastUsed = std::chrono::steady_clock::now();
+                ++activeConnections_;
+                
+                CurlHandle* result = tempHandle.get();
+                connectionPool_.push_back(std::move(tempHandle));
+                return result;
+            }
+        }
+        
+        // Wait briefly before retrying
+        lock.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Increased wait time
+        lock.lock();
     }
     
-    // Find any available connection
-    for (auto& handle : connectionPool_) {
-        if (!handle->inUse) {
-            handle->inUse = true;
-            handle->lastHost = host;
-            handle->lastUsed = std::chrono::steady_clock::now();
-            ++activeConnections_;
-            return handle.get();
-        }
-    }
-    
-    // No connections available, create a temporary one
-    auto tempHandle = std::make_unique<CurlHandle>();
-    tempHandle->curl = curl_easy_init();
-    if (tempHandle->curl) {
-        initializeCurlHandle(tempHandle->curl);
-        tempHandle->inUse = true;
-        tempHandle->lastHost = host;
-        tempHandle->lastUsed = std::chrono::steady_clock::now();
+    // If we still can't get a connection, force create one as last resort
+    auto emergencyHandle = std::make_unique<CurlHandle>();
+    emergencyHandle->curl = curl_easy_init();
+    if (emergencyHandle->curl) {
+        initializeCurlHandle(emergencyHandle->curl);
+        emergencyHandle->inUse = true;
+        emergencyHandle->lastHost = host;
+        emergencyHandle->lastUsed = std::chrono::steady_clock::now();
         ++activeConnections_;
         
-        CurlHandle* result = tempHandle.get();
-        connectionPool_.push_back(std::move(tempHandle));
+        CurlHandle* result = emergencyHandle.get();
+        connectionPool_.push_back(std::move(emergencyHandle));
         return result;
     }
     
@@ -296,9 +371,35 @@ HttpOptimization::CurlHandle* HttpOptimization::acquireConnection(const std::str
 
 void HttpOptimization::releaseConnection(CurlHandle* handle) {
     if (handle) {
+        std::lock_guard<std::mutex> lock(poolMutex_);
         handle->inUse = false;
         handle->requestCount++;
         --activeConnections_;
+        
+        // Clean up stale or overused connections
+        if (handle->requestCount > 100 || 
+            (std::chrono::steady_clock::now() - handle->lastUsed) > std::chrono::minutes(5)) {
+            
+            // Find and remove this handle from the pool
+            auto it = std::find_if(connectionPool_.begin(), connectionPool_.end(),
+                [handle](const std::unique_ptr<CurlHandle>& ptr) {
+                    return ptr.get() == handle;
+                });
+            
+            if (it != connectionPool_.end()) {
+                connectionPool_.erase(it);
+                
+                // Create a replacement connection if we're below the minimum
+                if (connectionPool_.size() < config_.maxConnections / 2) {
+                    auto newHandle = std::make_unique<CurlHandle>();
+                    newHandle->curl = curl_easy_init();
+                    if (newHandle->curl) {
+                        initializeCurlHandle(newHandle->curl);
+                        connectionPool_.push_back(std::move(newHandle));
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -403,62 +504,121 @@ HttpOptimization::OptimizedHttpResponse HttpOptimization::performRequest(
     
     CurlHandle* handle = acquireConnection(host);
     if (!handle || !handle->curl) {
-        response.error = "Failed to acquire connection";
-        return response;
+        response.error = "Failed to acquire connection - pool exhausted";
+        response.responseCode = 0;
+        
+        // Add exponential backoff for connection failures
+        static thread_local int failureCount = 0;
+        failureCount++;
+        int delayMs = std::min(1000, 50 * (1 << std::min(failureCount, 4))); // Cap at ~800ms
+        std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
+        
+        // Try one more time with emergency connection
+        handle = acquireConnection(host);
+        if (!handle || !handle->curl) {
+            response.error = "Failed to acquire connection after retry";
+            return response;
+        }
+        failureCount = 0; // Reset on success
     }
     
     auto startTime = std::chrono::steady_clock::now();
     
-    // Configure request
-    curl_easy_setopt(handle->curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(handle->curl, CURLOPT_WRITEDATA, &response.content);
-    
-    // Clear previous response data
-    response.content.clear();
-    
-    // Set method and data
-    if (method == "POST") {
-        curl_easy_setopt(handle->curl, CURLOPT_POST, 1L);
-        curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDS, data.c_str());
-    } else if (method == "PUT") {
-        curl_easy_setopt(handle->curl, CURLOPT_CUSTOMREQUEST, "PUT");
-        curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDS, data.c_str());
-    } else if (method == "PATCH") {
-        curl_easy_setopt(handle->curl, CURLOPT_CUSTOMREQUEST, "PATCH");
-        curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDS, data.c_str());
-    } else {
-        curl_easy_setopt(handle->curl, CURLOPT_HTTPGET, 1L);
-    }
-    
-    // Set headers
-    struct curl_slist* headerList = nullptr;
-    for (const auto& header : headers) {
-        headerList = curl_slist_append(headerList, header.c_str());
-    }
-    if (headerList) {
-        curl_easy_setopt(handle->curl, CURLOPT_HTTPHEADER, headerList);
-    }
-    
-    // Perform request
-    CURLcode res = curl_easy_perform(handle->curl);
-    
-    auto endTime = std::chrono::steady_clock::now();
-    response.transferTime = std::chrono::duration<double>(endTime - startTime).count();
-    
-    if (res == CURLE_OK) {
-        curl_easy_getinfo(handle->curl, CURLINFO_RESPONSE_CODE, &response.responseCode);
-        response.success = (response.responseCode >= 200 && response.responseCode < 300);
+    try {
+        // Configure request
+        curl_easy_setopt(handle->curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(handle->curl, CURLOPT_WRITEDATA, &response.content);
         
-        curl_off_t downloadSize;
-        curl_easy_getinfo(handle->curl, CURLINFO_SIZE_DOWNLOAD_T, &downloadSize);
-        response.bytesTransferred = static_cast<size_t>(downloadSize);
-    } else {
-        response.error = curl_easy_strerror(res);
-    }
-    
-    // Clean up
-    if (headerList) {
-        curl_slist_free_all(headerList);
+        // Clear previous response data
+        response.content.clear();
+        
+        // Reset curl handle to clean state
+        curl_easy_reset(handle->curl);
+        initializeCurlHandle(handle->curl);
+        curl_easy_setopt(handle->curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(handle->curl, CURLOPT_WRITEDATA, &response.content);
+        
+        // Set method and data
+        if (method == "POST") {
+            curl_easy_setopt(handle->curl, CURLOPT_POST, 1L);
+            curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDS, data.c_str());
+            curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDSIZE, data.length());
+        } else if (method == "PUT") {
+            curl_easy_setopt(handle->curl, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDS, data.c_str());
+            curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDSIZE, data.length());
+        } else if (method == "PATCH") {
+            curl_easy_setopt(handle->curl, CURLOPT_CUSTOMREQUEST, "PATCH");
+            curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDS, data.c_str());
+            curl_easy_setopt(handle->curl, CURLOPT_POSTFIELDSIZE, data.length());
+        } else {
+            curl_easy_setopt(handle->curl, CURLOPT_HTTPGET, 1L);
+        }
+        
+        // Set headers
+        struct curl_slist* headerList = nullptr;
+        for (const auto& header : headers) {
+            headerList = curl_slist_append(headerList, header.c_str());
+        }
+        if (headerList) {
+            curl_easy_setopt(handle->curl, CURLOPT_HTTPHEADER, headerList);
+        }
+        
+        // Perform request with retries for transient errors
+        CURLcode res = CURLE_FAILED_INIT;
+        int retryCount = 0;
+        const int maxRetries = 3;
+        
+        while (retryCount < maxRetries) {
+            res = curl_easy_perform(handle->curl);
+            
+            if (res == CURLE_OK) {
+                break;
+            }
+            
+            // Check if this is a retryable error
+            if (res == CURLE_COULDNT_CONNECT || 
+                res == CURLE_COULDNT_RESOLVE_HOST ||
+                res == CURLE_OPERATION_TIMEDOUT ||
+                res == CURLE_SEND_ERROR ||
+                res == CURLE_RECV_ERROR) {
+                
+                retryCount++;
+                if (retryCount < maxRetries) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100 * retryCount));
+                    response.content.clear(); // Clear any partial content
+                }
+            } else {
+                break; // Non-retryable error
+            }
+        }
+        
+        auto endTime = std::chrono::steady_clock::now();
+        response.transferTime = std::chrono::duration<double>(endTime - startTime).count();
+        
+        if (res == CURLE_OK) {
+            curl_easy_getinfo(handle->curl, CURLINFO_RESPONSE_CODE, &response.responseCode);
+            response.success = (response.responseCode >= 200 && response.responseCode < 300);
+            
+            curl_off_t downloadSize;
+            curl_easy_getinfo(handle->curl, CURLINFO_SIZE_DOWNLOAD_T, &downloadSize);
+            response.bytesTransferred = static_cast<size_t>(downloadSize);
+        } else {
+            response.error = curl_easy_strerror(res);
+            response.responseCode = 0;
+        }
+        
+        // Clean up
+        if (headerList) {
+            curl_slist_free_all(headerList);
+        }
+        
+    } catch (const std::exception& e) {
+        response.error = "Exception during HTTP request: " + std::string(e.what());
+        response.responseCode = 0;
+    } catch (...) {
+        response.error = "Unknown exception during HTTP request";
+        response.responseCode = 0;
     }
     
     releaseConnection(handle);

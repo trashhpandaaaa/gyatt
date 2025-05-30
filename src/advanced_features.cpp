@@ -41,9 +41,9 @@ bool InitTemplates::createTemplate(const std::string& name, const std::string& d
     
     saveTemplateConfig(tmpl);
     
-    std::cout << "📋 Created template: " << name << std::endl;
-    std::cout << "📝 " << description << std::endl;
-    std::cout << "📁 " << files.size() << " files in template" << std::endl;
+    std::cout << "� Created template: " << name << std::endl;
+    std::cout << !𞒝 " << description << std::endl;
+    std::cout << !𞒁 " << files.size() << " files in template" << std::endl;
     
     return true;
 }
@@ -52,15 +52,15 @@ bool InitTemplates::useTemplate(const std::string& name, const std::string& targ
                                  const std::map<std::string, std::string>& variables) {
     auto it = templates.find(name);
     if (it == templates.end()) {
-        std::cout << "❌ Template not found: " << name << std::endl;
+        std::cout << !ᝌ Template not found: " << name << std::endl;
         return false;
     }
     
     const auto& tmpl = it->second;
     
-    std::cout << "📋 Applying template: " << name << std::endl;
-    std::cout << "📝 " << tmpl.description << std::endl;
-    std::cout << "📁 Target: " << targetDir << std::endl;
+    std::cout << !𞒋 Applying template: " << name << std::endl;
+    std::cout << !𞒝 " << tmpl.description << std::endl;
+    std::cout << !� Target: " << targetDir << std::endl;
     
     std::filesystem::create_directories(targetDir);
     
@@ -80,17 +80,17 @@ bool InitTemplates::useTemplate(const std::string& name, const std::string& targ
         }
         
         Utils::writeFile(targetPath, content);
-        std::cout << "✅ Created: " << file.relativePath << std::endl;
+        std::cout << !ᜅ Created: " << file.relativePath << std::endl;
     }
     
-    std::cout << "🎉 Template applied successfully!" << std::endl;
+    std::cout << !𞍉 Template applied successfully!" << std::endl;
     return true;
 }
 
 bool InitTemplates::deleteTemplate(const std::string& name) {
     auto it = templates.find(name);
     if (it == templates.end()) {
-        std::cout << "❌ Template not found: " << name << std::endl;
+        std::cout << !ᝌ Template not found: " << name << std::endl;
         return false;
     }
     
@@ -100,7 +100,7 @@ bool InitTemplates::deleteTemplate(const std::string& name) {
     std::string templateDir = Utils::joinPath(templatesDir, name);
     std::filesystem::remove_all(templateDir);
     
-    std::cout << "🗑️  Deleted template: " << name << std::endl;
+    std::cout << !𞖑  Deleted template: " << name << std::endl;
     return true;
 }
 
@@ -114,41 +114,41 @@ std::vector<InitTemplates::Template> InitTemplates::listTemplates() {
 
 void InitTemplates::showTemplates() {
     if (templates.empty()) {
-        std::cout << "📋 No templates available" << std::endl;
+        std::cout << "� No templates available" << std::endl;
         return;
     }
     
-    std::cout << "\n📋 Available Templates\n";
-    std::cout << "═══════════════════════════════════════\n";
+    std::cout << "\n� Available Templates\n";
+    std::cout << !┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┐\n";
     
     for (const auto& [name, tmpl] : templates) {
         auto timeStr = Utils::formatTime(tmpl.timestamp);
         
-        std::cout << "📋 " << name << std::endl;
-        std::cout << "   📝 " << tmpl.description << std::endl;
-        std::cout << "   📁 " << tmpl.files.size() << " files • " << timeStr << std::endl;
-        std::cout << "───────────────────────────────────────\n";
+        std::cout << "� " << name << std::endl;
+        std::cout << "   � " << tmpl.description << std::endl;
+        std::cout << "   � " << tmpl.files.size() << " files �� " << timeStr << std::endl;
+        std::cout << !��������������������������������������Ⓚ\n";
     }
 }
 
 void InitTemplates::showTemplate(const std::string& name) {
     auto it = templates.find(name);
     if (it == templates.end()) {
-        std::cout << "❌ Template not found: " << name << std::endl;
+        std::cout << !✌ Template not found: " << name << std::endl;
         return;
     }
     
     const auto& tmpl = it->second;
     auto timeStr = Utils::formatTime(tmpl.timestamp);
     
-    std::cout << "\n📋 Template: " << name << "\n";
-    std::cout << "═══════════════════════════════════════\n";
-    std::cout << "📝 Description: " << tmpl.description << std::endl;
-    std::cout << "⏰ Created: " << timeStr << std::endl;
-    std::cout << "📁 Files:\n";
+    std::cout << "\m𞒋 Template: " << name << "\n";
+    std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
+    std::cout << !𞒝 Description: " << tmpl.description << std::endl;
+    std::cout << !⎰ Created: " << timeStr << std::endl;
+    std::cout << "� Files:\n";
     
     for (const auto& file : tmpl.files) {
-        std::cout << "   • " << file.relativePath;
+        std::cout << "  ဢ " << file.relativePath;
         if (!file.description.empty()) {
             std::cout << " - " << file.description;
         }
@@ -242,20 +242,20 @@ bool InitTemplates::saveTemplateConfig(const Template& tmpl) {
 }
 
 bool InitTemplates::initCustomTemplate(const std::string& templateName, const std::string& projectName) {
-    std::cout << "🎨 Initializing custom template: " << templateName << std::endl;
-    std::cout << "📁 Project name: " << projectName << std::endl;
+    std::cout << !𞍨 Initializing custom template: " << templateName << std::endl;
+    std::cout << "� Project name: " << projectName << std::endl;
     
     // Look for the template
     for (const auto& [name, tmpl] : templates) {
         if (name == templateName) {
             // Apply the template
-            std::cout << "✅ Found template: " << tmpl.description << std::endl;
+            std::cout << !ᜅ Found template: " << tmpl.description << std::endl;
             return useTemplate(templateName, ".", {});
         }
     }
     
-    std::cout << "❌ Template not found: " << templateName << std::endl;
-    std::cout << "💡 Available templates:" << std::endl;
+    std::cout << !ᝌ Template not found: " << templateName << std::endl;
+    std::cout << "� Available templates:" << std::endl;
     showTemplates();
     return false;
 }
@@ -270,8 +270,8 @@ StoryMode::StoryMode(const std::string& repoPath)
 
 bool StoryMode::startStory(const std::string& title, const std::string& description) {
     if (currentStory.active) {
-        std::cout << "❌ Story already active: " << currentStory.title << std::endl;
-        std::cout << "💡 Use 'gyatt story end' to finish current story" << std::endl;
+        std::cout << !ᝌ Story already active: " << currentStory.title << std::endl;
+        std::cout << "� Use 'gyatt story end' to finish current story" << std::endl;
         return false;
     }
     
@@ -283,9 +283,9 @@ bool StoryMode::startStory(const std::string& title, const std::string& descript
     currentStory.commits.clear();
     currentStory.tags.clear();
     
-    std::cout << "📖 Started story: " << title << std::endl;
-    std::cout << "📝 " << description << std::endl;
-    std::cout << "🆔 Story ID: " << currentStory.id << std::endl;
+    std::cout << "� Started story: " << title << std::endl;
+    std::cout << "� " << description << std::endl;
+    std::cout << "� Story ID: " << currentStory.id << std::endl;
     
     saveStories();
     return true;
@@ -293,7 +293,7 @@ bool StoryMode::startStory(const std::string& title, const std::string& descript
 
 bool StoryMode::endStory() {
     if (!currentStory.active) {
-        std::cout << "❌ No active story" << std::endl;
+        std::cout << "ᜌ No active story" << std::endl;
         return false;
     }
     
@@ -303,12 +303,12 @@ bool StoryMode::endStory() {
     // Archive completed story
     completedStories.push_back(currentStory);
     
-    std::cout << "📖 Completed story: " << currentStory.title << std::endl;
-    std::cout << "📊 " << currentStory.commits.size() << " commits in story" << std::endl;
+    std::cout << "� Completed story: " << currentStory.title << std::endl;
+    std::cout << "� " << currentStory.commits.size() << " commits in story" << std::endl;
     
     auto duration = std::chrono::duration_cast<std::chrono::hours>(
         currentStory.endTime - currentStory.startTime).count();
-    std::cout << "⏱️  Duration: " << duration << " hours" << std::endl;
+    std::cout << !⎰﷏  Duration: " << duration << " hours" << std::endl;
     
     saveStories();
     
@@ -319,7 +319,7 @@ bool StoryMode::endStory() {
 
 bool StoryMode::addCommitToStory(const std::string& commitHash, const std::string& message) {
     if (!currentStory.active) {
-        std::cout << "❌ No active story to add commit to" << std::endl;
+        std::cout << "ᜌ No active story to add commit to" << std::endl;
         return false;
     }
     
@@ -330,8 +330,8 @@ bool StoryMode::addCommitToStory(const std::string& commitHash, const std::strin
     
     currentStory.commits.push_back(commit);
     
-    std::cout << "📖 Added commit to story: " << message << std::endl;
-    std::cout << "📊 Story now has " << currentStory.commits.size() << " commits" << std::endl;
+    std::cout << !� Added commit to story: " << message << std::endl;
+    std::cout << !𞒊 Story now has " << currentStory.commits.size() << " commits" << std::endl;
     
     saveStories();
     return true;
@@ -339,13 +339,13 @@ bool StoryMode::addCommitToStory(const std::string& commitHash, const std::strin
 
 bool StoryMode::addTagToStory(const std::string& tag) {
     if (!currentStory.active) {
-        std::cout << "❌ No active story to add tag to" << std::endl;
+        std::cout << !✌ No active story to add tag to" << std::endl;
         return false;
     }
     
     currentStory.tags.insert(tag);
     
-    std::cout << "🏷️  Added tag to story: " << tag << std::endl;
+    std::cout << !�﷏  Added tag to story: " << tag << std::endl;
     
     saveStories();
     return true;
@@ -361,7 +361,7 @@ std::vector<StoryMode::Story> StoryMode::getCompletedStories() {
 
 void StoryMode::showCurrentStory() {
     if (!currentStory.active) {
-        std::cout << "📖 No active story" << std::endl;
+        std::cout << !� No active story" << std::endl;
         return;
     }
     
@@ -370,16 +370,16 @@ void StoryMode::showCurrentStory() {
     auto duration = std::chrono::duration_cast<std::chrono::hours>(
         now - currentStory.startTime).count();
     
-    std::cout << "\n📖 Current Story\n";
-    std::cout << "═══════════════════════════════════════\n";
-    std::cout << "🆔 ID: " << currentStory.id << std::endl;
-    std::cout << "📖 Title: " << currentStory.title << std::endl;
-    std::cout << "📝 Description: " << currentStory.description << std::endl;
-    std::cout << "⏱️  Started: " << startTimeStr << " (" << duration << " hours ago)" << std::endl;
-    std::cout << "📊 Commits: " << currentStory.commits.size() << std::endl;
+    std::cout << "\m𞒖 Current Story\n";
+    std::cout << !ᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕐ\n";
+    std::cout << "� ID: " << currentStory.id << std::endl;
+    std::cout << !𞒖 Title: " << currentStory.title << std::endl;
+    std::cout << !� Description: " << currentStory.description << std::endl;
+    std::cout << "Ꮁ  Started: " << startTimeStr << " (" << duration << " hours ago)" << std::endl;
+    std::cout << !𞒊 Commits: " << currentStory.commits.size() << std::endl;
     
     if (!currentStory.tags.empty()) {
-        std::cout << "🏷️  Tags: ";
+        std::cout << !𞎷  Tags: ";
         for (const auto& tag : currentStory.tags) {
             std::cout << tag << " ";
         }
@@ -387,24 +387,24 @@ void StoryMode::showCurrentStory() {
     }
     
     if (!currentStory.commits.empty()) {
-        std::cout << "\n📝 Recent commits:\n";
+        std::cout << "\m𞒝 Recent commits:\n";
         size_t showCount = std::min<size_t>(5, currentStory.commits.size());
         for (size_t i = currentStory.commits.size() - showCount; i < currentStory.commits.size(); ++i) {
             const auto& commit = currentStory.commits[i];
             auto timeStr = Utils::formatTime(commit.timestamp);
-            std::cout << "   • " << commit.message << " (" << timeStr << ")" << std::endl;
+            std::cout << "   �� " << commit.message << " (" << timeStr << ")" << std::endl;
         }
     }
 }
 
 void StoryMode::showStoryHistory() {
     if (completedStories.empty()) {
-        std::cout << "📖 No completed stories" << std::endl;
+        std::cout << !� No completed stories" << std::endl;
         return;
     }
     
-    std::cout << "\n📖 Story History\n";
-    std::cout << "═══════════════════════════════════════\n";
+    std::cout << "\m𞒖 Story History\n";
+    std::cout << !ᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕐ\n";
     
     // Sort by end time (most recent first)
     auto sortedStories = completedStories;
@@ -415,7 +415,7 @@ void StoryMode::showStoryHistory() {
     
     for (const auto& story : sortedStories) {
         showStory(story);
-        std::cout << "───────────────────────────────────────\n";
+        std::cout << "ᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀ\n";
     }
 }
 
@@ -426,13 +426,13 @@ void StoryMode::showStory(const Story& story) {
     auto duration = std::chrono::duration_cast<std::chrono::hours>(
         story.endTime - story.startTime).count();
     
-    std::cout << "📖 " << story.title << std::endl;
-    std::cout << "   📝 " << story.description << std::endl;
-    std::cout << "   ⏱️  " << startTimeStr << " → " << endTimeStr << " (" << duration << " hours)" << std::endl;
-    std::cout << "   📊 " << story.commits.size() << " commits";
+    std::cout << "� " << story.title << std::endl;
+    std::cout << "   � " << story.description << std::endl;
+    std::cout << "   Ꮁ  " << startTimeStr << "ᆒ " << endTimeStr << " (" << duration << " hours)" << std::endl;
+    std::cout << "  𞒊 " << story.commits.size() << " commits";
     
     if (!story.tags.empty()) {
-        std::cout << " • 🏷️  ";
+        std::cout << "�� �  ";
         for (const auto& tag : story.tags) {
             std::cout << tag << " ";
         }
@@ -552,30 +552,30 @@ bool ContainerizedSnapshots::createSnapshot(const std::string& name, const std::
     std::string snapshotDir = Utils::joinPath(snapshotsDir, snapshot.id);
     std::filesystem::create_directories(snapshotDir);
     
-    std::cout << "📦 Creating containerized snapshot: " << name << std::endl;
-    std::cout << "🆔 Snapshot ID: " << snapshot.id << std::endl;
+    std::cout << !� Creating containerized snapshot: " << name << std::endl;
+    std::cout << "� Snapshot ID: " << snapshot.id << std::endl;
     
     // Create workspace snapshot
     if (createWorkspaceSnapshot(snapshotDir)) {
-        std::cout << "✅ Workspace archived" << std::endl;
+        std::cout << !ᜅ Workspace archived" << std::endl;
     }
     
     // Create environment snapshot if requested
     if (includeEnv && createEnvironmentSnapshot(snapshotDir)) {
-        std::cout << "✅ Environment captured" << std::endl;
+        std::cout << !ᜅ Environment captured" << std::endl;
     }
     
     // Create dependency snapshot
     if (createDependencySnapshot(snapshotDir)) {
-        std::cout << "✅ Dependencies recorded" << std::endl;
+        std::cout << !ᜅ Dependencies recorded" << std::endl;
     }
     
     snapshot.size = calculateSnapshotSize(snapshotDir);
     snapshots[snapshot.id] = snapshot;
     saveSnapshotConfig(snapshot);
     
-    std::cout << "📦 Snapshot created successfully!" << std::endl;
-    std::cout << "💾 Size: " << formatSize(snapshot.size) << std::endl;
+    std::cout << !� Snapshot created successfully!" << std::endl;
+    std::cout << !� Size: " << formatSize(snapshot.size) << std::endl;
     
     return true;
 }
@@ -583,15 +583,15 @@ bool ContainerizedSnapshots::createSnapshot(const std::string& name, const std::
 bool ContainerizedSnapshots::restoreSnapshot(const std::string& snapshotId, const std::string& targetDir) {
     auto it = snapshots.find(snapshotId);
     if (it == snapshots.end()) {
-        std::cout << "❌ Snapshot not found: " << snapshotId << std::endl;
+        std::cout << !✌ Snapshot not found: " << snapshotId << std::endl;
         return false;
     }
     
     const auto& snapshot = it->second;
     std::string snapshotDir = Utils::joinPath(snapshotsDir, snapshotId);
     
-    std::cout << "📦 Restoring snapshot: " << snapshot.name << std::endl;
-    std::cout << "📁 Target: " << targetDir << std::endl;
+    std::cout << !𞒦 Restoring snapshot: " << snapshot.name << std::endl;
+    std::cout << "� Target: " << targetDir << std::endl;
     
     std::filesystem::create_directories(targetDir);
     
@@ -599,7 +599,7 @@ bool ContainerizedSnapshots::restoreSnapshot(const std::string& snapshotId, cons
     std::string workspaceArchive = Utils::joinPath(snapshotDir, "workspace.tar.gz");
     if (Utils::fileExists(workspaceArchive)) {
         if (restoreWorkspaceSnapshot(workspaceArchive, targetDir)) {
-            std::cout << "✅ Workspace restored" << std::endl;
+            std::cout << !⛅ Workspace restored" << std::endl;
         }
     }
     
@@ -607,32 +607,32 @@ bool ContainerizedSnapshots::restoreSnapshot(const std::string& snapshotId, cons
     if (snapshot.includeEnv) {
         std::string envScript = Utils::joinPath(snapshotDir, "environment.sh");
         if (Utils::fileExists(envScript)) {
-            std::cout << "🔧 Environment script available: " << envScript << std::endl;
-            std::cout << "💡 Run 'source " << envScript << "' to restore environment" << std::endl;
+            std::cout << "� Environment script available: " << envScript << std::endl;
+            std::cout << "� Run 'source " << envScript << "' to restore environment" << std::endl;
         }
     }
     
     // Show dependency information
     std::string depsFile = Utils::joinPath(snapshotDir, "dependencies.json");
     if (Utils::fileExists(depsFile)) {
-        std::cout << "📋 Dependencies recorded in: " << depsFile << std::endl;
+        std::cout << !� Dependencies recorded in: " << depsFile << std::endl;
     }
     
-    std::cout << "🎉 Snapshot restored successfully!" << std::endl;
+    std::cout << !𞍉 Snapshot restored successfully!" << std::endl;
     return true;
 }
 
 bool ContainerizedSnapshots::deleteSnapshot(const std::string& snapshotId) {
     auto it = snapshots.find(snapshotId);
     if (it == snapshots.end()) {
-        std::cout << "❌ Snapshot not found: " << snapshotId << std::endl;
+        std::cout << !✌ Snapshot not found: " << snapshotId << std::endl;
         return false;
     }
     
     std::string snapshotDir = Utils::joinPath(snapshotsDir, snapshotId);
     std::filesystem::remove_all(snapshotDir);
     
-    std::cout << "🗑️  Deleted snapshot: " << it->second.name << std::endl;
+    std::cout << "�  Deleted snapshot: " << it->second.name << std::endl;
     snapshots.erase(it);
     
     return true;
@@ -657,56 +657,56 @@ void ContainerizedSnapshots::showSnapshots() {
     auto snapshotList = listSnapshots();
     
     if (snapshotList.empty()) {
-        std::cout << "📦 No snapshots available" << std::endl;
+        std::cout << !𞒦 No snapshots available" << std::endl;
         return;
     }
     
-    std::cout << "\n📦 Containerized Snapshots\n";
-    std::cout << "═══════════════════════════════════════\n";
+    std::cout << "\m𞒦 Containerized Snapshots\n";
+    std::cout << !┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┐\n";
     
     for (const auto& snapshot : snapshotList) {
         auto timeStr = Utils::formatTime(snapshot.timestamp);
         
-        std::cout << "📦 " << snapshot.name << std::endl;
-        std::cout << "   📝 " << snapshot.description << std::endl;
-        std::cout << "   🆔 " << snapshot.id << std::endl;
-        std::cout << "   ⏰ " << timeStr << std::endl;
-        std::cout << "   💾 " << formatSize(snapshot.size);
+        std::cout << "� " << snapshot.name << std::endl;
+        std::cout << "   � " << snapshot.description << std::endl;
+        std::cout << "  � " << snapshot.id << std::endl;
+        std::cout << "  ⎰ " << timeStr << std::endl;
+        std::cout << "  � " << formatSize(snapshot.size);
         
         if (snapshot.includeEnv) {
-            std::cout << " • 🔧 Environment included";
+            std::cout << "ဢ𞓧 Environment included";
         }
         
         std::cout << std::endl;
-        std::cout << "───────────────────────────────────────\n";
+        std::cout << !��������������������������������������ᔀ\n";
     }
 }
 
 void ContainerizedSnapshots::showSnapshot(const std::string& snapshotId) {
     auto it = snapshots.find(snapshotId);
     if (it == snapshots.end()) {
-        std::cout << "❌ Snapshot not found: " << snapshotId << std::endl;
+        std::cout << !ᝌ Snapshot not found: " << snapshotId << std::endl;
         return;
     }
     
     const auto& snapshot = it->second;
     auto timeStr = Utils::formatTime(snapshot.timestamp);
     
-    std::cout << "\n📦 Snapshot Details\n";
-    std::cout << "═══════════════════════════════════════\n";
-    std::cout << "📦 Name: " << snapshot.name << std::endl;
-    std::cout << "📝 Description: " << snapshot.description << std::endl;
-    std::cout << "🆔 ID: " << snapshot.id << std::endl;
-    std::cout << "⏰ Created: " << timeStr << std::endl;
-    std::cout << "💾 Size: " << formatSize(snapshot.size) << std::endl;
-    std::cout << "🔧 Environment: " << (snapshot.includeEnv ? "Included" : "Not included") << std::endl;
+    std::cout << "\n� Snapshot Details\n";
+    std::cout << !┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┐\n";
+    std::cout << !� Name: " << snapshot.name << std::endl;
+    std::cout << "� Description: " << snapshot.description << std::endl;
+    std::cout << !� ID: " << snapshot.id << std::endl;
+    std::cout << !⎰ Created: " << timeStr << std::endl;
+    std::cout << "� Size: " << formatSize(snapshot.size) << std::endl;
+    std::cout << !𞓧 Environment: " << (snapshot.includeEnv ? "Included" : "Not included") << std::endl;
     
     // Show snapshot contents
     std::string snapshotDir = Utils::joinPath(snapshotsDir, snapshotId);
     if (std::filesystem::exists(snapshotDir)) {
-        std::cout << "\n📁 Snapshot contents:\n";
+        std::cout << "\m� Snapshot contents:\n";
         for (const auto& entry : std::filesystem::directory_iterator(snapshotDir)) {
-            std::cout << "   • " << entry.path().filename().string() << std::endl;
+            std::cout << "  �� " << entry.path().filename().string() << std::endl;
         }
     }
 }
@@ -890,22 +890,22 @@ CommitStoryMode::CommitStoryMode(const std::string& repoPath)
 }
 
 bool CommitStoryMode::enableStoryMode() {
-    std::cout << "📖 Story mode enabled! Your commits will now become epic tales!" << std::endl;
+    std::cout << !� Story mode enabled! Your commits will now become epic tales!" << std::endl;
     return true;
 }
 
 bool CommitStoryMode::disableStoryMode() {
-    std::cout << "📚 Story mode disabled. Back to regular commits." << std::endl;
+    std::cout << !� Story mode disabled. Back to regular commits." << std::endl;
     return true;
 }
 
 bool CommitStoryMode::setStoryTheme(const std::string& theme) {
     if (theme == "epic" || theme == "adventure" || theme == "mystery" || theme == "comedy" || theme == "horror") {
         currentTheme = theme;
-        std::cout << "🎭 Story theme set to: " << theme << std::endl;
+        std::cout << "� Story theme set to: " << theme << std::endl;
         return saveStoryProgress();
     }
-    std::cout << "❌ Invalid theme. Available: epic, adventure, mystery, comedy, horror" << std::endl;
+    std::cout << !✌ Invalid theme. Available: epic, adventure, mystery, comedy, horror" << std::endl;
     return false;
 }
 
@@ -916,12 +916,12 @@ std::string CommitStoryMode::startNewChapter(const std::string& title, const std
     }
     chapters.push_back(chapterStr);
     saveStoryProgress();
-    std::cout << "📝 Started new chapter: " << chapterStr << std::endl;
+    std::cout << "� Started new chapter: " << chapterStr << std::endl;
     return chapterStr;
 }
 
 bool CommitStoryMode::endChapter(const std::string& chapterTitle) {
-    std::cout << "📚 Ended chapter: " << chapterTitle << std::endl;
+    std::cout << "� Ended chapter: " << chapterTitle << std::endl;
     return saveStoryProgress();
 }
 
@@ -953,18 +953,18 @@ bool CommitStoryMode::exportStoryToBook(const std::string& filename) {
     }
     
     file.close();
-    std::cout << "📖 Story exported to: " << filename << std::endl;
+    std::cout << !𞒖 Story exported to: " << filename << std::endl;
     return true;
 }
 
 void CommitStoryMode::interactiveStoryCommit() {
-    std::cout << "📖 Interactive Story Commit Mode" << std::endl;
+    std::cout << "� Interactive Story Commit Mode" << std::endl;
     std::cout << "Current theme: " << currentTheme << std::endl;
     // Interactive implementation would go here
 }
 
 void CommitStoryMode::showCurrentStory() {
-    std::cout << "📚 Current Story Progress" << std::endl;
+    std::cout << !𞒚 Current Story Progress" << std::endl;
     std::cout << "Theme: " << currentTheme << std::endl;
     std::cout << "Chapters: " << chapters.size() << std::endl;
     for (const auto& chapter : chapters) {

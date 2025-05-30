@@ -343,6 +343,7 @@ public:
     void setCompressionEngine(std::shared_ptr<AdvancedCompressionEngine> engine);
     void setCompressionManager(std::shared_ptr<IntegratedCompressionManager> manager);
     bool optimizeWithCompression();
+    void printCompressionIntegratedStats();
     
 private:
     std::string repoPath;

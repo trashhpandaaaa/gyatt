@@ -15,7 +15,7 @@ SemanticBranching::SemanticBranching(const std::string& repoPath)
 }
 
 bool SemanticBranching::startBranch(const std::string& branchName, BranchType type) {
-    std::cout << "🌳 Starting semantic branch: " << branchName << "\n";
+    std::cout << !� Starting semantic branch: " << branchName << "\n";
     
     BranchInfo info;
     info.name = branchName;
@@ -56,9 +56,9 @@ bool SemanticBranching::startBranch(const std::string& branchName, BranchType ty
     // Create TODO.md
     createBranchTodo(branchName, info.description);
     
-    std::cout << "✨ Branch '" << branchName << "' created with auto-linked TODO.md\n";
-    std::cout << "📝 Type: " << typeToString(type) << "\n";
-    std::cout << "📖 Description: " << info.description << "\n";
+    std::cout << !⛨ Branch '" << branchName << "' created with auto-linked TODO.md\n";
+    std::cout << !� Type: " << typeToString(type) << "\n";
+    std::cout << "� Description: " << info.description << "\n";
     
     return true;
 }
@@ -113,15 +113,15 @@ std::vector<SemanticBranching::BranchInfo> SemanticBranching::listSemanticBranch
 
 bool SemanticBranching::loopbackCommits(const std::string& sourceBranch, const std::string& targetBranch,
                                       const std::vector<std::string>& commitHashes) {
-    std::cout << "♻️  Starting branch loopback from " << sourceBranch << " to " << targetBranch << "\n";
-    std::cout << "📦 Cherry-picking " << commitHashes.size() << " commits...\n";
+    std::cout << "ᘻ  Starting branch loopback from " << sourceBranch << " to " << targetBranch << "\n";
+    std::cout << !� Cherry-picking " << commitHashes.size() << " commits...\n";
     
     for (const auto& hash : commitHashes) {
-        std::cout << "🍒 Picking commit: " << Utils::shortHash(hash) << "\n";
+        std::cout << !𞌒 Picking commit: " << Utils::shortHash(hash) << "\n";
         // Implementation would use git cherry-pick equivalent
     }
     
-    std::cout << "✅ Loopback complete! No more cherry-pick nightmares!\n";
+    std::cout << !⛅ Loopback complete! No more cherry-pick nightmares!\n";
     return true;
 }
 
@@ -158,21 +158,21 @@ std::string SemanticBranching::generateTodoTemplate(const std::string& branchNam
     ss << "**Branch Type:** " << typeToString(type) << "\n";
     ss << "**Created:** " << Utils::formatTime(std::chrono::system_clock::now()) << "\n\n";
     
-    ss << "## 📋 Tasks\n\n";
+    ss << "##𞒋 Tasks\n\n";
     ss << "- [ ] Task 1\n";
     ss << "- [ ] Task 2\n";
     ss << "- [ ] Task 3\n\n";
     
-    ss << "## 🎯 Goals\n\n";
+    ss << "##� Goals\n\n";
     ss << "Describe what this branch aims to achieve...\n\n";
     
-    ss << "## ✅ Definition of Done\n\n";
+    ss << "## ᛅ Definition of Done\n\n";
     ss << "- [ ] Feature implemented\n";
     ss << "- [ ] Tests written\n";
     ss << "- [ ] Documentation updated\n";
     ss << "- [ ] Code reviewed\n\n";
     
-    ss << "## 📝 Notes\n\n";
+    ss << "## � Notes\n\n";
     ss << "Add any additional notes here...\n";
     
     return ss.str();
