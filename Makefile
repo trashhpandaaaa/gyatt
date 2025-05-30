@@ -1,8 +1,8 @@
 # Makefile for Gyatt
 
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -Iinclude
-LDFLAGS = -lssl -lcrypto -lcurl -ljsoncpp
+CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -Iinclude -O3 -march=native -mtune=native -mavx2 -pthread
+LDFLAGS = -lssl -lcrypto -lcurl -ljsoncpp -pthread -lz -llz4
 
 SRCDIR = src
 INCDIR = include

@@ -205,6 +205,196 @@ int main(int argc, char* argv[]) {
         gyatt::CommitStoryMode storyMode(repo.getRepoPath());
         gyatt::ContainerizedSnapshots snapshots(repo.getRepoPath());
         
+        // ============== PERFORMANCE COMMANDS ==============
+        if (command == "perf") {
+            if (args.empty()) {
+                // Show performance metrics
+                auto metrics = repo.getPerformanceMetrics();
+                std::cout << ui.colorize("📊 Performance Metrics:", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << "  Total time: " << metrics.totalTime.count() << "ms" << std::endl;
+                std::cout << "  Files processed: " << metrics.filesProcessed << std::endl;
+                std::cout << "  Bytes processed: " << metrics.bytesProcessed << std::endl;
+                std::cout << "  Cache hit rate: " << metrics.cacheHits << "%" << std::endl;
+                std::cout << "  Compression ratio: " << metrics.compressionRatio << std::endl;
+                std::cout << "  Parallel threads: " << metrics.parallelThreadsUsed << std::endl;
+                return 0;
+            }
+            
+            std::string subcommand = args[0];
+            if (subcommand == "enable") {
+                repo.enablePerformanceOptimizations(true);
+                std::cout << ui.colorize("🚀 Performance optimizations enabled", ui.Color::GREEN) << std::endl;
+            } else if (subcommand == "disable") {
+                repo.enablePerformanceOptimizations(false);
+                std::cout << ui.colorize("⏸️  Performance optimizations disabled", ui.Color::YELLOW) << std::endl;
+            } else if (subcommand == "parallel") {
+                bool enable = args.size() > 1 ? (args[1] == "on") : true;
+                repo.enableParallelProcessing(enable);
+                std::cout << ui.colorize("⚡ Parallel processing " + std::string(enable ? "enabled" : "disabled"), 
+                                       enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
+            } else if (subcommand == "cache") {
+                bool enable = args.size() > 1 ? (args[1] == "on") : true;
+                repo.enableObjectCaching(enable);
+                std::cout << ui.colorize("💾 Object caching " + std::string(enable ? "enabled" : "disabled"), 
+                                       enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
+            } else if (subcommand == "compression") {
+                bool enable = args.size() > 1 ? (args[1] == "on") : true;
+                repo.enableDeltaCompression(enable);
+                std::cout << ui.colorize("🗜️  Delta compression " + std::string(enable ? "enabled" : "disabled"), 
+                                       enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
+            } else if (subcommand == "mmap") {
+                bool enable = args.size() > 1 ? (args[1] == "on") : true;
+                repo.enableMemoryMapping(enable);
+                std::cout << ui.colorize("📋 Memory mapping " + std::string(enable ? "enabled" : "disabled"), 
+                                       enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
+            } else if (subcommand == "memory") {
+                bool enable = args.size() > 1 ? (args[1] == "on") : true;
+                repo.enableMemoryOptimization(enable);
+                std::cout << ui.colorize("🧠 Memory optimization " + std::string(enable ? "enabled" : "disabled"), 
+                                       enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
+            } else if (subcommand == "autotune") {
+                bool enable = args.size() > 1 ? (args[1] == "on") : true;
+                repo.enableAutoTuning(enable);
+                std::cout << ui.colorize("🎯 Auto-tuning " + std::string(enable ? "enabled" : "disabled"), 
+                                       enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
+            } else if (subcommand == "optimize-performance") {
+                repo.optimizeForPerformance();
+                std::cout << ui.colorize("🚀 System optimized for maximum performance", ui.Color::GREEN) << std::endl;
+            } else if (subcommand == "optimize-memory") {
+                repo.optimizeForMemory();
+                std::cout << ui.colorize("💾 System optimized for minimal memory usage", ui.Color::GREEN) << std::endl;
+            } else if (subcommand == "optimize-batch") {
+                repo.optimizeForBatch();
+                std::cout << ui.colorize("📦 System optimized for batch operations", ui.Color::GREEN) << std::endl;
+            } else if (subcommand == "gc") {
+                std::cout << ui.colorize("🧹 Performing garbage collection...", ui.Color::CYAN) << std::endl;
+                repo.performGarbageCollection();
+                std::cout << ui.colorize("✅ Garbage collection complete", ui.Color::GREEN) << std::endl;
+            } else if (subcommand == "profile") {
+                auto profile = repo.getMemoryProfile();
+                std::cout << ui.colorize("📊 Memory Profile:", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << "  System Memory: " << (profile.totalSystemMemory / 1024.0 / 1024.0) << " MB" << std::endl;
+                std::cout << "  Available Memory: " << (profile.availableMemory / 1024.0 / 1024.0) << " MB" << std::endl;
+                std::cout << "  Process Memory: " << (profile.processMemoryUsage / 1024.0 / 1024.0) << " MB" << std::endl;
+                std::cout << "  Pool Memory: " << (profile.poolMemoryUsage / 1024.0 / 1024.0) << " MB" << std::endl;
+                std::cout << "  Cache Memory: " << (profile.cacheMemoryUsage / 1024.0 / 1024.0) << " MB" << std::endl;
+                std::cout << "  Memory Efficiency: " << (profile.memoryEfficiency * 100.0) << "%" << std::endl;
+                
+                // Show compression statistics if available
+                if (profile.compressedDataSize > 0) {
+                    std::cout << ui.colorize("\n🗜️  Compression Statistics:", ui.Color::BLUE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                    std::cout << "  Compressed Data: " << (profile.compressedDataSize / 1024.0 / 1024.0) << " MB" << std::endl;
+                    std::cout << "  Uncompressed Data: " << (profile.uncompressedDataSize / 1024.0 / 1024.0) << " MB" << std::endl;
+                    std::cout << "  Compression Ratio: " << std::fixed << std::setprecision(1) 
+                              << (profile.overallCompressionRatio * 100.0) << "%" << std::endl;
+                    std::cout << "  Space Saved: " << (profile.totalSpaceSaved / 1024.0 / 1024.0) << " MB" << std::endl;
+                    std::cout << "  Compression Time: " << profile.compressionTime.count() << "ms" << std::endl;
+                }
+                
+                return 0;
+            } else if (subcommand == "compression") {
+                if (args.size() < 2) {
+                    std::cout << "Usage: gyatt perf compression [enable|disable|optimize|speed|size|balance|full]" << std::endl;
+                    return 1;
+                }
+                
+                std::string compressionCmd = args[1];
+                if (compressionCmd == "enable" || compressionCmd == "on") {
+                    repo.enableCompressionIntegration(true);
+                    std::cout << ui.colorize("🗜️  Compression integration enabled", ui.Color::GREEN) << std::endl;
+                } else if (compressionCmd == "disable" || compressionCmd == "off") {
+                    repo.enableCompressionIntegration(false);
+                    std::cout << ui.colorize("🗜️  Compression integration disabled", ui.Color::YELLOW) << std::endl;
+                } else if (compressionCmd == "optimize") {
+                    std::cout << ui.colorize("🚀 Running compression optimization...", ui.Color::CYAN) << std::endl;
+                    if (repo.optimizeWithCompression()) {
+                        std::cout << ui.colorize("✅ Compression optimization completed", ui.Color::GREEN) << std::endl;
+                    } else {
+                        std::cout << ui.colorize("❌ Compression optimization failed", ui.Color::RED) << std::endl;
+                    }
+                } else if (compressionCmd == "speed") {
+                    repo.optimizeCompressionForSpeed();
+                    std::cout << ui.colorize("⚡ Compression optimized for speed", ui.Color::GREEN) << std::endl;
+                } else if (compressionCmd == "size") {
+                    repo.optimizeCompressionForSize();
+                    std::cout << ui.colorize("📦 Compression optimized for size", ui.Color::GREEN) << std::endl;
+                } else if (compressionCmd == "balance") {
+                    repo.optimizeCompressionForBalance();
+                    std::cout << ui.colorize("⚖️  Compression optimized for balance", ui.Color::GREEN) << std::endl;
+                } else if (compressionCmd == "full") {
+                    std::cout << ui.colorize("🔄 Performing full compression optimization...", ui.Color::CYAN) << std::endl;
+                    repo.performFullCompressionOptimization();
+                    std::cout << ui.colorize("✅ Full compression optimization completed", ui.Color::GREEN) << std::endl;
+                } else {
+                    std::cout << "Unknown compression command: " << compressionCmd << std::endl;
+                    return 1;
+                }
+                return 0;
+            } else {
+                std::cout << "Usage: gyatt perf [enable|disable|parallel|cache|compression|mmap|memory|autotune|optimize-performance|optimize-memory|optimize-batch|gc|profile|tune|reset]" << std::endl;
+                return 1;
+            }
+            return 0;
+        }
+        
+        else if (command == "fast-add") {
+            if (args.empty()) {
+                std::cerr << "Nothing specified, nothing added." << std::endl;
+                return 1;
+            }
+            
+            // Use performance-optimized batch add
+            if (!repo.addOptimized(args)) {
+                std::cerr << "Failed to add files" << std::endl;
+                return 1;
+            }
+            std::cout << ui.colorize("🚀 Files added with optimizations", ui.Color::GREEN) << std::endl;
+            return 0;
+        }
+        
+        else if (command == "fast-commit") {
+            if (args.size() >= 2 && args[0] == "-m") {
+                std::string message = args[1];
+                
+                if (repo.commitOptimized(message)) {
+                    std::cout << ui.colorize("🚀 Optimized commit created successfully", ui.Color::GREEN) << std::endl;
+                    return 0;
+                } else {
+                    std::cerr << ui.colorize("❌ Failed to create commit", ui.Color::RED) << std::endl;
+                    return 1;
+                }
+            } else {
+                std::cerr << "Usage: gyatt fast-commit -m <message>" << std::endl;
+                return 1;
+            }
+        }
+        
+        else if (command == "fast-status") {
+            auto statuses = repo.statusOptimized();
+            
+            std::cout << "On branch " << repo.getCurrentBranch() << "\n";
+            
+            if (statuses.empty()) {
+                std::cout << ui.colorize("✅ Working tree clean", ui.Color::GREEN) << std::endl;
+            } else {
+                std::cout << ui.colorize("📊 Optimized file status:", ui.Color::CYAN) << std::endl;
+                for (const auto& [file, status] : statuses) {
+                    std::string color_status;
+                    if (status == "modified") {
+                        color_status = ui.colorize("modified", ui.Color::RED);
+                    } else if (status == "staged") {
+                        color_status = ui.colorize("staged", ui.Color::GREEN);
+                    } else if (status == "deleted") {
+                        color_status = ui.colorize("deleted", ui.Color::RED);
+                    } else {
+                        color_status = ui.colorize(status, ui.Color::YELLOW);
+                    }
+                    std::cout << "  " << color_status << ": " << file << std::endl;
+                }
+            }
+            return 0;
+        }
+        
         // ============== BASIC VERSION CONTROL ==============
         if (command == "add") {
             if (args.empty()) {

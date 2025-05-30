@@ -8,6 +8,10 @@
 #include <chrono>
 #include <functional>
 #include "ignore.h"
+#include "performance_engine.h"
+#include "http_optimization.h"
+#include "memory_optimization.h"
+#include "advanced_compression.h"
 
 // Enhanced remote repository management structures
 namespace gyatt {
@@ -49,6 +53,7 @@ struct RemoteRepository {
     std::string name;
     std::string url;
     RemoteProtocol protocol;
+    AuthMethod authMethod = AuthMethod::NONE;  // Added for compatibility
     bool isGyattRepo = false;
     bool isHealthy = true;
     std::string lastError;
@@ -63,6 +68,8 @@ struct SyncProfile {
     SyncMode mode;
     std::vector<std::string> includePaths;
     std::vector<std::string> excludePaths;
+    std::vector<std::string> includePatterns;  // Added for compatibility
+    std::vector<std::string> excludePatterns;  // Added for compatibility
     bool autoSync = false;
     std::chrono::minutes syncInterval{60};
     std::function<void(const std::string&)> progressCallback;
@@ -71,12 +78,16 @@ struct SyncProfile {
 struct PushProgress {
     std::string phase;
     std::string message;
+    std::string status;           // Added for compatibility
     size_t current = 0;
     size_t total = 0;
     size_t totalFiles = 0;
     size_t processedFiles = 0;
     size_t totalBytes = 0;
     size_t transferredBytes = 0;
+    size_t totalObjects = 0;      // Added for compatibility
+    size_t pushedObjects = 0;     // Added for compatibility
+    size_t pushedBytes = 0;       // Added for compatibility
     double percentComplete = 0.0;
     std::string currentOperation;
     bool isComplete = false;
@@ -122,6 +133,38 @@ public:
     bool status();
     bool log();
     bool diff();
+    
+    // Performance-optimized operations
+    bool addOptimized(const std::vector<std::string>& files);
+    bool commitOptimized(const std::string& message, const std::string& author = "");
+    std::map<std::string, std::string> statusOptimized();
+    
+    // Performance control
+    void enablePerformanceOptimizations(bool enable = true);
+    void enableParallelProcessing(bool enable = true);
+    void enableObjectCaching(bool enable = true);
+    void enableDeltaCompression(bool enable = true);
+    void enableMemoryMapping(bool enable = true);
+    PerformanceEngine::Metrics getPerformanceMetrics() const;
+    void resetPerformanceMetrics();
+    void autoTunePerformance();
+    
+    // Memory optimization control
+    void enableMemoryOptimization(bool enable = true);
+    void optimizeForPerformance();
+    void optimizeForMemory();
+    void optimizeForBatch();
+    MemoryOptimizationManager::MemoryProfile getMemoryProfile() const;
+    void performGarbageCollection();
+    void enableAutoTuning(bool enable = true);
+    
+    // Compression optimization control
+    void enableCompressionIntegration(bool enable = true);
+    bool optimizeWithCompression();
+    bool optimizeCompressionForSpeed();
+    bool optimizeCompressionForSize();
+    bool optimizeCompressionForBalance();
+    bool performFullCompressionOptimization();
     
     // Branch operations
     bool createBranch(const std::string& branchName);
@@ -245,6 +288,9 @@ private:
     std::string indexFile;
     std::string headFile;
     
+    // Remote repository management
+    std::map<std::string, RemoteRepository> remotes;
+    
     // Advanced feature systems - initialized lazily
     mutable std::unique_ptr<MarkdownCommit> markdownCommit;
     mutable std::unique_ptr<SemanticBranching> semanticBranching;
@@ -263,6 +309,15 @@ private:
     mutable std::unique_ptr<CommitStoryMode> storyMode;
     mutable std::unique_ptr<ContainerizedSnapshots> snapshots;
     mutable std::unique_ptr<TerminalUI> terminalUI;
+    
+    // Performance optimization engine
+    mutable std::unique_ptr<PerformanceEngine> performanceEngine;
+    
+    // Memory optimization manager
+    mutable std::unique_ptr<MemoryOptimizationManager> memoryOptimizer;
+    
+    // Compression optimization manager
+    mutable std::unique_ptr<IntegratedCompressionManager> compressionManager;
     
     // Initialization methods for feature systems
     void initializeFeatureSystems() const;

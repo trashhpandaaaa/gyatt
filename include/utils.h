@@ -32,6 +32,9 @@ namespace Utils {
     std::string formatTime(const std::chrono::system_clock::time_point& time);
     std::chrono::system_clock::time_point parseTime(const std::string& timeStr);
     
+    // Size and formatting utilities
+    std::string formatSize(size_t bytes);
+    
     // Path utilities
     std::string joinPath(const std::string& path1, const std::string& path2);
     std::string relativePath(const std::string& from, const std::string& to);
