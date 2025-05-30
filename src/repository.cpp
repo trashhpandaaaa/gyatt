@@ -1209,135 +1209,45 @@ bool Repository::uploadToGitHub(const std::string& repoName, const std::string& 
         memoryOptimizer->optimizeForBatch(); // Optimize for bulk GitHub operations
     }
     
-    // Configure HTTP optimization settings
+    // Configure HTTP optimization settings for reliability
     HttpOptimization::ConnectionPoolConfig config;
-    config.maxConnections = 16;           // Increased for GitHub API
-    config.maxConnectionsPerHost = 8;     // GitHub API limit consideration
-    config.connectionTimeout = 30L;       // 30 second timeout
-    config.requestTimeout = 60L;          // 60 second request timeout
+    config.maxConnections = 8;            // More conservative for stability
+    config.maxConnectionsPerHost = 4;     // Respect GitHub API limits
+    config.connectionTimeout = 45L;       // Longer timeout for reliability
+    config.requestTimeout = 90L;          // Longer request timeout
     config.enableCompression = true;      // Enable gzip compression
     config.enableKeepAlive = true;        // Enable connection reuse
-    config.enableHttp2 = true;            // Use HTTP/2 when available
-    config.maxRetries = 3;                // Retry failed requests
+    config.enableHttp2 = false;           // Disable HTTP/2 for stability
+    config.maxRetries = 5;                // More retries for reliability
     
     httpOptimizer->setConfig(config);
     httpOptimizer->enableCompression(true);
     httpOptimizer->setCacheExpiry(std::chrono::seconds(300)); // 5 minute cache
-    httpOptimizer->setRateLimit(std::chrono::milliseconds(17)); // ~60 requests per second
+    httpOptimizer->setRateLimit(std::chrono::milliseconds(25)); // ~40 requests per second (more conservative)
     
-    const size_t numThreads = std::min(static_cast<size_t>(8), 
+    const size_t numThreads = std::min(static_cast<size_t>(4),  // Reduced for stability
                                       std::max(static_cast<size_t>(2), 
-                                      static_cast<size_t>(std::thread::hardware_concurrency())));
-    const size_t chunkSize = std::max(static_cast<size_t>(1), 
-                                     (filesToUpload.size() + numThreads - 1) / numThreads);
+                                      static_cast<size_t>(std::thread::hardware_concurrency() / 2)));
     
     std::vector<std::future<std::map<std::string, std::string>>> futures;
     std::mutex consoleMutex;
     std::atomic<size_t> completedFiles{0};
     
-    std::cout << "Processing " << filesToUpload.size() << " files with " << numThreads 
-              << " threads (HTTP optimized, " << chunkSize << " files per thread)\n";
+    std::cout << "Processing " << filesToUpload.size() << " files with HTTP optimization batch processing\n";
     
-    for (size_t i = 0; i < filesToUpload.size(); i += chunkSize) {
-        size_t endIdx = std::min(i + chunkSize, filesToUpload.size());
-        std::vector<std::pair<std::string, std::string>> chunk(
-            filesToUpload.begin() + i, filesToUpload.begin() + endIdx);
-        
-        auto future = std::async(std::launch::async, [&headers, &consoleMutex, &completedFiles, &filesToUpload, httpOptimizer, chunk, repoName]() 
-            -> std::map<std::string, std::string> {
-            
-            std::map<std::string, std::string> chunkResults;
-            std::string blobUrl = "https://api.github.com/repos/" + repoName + "/git/blobs";
-            
-            // Prepare batch requests for HTTP optimization
-            std::vector<HttpOptimization::BatchRequest> batchRequests;
-            
-            for (const auto& [filePath, fileContent] : chunk) {
-                // Create blob via GitHub API with HTTP optimization
-                std::string encodedContent = Utils::base64Encode(fileContent);
-                std::string blobData = "{\"content\":\"" + encodedContent + "\",\"encoding\":\"base64\"}";
-                
-                HttpOptimization::BatchRequest request;
-                request.url = blobUrl;
-                request.method = "POST";
-                request.data = blobData;
-                request.headers = headers;
-                request.headers.push_back("Content-Type: application/json");
-                request.priority = 1;  // High priority
-                
-                batchRequests.push_back(request);
-            }
-            
-            // Process batch requests with HTTP optimization
-            auto responses = httpOptimizer->executeRequestBatch(batchRequests);
-            
-            for (size_t i = 0; i < responses.size(); ++i) {
-                const auto& response = responses[i];
-                const std::string& filePath = chunk[i].first;
-                
-                if (response.success || response.responseCode == 409) {
-                    // Check if this is an "empty repository" 409 error
-                    if (response.responseCode == 409 && 
-                        response.content.find("Git Repository is empty") != std::string::npos) {
-                        chunkResults[filePath] = ""; // Placeholder for empty repo
-                        {
-                            std::lock_guard<std::mutex> lock(consoleMutex);
-                            std::cout << "  " << filePath << " (will be included in initial commit)\n";
-                        }
-                        continue;
-                    }
-                    
-                    // Parse SHA from response
-                    size_t shaPos = response.content.find("\"sha\":");
-                    if (shaPos != std::string::npos) {
-                        shaPos = response.content.find("\"", shaPos + 6);
-                        if (shaPos != std::string::npos) {
-                            size_t shaEnd = response.content.find("\"", shaPos + 1);
-                            if (shaEnd != std::string::npos) {
-                                std::string blobSha = response.content.substr(shaPos + 1, shaEnd - shaPos - 1);
-                                chunkResults[filePath] = blobSha;
-                                
-                                size_t completed = ++completedFiles;
-                                {
-                                    std::lock_guard<std::mutex> lock(consoleMutex);
-                                    std::cout << "  [" << completed << "/" << filesToUpload.size() 
-                                              << "] " << filePath << " -> " << Utils::shortHash(blobSha) 
-                                              << " (optimized)\n";
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (chunkResults.find(filePath) == chunkResults.end()) {
-                        std::lock_guard<std::mutex> lock(consoleMutex);
-                        std::cerr << "error: could not parse blob SHA for file '" << filePath << "'\n";
-                    }
-                } else {
-                    {
-                        std::lock_guard<std::mutex> lock(consoleMutex);
-                        std::cerr << "error: failed to create blob for file '" << filePath 
-                                  << "' (HTTP " << response.responseCode << ")\n";
-                        std::cerr << "Response: " << response.content << "\n";
-                    }
-                }
-            }
-            
-            return chunkResults;
-        });
-        
-        futures.push_back(std::move(future));
-    }
+    // Use the improved batch processing system directly
+    std::map<std::string, std::string> blobResults = httpOptimizer->createBlobsBatch(
+        repoName, filesToUpload, token,
+        [&completedFiles, &filesToUpload, &consoleMutex](size_t completed, size_t total, const std::string& currentFile) {
+            std::lock_guard<std::mutex> lock(consoleMutex);
+            std::cout << "  [" << completed << "/" << total << "] " << currentFile << " -> blob created\n";
+        }
+    );
     
-    // Collect results from all threads
-    for (auto& future : futures) {
-        try {
-            auto chunkResults = future.get();
-            for (const auto& [filePath, blobSha] : chunkResults) {
-                fileBlobMap[filePath] = blobSha;
-            }
-        } catch (const std::exception& e) {
-            std::cerr << "error: exception in parallel blob creation: " << e.what() << "\n";
-            return false;
+    // Copy results to fileBlobMap
+    for (const auto& [filePath, blobSha] : blobResults) {
+        if (!blobSha.empty()) {
+            fileBlobMap[filePath] = blobSha;
         }
     }
     

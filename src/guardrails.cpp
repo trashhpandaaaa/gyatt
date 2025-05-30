@@ -215,22 +215,7 @@ bool GuardrailSystem::checkForDebugCode(const std::vector<std::string>& files) {
     
     for (const auto& filepath : files) {
         if (containsDebugPatterns(filepath)) {
-            std::cout << "\n🐛 Debug code detected in: " << filepath << std::endl;
             foundDebugCode = true;
-            
-            // Show specific patterns found
-            std::ifstream file(filepath);
-            std::string line;
-            int lineNum = 0;
-            
-            while (std::getline(file, line)) {
-                lineNum++;
-                for (const auto& pattern : debugPatterns) {
-                    if (line.find(pattern) != std::string::npos) {
-                        std::cout << "  Line " << lineNum << ": " << pattern << std::endl;
-                    }
-                }
-            }
         }
     }
     

@@ -443,7 +443,7 @@ public:
             std::vector<uint8_t> data(objectData.begin(), objectData.end());
             
             auto result = compressionEngine->compress(data, 
-                AdvancedCompressionEngine::CompressionType::LZ4_STANDARD);
+                gyatt::CompressionType::LZ4_STANDARD);
             
             totalUncompressed += result.originalSize;
             totalCompressed += result.compressedSize;
@@ -556,13 +556,13 @@ public:
         // Configure compression based on optimization type
         if (type == "speed") {
             compressionEngine->setCompressionLevel(
-                AdvancedCompressionEngine::CompressionType::LZ4_FAST, 1);
+                gyatt::CompressionType::LZ4_FAST, 1);
         } else if (type == "size") {
             compressionEngine->setCompressionLevel(
-                AdvancedCompressionEngine::CompressionType::ZLIB_BEST, 9);
+                gyatt::CompressionType::ZLIB_BEST, 9);
         } else { // balance
             compressionEngine->setCompressionLevel(
-                AdvancedCompressionEngine::CompressionType::LZ4_STANDARD, 3);
+                gyatt::CompressionType::LZ4_STANDARD, 3);
         }
         
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -608,7 +608,7 @@ IntegratedCompressionManager::IntegratedCompressionManager(const std::string& re
     defaultProfile.packConfig.maxPackSize = 256 * 1024 * 1024;
     defaultProfile.packConfig.compressionThreshold = 0.1;
     defaultProfile.packConfig.enableParallelPacking = true;
-    defaultProfile.packConfig.windowSize = 10;
+    defaultProfile.packConfig.deltaWindowSize = 10;
     
     // Set up default storage configuration
     defaultProfile.storageConfig.storageRoot = repositoryPath + "/.gyatt/compressed";
