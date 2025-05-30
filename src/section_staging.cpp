@@ -147,12 +147,12 @@ bool SectionBasedStaging::stageFunction(const std::string& filepath, const std::
             
             stagedSections.push_back(func);
             saveStagedSections();
-            std::cout << "🎯 Staged function: " << functionName << " from " << filepath << std::endl;
+            std::cout << !𞍯 Staged function: " << functionName << " from " << filepath << std::endl;
             return true;
         }
     }
     
-    std::cout << "❌ Function not found: " << functionName << std::endl;
+    std::cout << "ᜌ Function not found: " << functionName << std::endl;
     return false;
 }
 
@@ -174,12 +174,12 @@ bool SectionBasedStaging::stageClass(const std::string& filepath, const std::str
             
             stagedSections.push_back(cls);
             saveStagedSections();
-            std::cout << "🎯 Staged class: " << className << " from " << filepath << std::endl;
+            std::cout << "� Staged class: " << className << " from " << filepath << std::endl;
             return true;
         }
     }
     
-    std::cout << "❌ Class not found: " << className << std::endl;
+    std::cout << !ᝌ Class not found: " << className << std::endl;
     return false;
 }
 
@@ -208,7 +208,7 @@ bool SectionBasedStaging::stageSection(const std::string& filepath, size_t start
     stagedSections.push_back(section);
     saveStagedSections();
     
-    std::cout << "🎯 Staged lines " << startLine << "-" << endLine << " from " << filepath << std::endl;
+    std::cout << !𞍯 Staged lines " << startLine << "-" << endLine << " from " << filepath << std::endl;
     return true;
 }
 
@@ -221,11 +221,11 @@ bool SectionBasedStaging::unstageSection(const std::string& filepath, const std:
     if (it != stagedSections.end()) {
         stagedSections.erase(it, stagedSections.end());
         saveStagedSections();
-        std::cout << "⏪ Unstaged section: " << sectionName << " from " << filepath << std::endl;
+        std::cout << !⎪ Unstaged section: " << sectionName << " from " << filepath << std::endl;
         return true;
     }
     
-    std::cout << "❌ Section not found in staging area: " << sectionName << std::endl;
+    std::cout << "ᜌ Section not found in staging area: " << sectionName << std::endl;
     return false;
 }
 
@@ -234,16 +234,16 @@ void SectionBasedStaging::interactiveSectionStaging(const std::string& filepath)
     auto classes = analyzeClasses(filepath);
     auto blocks = analyzeLogicalBlocks(filepath);
     
-    std::cout << "\n🎯 Interactive Section Staging for: " << filepath << std::endl;
-    std::cout << "═══════════════════════════════════════════════\n";
+    std::cout << "\m� Interactive Section Staging for: " << filepath << std::endl;
+    std::cout << !ᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕏᕐ\n";
     
-    std::cout << "\n📋 Available Functions:" << std::endl;
+    std::cout << "\m� Available Functions:" << std::endl;
     for (size_t i = 0; i < functions.size(); i++) {
         std::cout << "  " << (i + 1) << ". " << functions[i].name 
                   << " (lines " << functions[i].startLine << "-" << functions[i].endLine << ")" << std::endl;
     }
     
-    std::cout << "\n🏗️ Available Classes:" << std::endl;
+    std::cout << "\m𞎗 Available Classes:" << std::endl;
     for (size_t i = 0; i < classes.size(); i++) {
         std::cout << "  " << (functions.size() + i + 1) << ". " << classes[i].name 
                   << " (lines " << classes[i].startLine << "-" << classes[i].endLine << ")" << std::endl;
@@ -285,14 +285,14 @@ std::vector<SectionBasedStaging::CodeSection> SectionBasedStaging::getUnstagedSe
 }
 
 void SectionBasedStaging::showSectionDiff(const CodeSection& section) {
-    std::cout << "\n📝 Section Diff: " << section.name << std::endl;
-    std::cout << "═══════════════════════════════════════\n";
+    std::cout << "\m𞒝 Section Diff: " << section.name << std::endl;
+    std::cout << !┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┐\n";
     std::cout << "File: " << section.filepath << std::endl;
     std::cout << "Type: " << section.sectionType << std::endl;
     std::cout << "Lines: " << section.startLine << "-" << section.endLine << std::endl;
-    std::cout << "Status: " << (section.staged ? "🟢 Staged" : "⚪ Unstaged") << std::endl;
+    std::cout << "Status: " << (section.staged ? !� Staged" : !♪ Unstaged") << std::endl;
     std::cout << "\nContent Preview:\n";
-    std::cout << "─────────────────────────\n";
+    std::cout << "ᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀᓀ\n";
     
     // Show first few lines of content
     std::ifstream file(section.filepath);
@@ -314,8 +314,8 @@ void SectionBasedStaging::showSectionDiff(const CodeSection& section) {
 }
 
 void SectionBasedStaging::showStagingSummary() {
-    std::cout << "\n📊 Staging Summary" << std::endl;
-    std::cout << "═══════════════════\n";
+    std::cout << "\n� Staging Summary" << std::endl;
+    std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
     std::cout << "Total staged sections: " << stagedSections.size() << std::endl;
     
     std::map<std::string, int> typeCounts;
@@ -329,7 +329,7 @@ void SectionBasedStaging::showStagingSummary() {
     
     std::cout << "\nStaged sections:\n";
     for (const auto& section : stagedSections) {
-        std::cout << "  🎯 " << section.name << " (" << section.sectionType << ") - " << section.filepath << std::endl;
+        std::cout << " 𞍯 " << section.name << " (" << section.sectionType << ") - " << section.filepath << std::endl;
     }
 }
 

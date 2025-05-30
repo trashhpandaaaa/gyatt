@@ -38,51 +38,51 @@ void printUsage() {
     
     theme.showGyattSplash();
     
-    std::cout << ui.colorize("📂 HUMAN-READABLE COMMITS", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
-    std::cout << "  " << ui.colorize("fr", ui.Color::GREEN) << " -m \"✨ feat: markdown commits with emojis\"" << std::endl;
+    std::cout << ui.colorize("� HUMAN-READABLE COMMITS", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << "  " << ui.colorize("fr", ui.Color::GREEN) << " -m \!ᜨ feat: markdown commits with emojis\"" << std::endl;
     std::cout << "  " << ui.colorize("commit-interactive", ui.Color::GREEN) << "     Interactive commit builder" << std::endl;
     std::cout << "  " << ui.colorize("story-mode", ui.Color::GREEN) << "             Enable narrative commits" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🌳 SEMANTIC BRANCHING", ui.Color::YELLOW, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize(!𞋳 SEMANTIC BRANCHING", ui.Color::YELLOW, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("start feature/login", ui.Color::GREEN) << "    Auto-naming + TODO.md generation" << std::endl;
     std::cout << "  " << ui.colorize("start bugfix/auth", ui.Color::GREEN) << "     Semantic branch creation" << std::endl;
     std::cout << "  " << ui.colorize("loopback", ui.Color::GREEN) << "              Selective commit merging" << std::endl << std::endl;
 
-    std::cout << ui.colorize("✂️ SECTION-BASED STAGING", ui.Color::MAGENTA, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize(!⛁﷏ SECTION-BASED STAGING", ui.Color::MAGENTA, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("stage-function", ui.Color::GREEN) << "         Stage by function/class" << std::endl;
     std::cout << "  " << ui.colorize("stage-interactive", ui.Color::GREEN) << "     Smart section staging" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🗺️ PROJECT MAPPING", ui.Color::BLUE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize(!�﷏ PROJECT MAPPING", ui.Color::BLUE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("map", ui.Color::GREEN) << "                   Generate project overview" << std::endl;
     std::cout << "  " << ui.colorize("map --visual", ui.Color::GREEN) << "          Visual dependency graph" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🔖 CHECKPOINTS & SNAPSHOTS", ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize(!� CHECKPOINTS & SNAPSHOTS", ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("mark alpha-release", ui.Color::GREEN) << "   Create checkpoint" << std::endl;
     std::cout << "  " << ui.colorize("rewind 3 --soft", ui.Color::GREEN) << "      Time travel safely" << std::endl;
     std::cout << "  " << ui.colorize("oops-shield", ui.Color::GREEN) << "          Emergency recovery" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🛡️ GUARDRAILS & OVERRIDES", ui.Color::YELLOW, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize(!𞚡 GUARDRAILS & OVERRIDES", ui.Color::YELLOW, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("fr", ui.Color::GREEN) << " -m \"fix\" --no-verify --no-format" << std::endl;
     std::cout << "  " << ui.colorize("guardrails", ui.Color::GREEN) << "            Manage safety rules" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🧩 PLUGIN ECOSYSTEM", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize("� PLUGIN ECOSYSTEM", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("install changelog-gen", ui.Color::GREEN) << "  Auto changelog generation" << std::endl;
     std::cout << "  " << ui.colorize("install undo-commits", ui.Color::GREEN) << "   Smart commit undoing" << std::endl << std::endl;
 
-    std::cout << ui.colorize("💬 COMMENTS & NOTES", ui.Color::MAGENTA, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize("� COMMENTS & NOTES", ui.Color::MAGENTA, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("comment add", ui.Color::GREEN) << " file.cpp:42 \"Fix this bug\"" << std::endl;
     std::cout << "  " << ui.colorize("sticky-note", ui.Color::GREEN) << "           Drop persistent notes" << std::endl;
     std::cout << "  " << ui.colorize("label core", ui.Color::GREEN) << " file.cpp   Label-based organization" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🎥 SESSION RECORDING", ui.Color::BLUE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize(!𞍥 SESSION RECORDING", ui.Color::BLUE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("record start", ui.Color::GREEN) << "           Begin session recording" << std::endl;
     std::cout << "  " << ui.colorize("export session", ui.Color::GREEN) << "        Export to .asciinema" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🧑‍🏫 TEMPLATES & INIT", ui.Color::YELLOW, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize("�ဌ� TEMPLATES & INIT", ui.Color::YELLOW, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("damnit react", ui.Color::GREEN) << "          React project template" << std::endl;
     std::cout << "  " << ui.colorize("damnit python-flask", ui.Color::GREEN) << "   Flask project template" << std::endl << std::endl;
 
-    std::cout << ui.colorize("🤘 VIBE COMMANDS", ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize("� VIBE COMMANDS", ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  " << ui.colorize("yeet", ui.Color::GREEN) << " file.cpp         Add files (no cap)" << std::endl;
     std::cout << "  " << ui.colorize("regret", ui.Color::GREEN) << "              Undo changes" << std::endl;
     std::cout << "  " << ui.colorize("vibe", ui.Color::GREEN) << "                Status with style" << std::endl;
@@ -92,11 +92,11 @@ void printUsage() {
     std::cout << "  " << ui.colorize("flex", ui.Color::GREEN) << "               Show off commits" << std::endl;
     std::cout << "  " << ui.colorize("ghost", ui.Color::GREEN) << "              Stash changes" << std::endl << std::endl;
 
-    std::cout << ui.colorize("📋 CLASSIC COMMANDS", ui.Color::WHITE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+    std::cout << ui.colorize(!� CLASSIC COMMANDS", ui.Color::WHITE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
     std::cout << "  init, clone, add, commit, status, log, diff, branch, checkout, push" << std::endl;
     std::cout << "  remote, show, github-token, gyattignore, help" << std::endl << std::endl;
 
-    std::cout << ui.colorize("Built with 💖 and pure chaos energy", ui.Color::MAGENTA) << std::endl;
+    std::cout << ui.colorize("Built with� and pure chaos energy", ui.Color::MAGENTA) << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
             if (args.empty()) {
                 if (repo.init()) {
                     theme.showBrutalistAnimation("INITIALIZING GYATT REPOSITORY");
-                    std::cout << ui.colorize("✅ Initialized empty Gyatt repository in " + repo.getRepoPath() + "/.gyatt", 
+                    std::cout << ui.colorize(!ᜅ Initialized empty Gyatt repository in " + repo.getRepoPath() + "/.gyatt", 
                                            ui.Color::GREEN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                     
                     gyatt::PluginManager plugins(repo.getRepoPath());
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
                     
                     return 0;
                 } else {
-                    std::cerr << ui.colorize("❌ Failed to initialize repository", ui.Color::RED) << std::endl;
+                    std::cerr << ui.colorize(!✌ Failed to initialize repository", ui.Color::RED) << std::endl;
                     return 1;
                 }
             } else {
@@ -149,11 +149,11 @@ int main(int argc, char* argv[]) {
                 
                 if (templates.initCustomTemplate(templateName, templateName)) {
                     theme.showBrutalistAnimation("INITIALIZING " + templateName + " PROJECT");
-                    std::cout << ui.colorize("✅ Initialized " + templateName + " project with Gyatt", 
+                    std::cout << ui.colorize(!ᜅ Initialized " + templateName + " project with Gyatt", 
                                            ui.Color::GREEN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                     return 0;
                 } else {
-                    std::cerr << ui.colorize("❌ Failed to initialize from template: " + templateName, ui.Color::RED) << std::endl;
+                    std::cerr << ui.colorize(!ᝌ Failed to initialize from template: " + templateName, ui.Color::RED) << std::endl;
                     return 1;
                 }
             }
@@ -183,7 +183,7 @@ int main(int argc, char* argv[]) {
         }
         
         if (!repo.isRepository()) {
-            std::cerr << ui.colorize("💀 fatal: not a gyatt repository (or any of the parent directories): .gyatt", 
+            std::cerr << ui.colorize(!𞑀 fatal: not a gyatt repository (or any of the parent directories): .gyatt", 
                                    ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
             return 1;
         }
@@ -210,7 +210,7 @@ int main(int argc, char* argv[]) {
             if (args.empty()) {
                 // Show performance metrics
                 auto metrics = repo.getPerformanceMetrics();
-                std::cout << ui.colorize("📊 Performance Metrics:", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << ui.colorize(!𞒊 Performance Metrics:", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                 std::cout << "  Total time: " << metrics.totalTime.count() << "ms" << std::endl;
                 std::cout << "  Files processed: " << metrics.filesProcessed << std::endl;
                 std::cout << "  Bytes processed: " << metrics.bytesProcessed << std::endl;
@@ -223,56 +223,56 @@ int main(int argc, char* argv[]) {
             std::string subcommand = args[0];
             if (subcommand == "enable") {
                 repo.enablePerformanceOptimizations(true);
-                std::cout << ui.colorize("🚀 Performance optimizations enabled", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!� Performance optimizations enabled", ui.Color::GREEN) << std::endl;
             } else if (subcommand == "disable") {
                 repo.enablePerformanceOptimizations(false);
-                std::cout << ui.colorize("⏸️  Performance optimizations disabled", ui.Color::YELLOW) << std::endl;
+                std::cout << ui.colorize("Ꮈ  Performance optimizations disabled", ui.Color::YELLOW) << std::endl;
             } else if (subcommand == "parallel") {
                 bool enable = args.size() > 1 ? (args[1] == "on") : true;
                 repo.enableParallelProcessing(enable);
-                std::cout << ui.colorize("⚡ Parallel processing " + std::string(enable ? "enabled" : "disabled"), 
+                std::cout << ui.colorize(!♡ Parallel processing " + std::string(enable ? "enabled" : "disabled"), 
                                        enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
             } else if (subcommand == "cache") {
                 bool enable = args.size() > 1 ? (args[1] == "on") : true;
                 repo.enableObjectCaching(enable);
-                std::cout << ui.colorize("💾 Object caching " + std::string(enable ? "enabled" : "disabled"), 
+                std::cout << ui.colorize(!𞑾 Object caching " + std::string(enable ? "enabled" : "disabled"), 
                                        enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
             } else if (subcommand == "compression") {
                 bool enable = args.size() > 1 ? (args[1] == "on") : true;
                 repo.enableDeltaCompression(enable);
-                std::cout << ui.colorize("🗜️  Delta compression " + std::string(enable ? "enabled" : "disabled"), 
+                std::cout << ui.colorize(!�﷏  Delta compression " + std::string(enable ? "enabled" : "disabled"), 
                                        enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
             } else if (subcommand == "mmap") {
                 bool enable = args.size() > 1 ? (args[1] == "on") : true;
                 repo.enableMemoryMapping(enable);
-                std::cout << ui.colorize("📋 Memory mapping " + std::string(enable ? "enabled" : "disabled"), 
+                std::cout << ui.colorize("� Memory mapping " + std::string(enable ? "enabled" : "disabled"), 
                                        enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
             } else if (subcommand == "memory") {
                 bool enable = args.size() > 1 ? (args[1] == "on") : true;
                 repo.enableMemoryOptimization(enable);
-                std::cout << ui.colorize("🧠 Memory optimization " + std::string(enable ? "enabled" : "disabled"), 
+                std::cout << ui.colorize(!𞦠 Memory optimization " + std::string(enable ? "enabled" : "disabled"), 
                                        enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
             } else if (subcommand == "autotune") {
                 bool enable = args.size() > 1 ? (args[1] == "on") : true;
                 repo.enableAutoTuning(enable);
-                std::cout << ui.colorize("🎯 Auto-tuning " + std::string(enable ? "enabled" : "disabled"), 
+                std::cout << ui.colorize("� Auto-tuning " + std::string(enable ? "enabled" : "disabled"), 
                                        enable ? ui.Color::GREEN : ui.Color::YELLOW) << std::endl;
             } else if (subcommand == "optimize-performance") {
                 repo.optimizeForPerformance();
-                std::cout << ui.colorize("🚀 System optimized for maximum performance", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize("� System optimized for maximum performance", ui.Color::GREEN) << std::endl;
             } else if (subcommand == "optimize-memory") {
                 repo.optimizeForMemory();
-                std::cout << ui.colorize("💾 System optimized for minimal memory usage", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!𞑾 System optimized for minimal memory usage", ui.Color::GREEN) << std::endl;
             } else if (subcommand == "optimize-batch") {
                 repo.optimizeForBatch();
-                std::cout << ui.colorize("📦 System optimized for batch operations", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize("� System optimized for batch operations", ui.Color::GREEN) << std::endl;
             } else if (subcommand == "gc") {
-                std::cout << ui.colorize("🧹 Performing garbage collection...", ui.Color::CYAN) << std::endl;
+                std::cout << ui.colorize(!� Performing garbage collection...", ui.Color::CYAN) << std::endl;
                 repo.performGarbageCollection();
-                std::cout << ui.colorize("✅ Garbage collection complete", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize("ᛅ Garbage collection complete", ui.Color::GREEN) << std::endl;
             } else if (subcommand == "profile") {
                 auto profile = repo.getMemoryProfile();
-                std::cout << ui.colorize("📊 Memory Profile:", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << ui.colorize("� Memory Profile:", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                 std::cout << "  System Memory: " << (profile.totalSystemMemory / 1024.0 / 1024.0) << " MB" << std::endl;
                 std::cout << "  Available Memory: " << (profile.availableMemory / 1024.0 / 1024.0) << " MB" << std::endl;
                 std::cout << "  Process Memory: " << (profile.processMemoryUsage / 1024.0 / 1024.0) << " MB" << std::endl;
@@ -282,7 +282,7 @@ int main(int argc, char* argv[]) {
                 
                 // Show compression statistics if available
                 if (profile.compressedDataSize > 0) {
-                    std::cout << ui.colorize("\n🗜️  Compression Statistics:", ui.Color::BLUE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                    std::cout << ui.colorize("\m�﷏  Compression Statistics:", ui.Color::BLUE, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                     std::cout << "  Compressed Data: " << (profile.compressedDataSize / 1024.0 / 1024.0) << " MB" << std::endl;
                     std::cout << "  Uncompressed Data: " << (profile.uncompressedDataSize / 1024.0 / 1024.0) << " MB" << std::endl;
                     std::cout << "  Compression Ratio: " << std::fixed << std::setprecision(1) 
@@ -301,30 +301,30 @@ int main(int argc, char* argv[]) {
                 std::string compressionCmd = args[1];
                 if (compressionCmd == "enable" || compressionCmd == "on") {
                     repo.enableCompressionIntegration(true);
-                    std::cout << ui.colorize("🗜️  Compression integration enabled", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize(!𞖜  Compression integration enabled", ui.Color::GREEN) << std::endl;
                 } else if (compressionCmd == "disable" || compressionCmd == "off") {
                     repo.enableCompressionIntegration(false);
-                    std::cout << ui.colorize("🗜️  Compression integration disabled", ui.Color::YELLOW) << std::endl;
+                    std::cout << ui.colorize(!𞖜  Compression integration disabled", ui.Color::YELLOW) << std::endl;
                 } else if (compressionCmd == "optimize") {
-                    std::cout << ui.colorize("🚀 Running compression optimization...", ui.Color::CYAN) << std::endl;
+                    std::cout << ui.colorize("� Running compression optimization...", ui.Color::CYAN) << std::endl;
                     if (repo.optimizeWithCompression()) {
-                        std::cout << ui.colorize("✅ Compression optimization completed", ui.Color::GREEN) << std::endl;
+                        std::cout << ui.colorize(!ᜅ Compression optimization completed", ui.Color::GREEN) << std::endl;
                     } else {
-                        std::cout << ui.colorize("❌ Compression optimization failed", ui.Color::RED) << std::endl;
+                        std::cout << ui.colorize(!✌ Compression optimization failed", ui.Color::RED) << std::endl;
                     }
                 } else if (compressionCmd == "speed") {
                     repo.optimizeCompressionForSpeed();
-                    std::cout << ui.colorize("⚡ Compression optimized for speed", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize("ᙡ Compression optimized for speed", ui.Color::GREEN) << std::endl;
                 } else if (compressionCmd == "size") {
                     repo.optimizeCompressionForSize();
-                    std::cout << ui.colorize("📦 Compression optimized for size", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize("� Compression optimized for size", ui.Color::GREEN) << std::endl;
                 } else if (compressionCmd == "balance") {
                     repo.optimizeCompressionForBalance();
-                    std::cout << ui.colorize("⚖️  Compression optimized for balance", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize("ᙖ  Compression optimized for balance", ui.Color::GREEN) << std::endl;
                 } else if (compressionCmd == "full") {
-                    std::cout << ui.colorize("🔄 Performing full compression optimization...", ui.Color::CYAN) << std::endl;
+                    std::cout << ui.colorize(!𞓄 Performing full compression optimization...", ui.Color::CYAN) << std::endl;
                     repo.performFullCompressionOptimization();
-                    std::cout << ui.colorize("✅ Full compression optimization completed", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize("ᛅ Full compression optimization completed", ui.Color::GREEN) << std::endl;
                 } else {
                     std::cout << "Unknown compression command: " << compressionCmd << std::endl;
                     return 1;
@@ -348,7 +348,7 @@ int main(int argc, char* argv[]) {
                 std::cerr << "Failed to add files" << std::endl;
                 return 1;
             }
-            std::cout << ui.colorize("🚀 Files added with optimizations", ui.Color::GREEN) << std::endl;
+            std::cout << ui.colorize(!� Files added with optimizations", ui.Color::GREEN) << std::endl;
             return 0;
         }
         
@@ -357,10 +357,10 @@ int main(int argc, char* argv[]) {
                 std::string message = args[1];
                 
                 if (repo.commitOptimized(message)) {
-                    std::cout << ui.colorize("🚀 Optimized commit created successfully", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize(!𞙀 Optimized commit created successfully", ui.Color::GREEN) << std::endl;
                     return 0;
                 } else {
-                    std::cerr << ui.colorize("❌ Failed to create commit", ui.Color::RED) << std::endl;
+                    std::cerr << ui.colorize(!✌ Failed to create commit", ui.Color::RED) << std::endl;
                     return 1;
                 }
             } else {
@@ -375,9 +375,9 @@ int main(int argc, char* argv[]) {
             std::cout << "On branch " << repo.getCurrentBranch() << "\n";
             
             if (statuses.empty()) {
-                std::cout << ui.colorize("✅ Working tree clean", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Working tree clean", ui.Color::GREEN) << std::endl;
             } else {
-                std::cout << ui.colorize("📊 Optimized file status:", ui.Color::CYAN) << std::endl;
+                std::cout << ui.colorize("� Optimized file status:", ui.Color::CYAN) << std::endl;
                 for (const auto& [file, status] : statuses) {
                     std::string color_status;
                     if (status == "modified") {
@@ -408,7 +408,7 @@ int main(int argc, char* argv[]) {
                     return 1;
                 }
             }
-            std::cout << ui.colorize("✅ Files added successfully", ui.Color::GREEN) << std::endl;
+            std::cout << ui.colorize("ᛅ Files added successfully", ui.Color::GREEN) << std::endl;
             return 0;
         }
         
@@ -423,16 +423,16 @@ int main(int argc, char* argv[]) {
                 std::vector<std::string> files; // Empty for now, could get from staging area
                 if (!guardrails.runPreCommitChecks(files)) {
                     if (!ui.showConfirmDialog("Guardrails detected issues. Continue anyway?", false)) {
-                        std::cout << ui.colorize("❌ Commit cancelled", ui.Color::YELLOW) << std::endl;
+                        std::cout << ui.colorize("ᜌ Commit cancelled", ui.Color::YELLOW) << std::endl;
                         return 1;
                     }
                 }
                 
                 if (repo.commit(message)) {
-                    std::cout << ui.colorize("✅ Commit created successfully", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize(!⛅ Commit created successfully", ui.Color::GREEN) << std::endl;
                     return 0;
                 } else {
-                    std::cerr << ui.colorize("❌ Failed to create commit", ui.Color::RED) << std::endl;
+                    std::cerr << ui.colorize("ᜌ Failed to create commit", ui.Color::RED) << std::endl;
                     return 1;
                 }
             } else {
@@ -491,20 +491,20 @@ int main(int argc, char* argv[]) {
             if (!commitInfo.title.empty()) {
                 std::string message = commitInfo.title + "\n\n" + commitInfo.description;
                 if (repo.commit(message)) {
-                    std::cout << ui.colorize("✅ Interactive commit created successfully", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize(!ᜅ Interactive commit created successfully", ui.Color::GREEN) << std::endl;
                     return 0;
                 }
             }
-            std::cerr << ui.colorize("❌ Failed to create interactive commit", ui.Color::RED) << std::endl;
+            std::cerr << ui.colorize(!ᝌ Failed to create interactive commit", ui.Color::RED) << std::endl;
             return 1;
         }
         
         else if (command == "export-changelog") {
             if (markdownCommit.exportToMarkdown("CHANGELOG.md")) {
-                std::cout << ui.colorize("✅ Commit history exported to CHANGELOG.md", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!⛅ Commit history exported to CHANGELOG.md", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to export commit history", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize("ᜌ Failed to export commit history", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -517,20 +517,20 @@ int main(int argc, char* argv[]) {
             }
             
             if (semanticBranching.startBranch(args[0])) {
-                std::cout << ui.colorize("✅ Semantic branch created: " + args[0], ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Semantic branch created: " + args[0], ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to create semantic branch", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize(!ᝌ Failed to create semantic branch", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
         
         else if (command == "loopback") {
             if (semanticBranching.loopbackCommits("", "", {})) {
-                std::cout << ui.colorize("✅ Loopback completed successfully", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Loopback completed successfully", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Loopback failed", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize("ᜌ Loopback failed", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -544,10 +544,10 @@ int main(int argc, char* argv[]) {
             
             std::string functionName = args.size() > 1 ? args[1] : "";
             if (sectionStaging.stageFunction(args[0], functionName)) {
-                std::cout << ui.colorize("✅ Function staged successfully", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Function staged successfully", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to stage function", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize("ᜌ Failed to stage function", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -555,11 +555,11 @@ int main(int argc, char* argv[]) {
         else if (command == "stage-interactive") {
             if (args.empty()) {
                 sectionStaging.interactiveSectionStaging("");
-                std::cout << ui.colorize("✅ Interactive staging completed", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize("ᛅ Interactive staging completed", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
                 sectionStaging.interactiveSectionStaging(args[0]);
-                std::cout << ui.colorize("✅ Interactive staging completed", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Interactive staging completed", ui.Color::GREEN) << std::endl;
                 return 0;
             }
         }
@@ -570,9 +570,9 @@ int main(int argc, char* argv[]) {
             
             if (visual) {
                 if (projectMapper.exportDependencyGraphAsDOT("project_map.dot")) {
-                    std::cout << ui.colorize("✅ Visual project map exported to project_map.dot", ui.Color::GREEN) << std::endl;
+                    std::cout << ui.colorize(!ᜅ Visual project map exported to project_map.dot", ui.Color::GREEN) << std::endl;
                 } else {
-                    std::cerr << ui.colorize("❌ Failed to export visual map", ui.Color::RED) << std::endl;
+                    std::cerr << ui.colorize("ᜌ Failed to export visual map", ui.Color::RED) << std::endl;
                 }
             } else {
                 projectMapper.showProjectSummary();
@@ -593,10 +593,10 @@ int main(int argc, char* argv[]) {
             }
             
             if (checkpoints.markCheckpoint(args[0])) {
-                std::cout << ui.colorize("✅ Checkpoint created: " + args[0], ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Checkpoint created: " + args[0], ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to create checkpoint", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize(!✌ Failed to create checkpoint", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -611,20 +611,20 @@ int main(int argc, char* argv[]) {
             bool soft = args.size() > 1 && args[1] == "--soft";
             
             if (rewindMode.rewind(steps, soft)) {
-                std::cout << ui.colorize("✅ Rewind completed", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!⛅ Rewind completed", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Rewind failed", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize(!ᝌ Rewind failed", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
         
         else if (command == "oops-shield") {
             if (oopsShield.emergencyRestore()) {
-                std::cout << ui.colorize("✅ Emergency recovery completed", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!⛅ Emergency recovery completed", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Emergency recovery failed", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize(!ᝌ Emergency recovery failed", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -633,9 +633,9 @@ int main(int argc, char* argv[]) {
         else if (command == "guardrails") {
             if (args.empty()) {
                 auto guardrailList = guardrails.listGuardrails();
-                std::cout << ui.colorize("🛡️ Guardrails Status", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << ui.colorize("� Guardrails Status", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                 for (const auto& rule : guardrailList) {
-                    std::string status = rule.enabled ? "✅" : "❌";
+                    std::string status = rule.enabled ? !ᜅ" : "ᜌ";
                     std::cout << status << " " << ui.colorize(rule.name, ui.Color::GREEN) 
                              << " - " << rule.description << std::endl;
                 }
@@ -682,7 +682,7 @@ int main(int argc, char* argv[]) {
             ui.showBanner("Installed Plugins");
             
             for (const auto& plugin : pluginList) {
-                std::string status = plugin.enabled ? "✅" : "❌";
+                std::string status = plugin.enabled ? !⛅" : !ᝌ";
                 std::cout << status << " " << ui.colorize(plugin.name, ui.Color::CYAN) 
                          << " v" << plugin.version << " - " << plugin.description << std::endl;
             }
@@ -762,10 +762,10 @@ int main(int argc, char* argv[]) {
             std::string author = "current-user"; 
             
             if (comments.addComment(filepath, lineNumber, message, author)) {
-                std::cout << ui.colorize("✅ Comment added", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!⛅ Comment added", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to add comment", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize(!ᝌ Failed to add comment", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -778,10 +778,10 @@ int main(int argc, char* argv[]) {
             
             std::string message = args[0];
             if (stickyNotes.addNote(message)) {
-                std::cout << ui.colorize("✅ Sticky note added", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Sticky note added", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to add sticky note", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize(!ᝌ Failed to add sticky note", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -793,10 +793,10 @@ int main(int argc, char* argv[]) {
             }
             
             if (labels.addFileLabel(args[0], args[1])) {
-                std::cout << ui.colorize("✅ File labeled", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!⛅ File labeled", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to label file", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize("ᜌ Failed to label file", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -810,10 +810,10 @@ int main(int argc, char* argv[]) {
             
             if (args[0] == "enable") {
                 storyMode.enableStoryMode();
-                std::cout << ui.colorize("✅ Story mode enabled", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!⛅ Story mode enabled", ui.Color::GREEN) << std::endl;
             } else if (args[0] == "disable") {
                 storyMode.disableStoryMode();
-                std::cout << ui.colorize("✅ Story mode disabled", ui.Color::YELLOW) << std::endl;
+                std::cout << ui.colorize(!ᜅ Story mode disabled", ui.Color::YELLOW) << std::endl;
             } else if (args[0] == "status") {
                 std::cout << "Story mode: " << "available" << std::endl;
             }
@@ -827,11 +827,11 @@ int main(int argc, char* argv[]) {
                 return 0;
             } else if (args[0] == "add" && args.size() >= 3) {
                 aliases.addCustomAlias(args[1], args[2]);
-                std::cout << ui.colorize("✅ Alias added: " + args[1] + " -> " + args[2], ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Alias added: " + args[1] + " -> " + args[2], ui.Color::GREEN) << std::endl;
                 return 0;
             } else if (args[0] == "remove" && args.size() >= 2) {
                 aliases.removeAlias(args[1]);
-                std::cout << ui.colorize("✅ Alias removed: " + args[1], ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize("ᛅ Alias removed: " + args[1], ui.Color::GREEN) << std::endl;
                 return 0;
             } else if (args[0] == "list") {
                 auto aliasList = aliases.getAllAliases();
@@ -881,13 +881,13 @@ int main(int argc, char* argv[]) {
             }
             else if (args[0] == "--enhanced") {
                 auto remotes = repo.getRemoteRepositories();
-                std::cout << ui.colorize("🌐 Enhanced Remote Repository Information", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << ui.colorize(!� Enhanced Remote Repository Information", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                 for (const auto& remote : remotes) {
                     std::cout << "\n" << ui.colorize("Remote: " + remote.name, ui.Color::GREEN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                     std::cout << "  URL: " << remote.url << std::endl;
                     std::cout << "  Protocol: " << repo.getProtocolName(remote.protocol) << std::endl;
                     std::cout << "  Auth: " << repo.getAuthMethodName(remote.credentials.method) << std::endl;
-                    std::cout << "  Health: " << (remote.isHealthy ? "✅ Healthy" : "❌ Unhealthy") << std::endl;
+                    std::cout << "  Health: " << (remote.isHealthy ? !ᜅ Healthy" : !✌ Unhealthy") << std::endl;
                     auto syncTime = std::chrono::system_clock::to_time_t(remote.lastSync);
                     if (syncTime > 0) {
                         std::cout << "  Last Sync: " << std::ctime(&syncTime);
@@ -941,10 +941,10 @@ int main(int argc, char* argv[]) {
             }
             
             if (repo.addRemoteWithAuth(name, url, credentials)) {
-                std::cout << ui.colorize("✅ Enhanced remote added successfully", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Enhanced remote added successfully", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Failed to add enhanced remote", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize("ᜌ Failed to add enhanced remote", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -952,10 +952,10 @@ int main(int argc, char* argv[]) {
         else if (command == "remote-health") {
             if (args.empty()) {
                 auto remotes = repo.listRemotes();
-                std::cout << ui.colorize("🏥 Remote Health Check", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << ui.colorize(!𞎥 Remote Health Check", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                 for (const auto& remote : remotes) {
                     bool healthy = repo.checkRemoteHealth(remote);
-                    std::string status = healthy ? "✅ Healthy" : "❌ Unhealthy";
+                    std::string status = healthy ? "ᛅ Healthy" : !ᝌ Unhealthy";
                     std::cout << remote.name << ": " << status << std::endl;
                 }
             } else {
@@ -966,7 +966,7 @@ int main(int argc, char* argv[]) {
                 }
                 
                 bool healthy = repo.checkRemoteHealth(remote);
-                std::string status = healthy ? "✅ Healthy" : "❌ Unhealthy";
+                std::string status = healthy ? !⛅ Healthy" : "ᜌ Unhealthy";
                 std::cout << "Remote '" << args[0] << "': " << status << std::endl;
             }
             return 0;
@@ -976,7 +976,7 @@ int main(int argc, char* argv[]) {
             std::string remoteName = args.size() > 0 ? args[0] : "origin";
             std::string branchName = args.size() > 1 ? args[1] : "main";
             
-            std::cout << ui.colorize("🚀 Enhanced Push with Progress Tracking", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+            std::cout << ui.colorize(!𞙀 Enhanced Push with Progress Tracking", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
             
             bool success = repo.pushWithProgress(remoteName, branchName, 
                 [&ui](const gyatt::PushProgress& progress) {
@@ -988,10 +988,10 @@ int main(int argc, char* argv[]) {
             std::cout << std::endl; // New line after progress
             
             if (success) {
-                std::cout << ui.colorize("✅ Enhanced push completed successfully!", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!ᜅ Enhanced push completed successfully!", ui.Color::GREEN) << std::endl;
                 return 0;
             } else {
-                std::cerr << ui.colorize("❌ Enhanced push failed", ui.Color::RED) << std::endl;
+                std::cerr << ui.colorize("ᜌ Enhanced push failed", ui.Color::RED) << std::endl;
                 return 1;
             }
         }
@@ -1008,12 +1008,12 @@ int main(int argc, char* argv[]) {
                 std::vector<std::string> excludePaths = {"build/", "*.o", "*.tmp"};
                 
                 auto profile = repo.createSyncProfile(profileName, gyatt::SyncMode::SELECTIVE, includePaths, excludePaths);
-                std::cout << ui.colorize("✅ Sync profile '" + profileName + "' created", ui.Color::GREEN) << std::endl;
+                std::cout << ui.colorize(!⛅ Sync profile '" + profileName + "' created", ui.Color::GREEN) << std::endl;
                 return 0;
             }
             else if (args[0] == "list") {
                 auto profiles = repo.getSyncProfiles();
-                std::cout << ui.colorize("📋 Sync Profiles", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                std::cout << ui.colorize(!� Sync Profiles", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                 for (const auto& profile : profiles) {
                     std::cout << "  " << ui.colorize(profile.name, ui.Color::GREEN) 
                              << " (" << repo.getSyncModeName(profile.mode) << ")" << std::endl;
@@ -1113,14 +1113,14 @@ int main(int argc, char* argv[]) {
         }
         
         else {
-            std::cerr << ui.colorize("💀 Unknown command: " + command, ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
-            std::cerr << ui.colorize("💡 Use 'gyatt help' for usage information or 'gyatt alias list' for available aliases.", 
+            std::cerr << ui.colorize(!𞑀 Unknown command: " + command, ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+            std::cerr << ui.colorize(!𞑡 Use 'gyatt help' for usage information or 'gyatt alias list' for available aliases.", 
                                    ui.Color::YELLOW) << std::endl;
             return 1;
         }
     }
     catch (const std::exception& e) {
-        std::cerr << ui.colorize("💥 Error: " + std::string(e.what()), ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+        std::cerr << ui.colorize(!� Error: " + std::string(e.what()), ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
         return 1;
     }
     

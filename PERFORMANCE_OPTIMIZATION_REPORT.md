@@ -1,6 +1,6 @@
 # GYATT GitHub Push Performance Optimization Summary
 
-## 📊 Performance Test Results
+## � Performance Test Results
 
 Our parallel processing optimization for GitHub push operations demonstrates **significant performance improvements**:
 
@@ -46,7 +46,7 @@ Our parallel processing optimization for GitHub push operations demonstrates **s
 - Chunked processing to prevent memory overload
 - Proper resource cleanup
 
-## 🚀 Real-World Impact
+## � Real-World Impact
 
 ### For Different Repository Sizes
 
@@ -65,7 +65,7 @@ Our parallel processing optimization for GitHub push operations demonstrates **s
 4. **Maintained Reliability**: Robust error handling and recovery
 5. **Resource Efficient**: Optimal thread utilization
 
-## 🔧 Technical Implementation Details
+## � Technical Implementation Details
 
 ### Code Changes Made
 
@@ -128,15 +128,12 @@ for (auto& future : futures) {
    - HTTP response codes
    - SHA hash generation confirmation
 
-## 🎯 Optimization Goals Achieved
+##𞍯 Optimization Goals Achieved
 
-✅ **Primary Goal**: Make gyatt faster than Git for GitHub operations  
-✅ **Performance Goal**: Achieve >3x speedup for multi-file pushes  
-✅ **Reliability Goal**: Maintain error handling and recovery  
-✅ **Scalability Goal**: Performance improvement scales with repository size  
-✅ **User Experience Goal**: Provide real-time progress feedback  
+ᛅ **Primary Goal**: Make gyatt faster than Git for GitHub operations  	ᜅ **Performance Goal**: Achieve >3x speedup for multi-file pushes  	⛅ **Reliability Goal**: Maintain error handling and recovery  	ᜅ **Scalability Goal**: Performance improvement scales with repository size  
+ᛅ **User Experience Goal**: Provide real-time progress feedback  
 
-## 🔮 Future Optimization Opportunities
+## � Future Optimization Opportunities
 
 1. **HTTP/2 Connection Pooling**: Reuse connections for additional speedup
 2. **Request Batching**: Combine multiple small requests where possible
@@ -144,7 +141,7 @@ for (auto& future : futures) {
 4. **Adaptive Threading**: Dynamically adjust thread count based on network performance
 5. **Caching Layer**: Cache blob SHAs to avoid redundant uploads
 
-## 📈 Performance Comparison with Git
+##� Performance Comparison with Git
 
 Based on our optimizations, gyatt now offers:
 - **5.45x faster** multi-file operations compared to sequential processing

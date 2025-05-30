@@ -546,10 +546,10 @@ void MemoryOptimizationManager::optimizeForPerformance() {
     memoryPool.preAllocateObjects(AdvancedMemoryPool::PoolType::SMALL_OBJECTS, 10000);
     memoryPool.preAllocateObjects(AdvancedMemoryPool::PoolType::MEDIUM_OBJECTS, 1000);
     
-    std::cout << "ðŸš€ Memory system optimized for performance\n";
-    std::cout << "   â€¢ Cache size: 512MB\n";
-    std::cout << "   â€¢ Pre-allocated object pools\n";
-    std::cout << "   â€¢ Aggressive caching enabled\n";
+    std::cout << !ðž™€ Memory system optimized for performance\n";
+    std::cout << "   á¢ Cache size: 512MB\n";
+    std::cout << "  â¢ Pre-allocated object pools\n";
+    std::cout << "  á€¢ Aggressive caching enabled\n";
 }
 
 void MemoryOptimizationManager::optimizeForMemory() {
@@ -558,10 +558,10 @@ void MemoryOptimizationManager::optimizeForMemory() {
     memoryPool.compactMemory();
     performGarbageCollection();
     
-    std::cout << "ðŸ’¾ Memory system optimized for low memory usage\n";
-    std::cout << "   â€¢ Cache size: 64MB\n";
-    std::cout << "   â€¢ Memory compaction performed\n";
-    std::cout << "   â€¢ Garbage collection completed\n";
+    std::cout << !ïŸ‘¾ Memory system optimized for low memory usage\n";
+    std::cout << "  á€¢ Cache size: 64MB\n";
+    std::cout << "  â¢ Memory compaction performed\n";
+    std::cout << "  â¢ Garbage collection completed\n";
 }
 
 void MemoryOptimizationManager::optimizeForBatch() {
@@ -569,9 +569,9 @@ void MemoryOptimizationManager::optimizeForBatch() {
     objectCache.setMemoryLimit(128 * 1024 * 1024); // 128MB cache
     memoryPool.preAllocateObjects(AdvancedMemoryPool::PoolType::MEDIUM_OBJECTS, 5000);
     
-    std::cout << "ðŸ“¦ Memory system optimized for batch operations\n";
-    std::cout << "   â€¢ Cache size: 128MB\n";
-    std::cout << "   â€¢ Batch-optimized allocation\n";
+    std::cout << "ïž“¦ Memory system optimized for batch operations\n";
+    std::cout << "   á¢ Cache size: 128MB\n";
+    std::cout << "  â¢ Batch-optimized allocation\n";
 }
 
 MemoryOptimizationManager::MemoryProfile MemoryOptimizationManager::getMemoryProfile() const {
@@ -626,7 +626,7 @@ void MemoryOptimizationManager::performGarbageCollection() {
     auto end = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     
-    std::cout << "ðŸ§¹ Garbage collection completed in " << duration.count() << "ms\n";
+    std::cout << !ðž¦¹ Garbage collection completed in " << duration.count() << "ms\n";
 }
 
 size_t MemoryOptimizationManager::getAvailableMemory() const {
@@ -666,10 +666,10 @@ void MemoryOptimizationManager::enableOptimization(bool enable) {
         // Components are already initialized in the constructor
         isInitialized = true;
         
-        std::cout << "ðŸ§  Memory optimization enabled\n";
-        std::cout << "  â€¢ Advanced memory pool: " << memoryPool.getStatistics().currentAllocated / 1024.0 / 1024.0 << " MB allocated\n";
-        std::cout << "  â€¢ Intelligent object cache: " << objectCache.getMetrics().totalObjects << " items cached\n";
-        std::cout << "  â€¢ Storage optimization: Ready\n";
+        std::cout << !ïŸ¦  Memory optimization enabled\n";
+        std::cout << " â¢ Advanced memory pool: " << memoryPool.getStatistics().currentAllocated / 1024.0 / 1024.0 << " MB allocated\n";
+        std::cout << "  á¢ Intelligent object cache: " << objectCache.getMetrics().totalObjects << " items cached\n";
+        std::cout << " â¢ Storage optimization: Ready\n";
     } else if (!enable && isInitialized) {
         // Disable auto-tuning if it's running
         if (autoTuningEnabled) {
@@ -680,11 +680,11 @@ void MemoryOptimizationManager::enableOptimization(bool enable) {
         objectCache.clear();
         
         isInitialized = false;
-        std::cout << "â¸ï¸  Memory optimization disabled\n";
+        std::cout << !âŽ·ï·  Memory optimization disabled\n";
     } else if (enable) {
-        std::cout << "ðŸ§  Memory optimization already enabled\n";
+        std::cout << "ïž§  Memory optimization already enabled\n";
     } else {
-        std::cout << "â¸ï¸  Memory optimization already disabled\n";
+        std::cout << !âŽ·ï·  Memory optimization already disabled\n";
     }
 }
 
@@ -694,7 +694,7 @@ void MemoryOptimizationManager::enableAutoTuning(bool enable) {
         shouldStopAutoTuning = false;
         autoTuningThread = std::thread(&MemoryOptimizationManager::autoTuningLoop, this);
         
-        std::cout << "ðŸŽ¯ Auto-tuning enabled for memory optimization\n";
+        std::cout << "ïžŽ¯ Auto-tuning enabled for memory optimization\n";
     } else if (!enable && autoTuningEnabled) {
         autoTuningEnabled = false;
         shouldStopAutoTuning = true;
@@ -703,7 +703,7 @@ void MemoryOptimizationManager::enableAutoTuning(bool enable) {
             autoTuningThread.join();
         }
         
-        std::cout << "â¸ï¸  Auto-tuning disabled\n";
+        std::cout << !âŽ·ï·  Auto-tuning disabled\n";
     }
 }
 
@@ -732,12 +732,12 @@ void MemoryOptimizationManager::monitorMemoryPressure() {
         objectCache.setMemoryLimit(32 * 1024 * 1024); // 32MB
         memoryPool.compactMemory();
         
-        std::cout << "âš ï¸  High memory pressure detected - reducing cache size\n";
+        std::cout << !â™Ÿï·  High memory pressure detected - reducing cache size\n";
     } else if (memoryPressure < 0.4) {
         // Low memory pressure - optimize for performance
         objectCache.setMemoryLimit(512 * 1024 * 1024); // 512MB
         
-        std::cout << "ðŸ“ˆ Low memory pressure - increasing cache size\n";
+        std::cout << "ïž“ˆ Low memory pressure - increasing cache size\n";
     }
 }
 
@@ -841,12 +841,12 @@ void MemoryOptimizationManager::enableCompressionIntegration(bool enable) {
         compressionEngine = std::make_shared<AdvancedCompressionEngine>();
         memoryPool.setCompressionEngine(compressionEngine);
         
-        std::cout << "ðŸ—œï¸  Compression integration enabled\n";
-        std::cout << "   â€¢ LZ4 fast compression: Active\n";
-        std::cout << "   â€¢ Adaptive compression: Enabled\n";
-        std::cout << "   â€¢ Memory pool compression: Ready\n";
+        std::cout << !ïŸ–›ï·  Compression integration enabled\n";
+        std::cout << "  â¢ LZ4 fast compression: Active\n";
+        std::cout << "  á€¢ Adaptive compression: Enabled\n";
+        std::cout << "  á€¢ Memory pool compression: Ready\n";
     } else if (!enable) {
-        std::cout << "ðŸ—œï¸  Compression integration disabled\n";
+        std::cout << !ïŸ–›ï·  Compression integration disabled\n";
     }
 }
 
@@ -865,11 +865,11 @@ void MemoryOptimizationManager::setCompressionManager(
 
 bool MemoryOptimizationManager::optimizeWithCompression() {
     if (!compressionEnabled || !compressionEngine) {
-        std::cerr << "âš ï¸  Compression not enabled for optimization\n";
+        std::cerr << !â™Ÿï·  Compression not enabled for optimization\n";
         return false;
     }
     
-    std::cout << "ðŸš€ Performing memory optimization with compression...\n";
+    std::cout << !ïŸ™€ Performing memory optimization with compression...\n";
     
     auto start = std::chrono::high_resolution_clock::now();
     
@@ -897,7 +897,7 @@ bool MemoryOptimizationManager::optimizeWithCompression() {
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     
-    std::cout << "âœ… Memory + compression optimization completed in " 
+    std::cout << !áœ… Memory + compression optimization completed in " 
               << duration.count() << "ms\n";
     
     // Print combined statistics
@@ -909,22 +909,22 @@ bool MemoryOptimizationManager::optimizeWithCompression() {
 void MemoryOptimizationManager::printCompressionIntegratedStats() {
     auto memProfile = getMemoryProfile();
     
-    std::cout << "\nðŸ“Š INTEGRATED MEMORY + COMPRESSION STATISTICS:\n";
-    std::cout << "   â€¢ Memory pool usage: " << (memProfile.poolMemoryUsage / 1024.0 / 1024.0) << " MB\n";
-    std::cout << "   â€¢ Cache memory usage: " << (memProfile.cacheMemoryUsage / 1024.0 / 1024.0) << " MB\n";
-    std::cout << "   â€¢ Memory efficiency: " << (memProfile.memoryEfficiency * 100.0) << "%\n";
+    std::cout << "\mïŸ’Š INTEGRATED MEMORY + COMPRESSION STATISTICS:\n";
+    std::cout << "   á¢ Memory pool usage: " << (memProfile.poolMemoryUsage / 1024.0 / 1024.0) << " MB\n";
+    std::cout << "   á¢ Cache memory usage: " << (memProfile.cacheMemoryUsage / 1024.0 / 1024.0) << " MB\n";
+    std::cout << "  â¢ Memory efficiency: " << (memProfile.memoryEfficiency * 100.0) << "%\n";
     
     if (compressionEngine && memProfile.compressedDataSize > 0) {
-        std::cout << "   â€¢ Compressed data: " << Utils::formatSize(memProfile.compressedDataSize) << "\n";
-        std::cout << "   â€¢ Uncompressed data: " << Utils::formatSize(memProfile.uncompressedDataSize) << "\n";
-        std::cout << "   â€¢ Compression ratio: " << std::fixed << std::setprecision(1) 
+        std::cout << "   á¢ Compressed data: " << Utils::formatSize(memProfile.compressedDataSize) << "\n";
+        std::cout << "  á€¢ Uncompressed data: " << Utils::formatSize(memProfile.uncompressedDataSize) << "\n";
+        std::cout << "   á¢ Compression ratio: " << std::fixed << std::setprecision(1) 
                   << (memProfile.overallCompressionRatio * 100.0) << "%\n";
-        std::cout << "   â€¢ Space saved: " << Utils::formatSize(memProfile.totalSpaceSaved) << "\n";
+        std::cout << "   á¢ Space saved: " << Utils::formatSize(memProfile.totalSpaceSaved) << "\n";
     }
     
     if (compressionManager) {
         auto overallStats = compressionManager->getOverallStats();
-        std::cout << "   â€¢ Overall performance gain: " << std::fixed << std::setprecision(1) 
+        std::cout << "   á¢ Overall performance gain: " << std::fixed << std::setprecision(1) 
                   << overallStats.performanceGain << "%\n";
     }
 }

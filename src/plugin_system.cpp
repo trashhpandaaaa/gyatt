@@ -16,7 +16,7 @@ PluginManager::PluginManager(const std::string& repoPath)
 }
 
 bool PluginManager::installPlugin(const std::string& pluginName, const std::string& source) {
-    std::cout << "📦 Installing plugin: " << pluginName << std::endl;
+    std::cout << !� Installing plugin: " << pluginName << std::endl;
     
     if (source.empty()) {
         // Install from built-in registry
@@ -40,7 +40,7 @@ bool PluginManager::uninstallPlugin(const std::string& pluginName) {
             savePluginConfig();
         }
         
-        std::cout << "✅ Plugin uninstalled: " << pluginName << std::endl;
+        std::cout << "ᛅ Plugin uninstalled: " << pluginName << std::endl;
         return true;
     }
     return false;
@@ -52,7 +52,7 @@ bool PluginManager::enablePlugin(const std::string& pluginName) {
     if (it != installedPlugins.end()) {
         it->enabled = true;
         savePluginConfig();
-        std::cout << "✅ Plugin enabled: " << pluginName << std::endl;
+        std::cout << !ᜅ Plugin enabled: " << pluginName << std::endl;
         return true;
     }
     return false;
@@ -64,7 +64,7 @@ bool PluginManager::disablePlugin(const std::string& pluginName) {
     if (it != installedPlugins.end()) {
         it->enabled = false;
         savePluginConfig();
-        std::cout << "⚠️  Plugin disabled: " << pluginName << std::endl;
+        std::cout << "ᙠ  Plugin disabled: " << pluginName << std::endl;
         return true;
     }
     return false;
@@ -114,7 +114,7 @@ std::string PluginManager::getPluginOutput(const std::string& pluginName, const 
 }
 
 bool PluginManager::installChangelogGenerator() {
-    std::cout << "📝 Installing built-in changelog generator..." << std::endl;
+    std::cout << "� Installing built-in changelog generator..." << std::endl;
     
     std::string pluginDir = pluginsDir + "/changelog-gen";
     std::filesystem::create_directories(pluginDir);
@@ -152,11 +152,11 @@ def generate_changelog():
         with open('CHANGELOG.md', 'w') as f:
             f.write(changelog)
             
-        print("✅ Changelog generated successfully")
+        print("ᛅ Changelog generated successfully")
         return True
         
     except Exception as e:
-        print(f"❌ Error generating changelog: {e}")
+        print(f"ᜌ Error generating changelog: {e}")
         return False
 
 if __name__ == "__main__":
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 }
 
 bool PluginManager::installUndoCommits() {
-    std::cout << "↩️  Installing built-in undo commits plugin..." << std::endl;
+    std::cout << !Ⅸ﷏  Installing built-in undo commits plugin..." << std::endl;
     
     std::string pluginDir = pluginsDir + "/undo-commits";
     std::filesystem::create_directories(pluginDir);
@@ -201,16 +201,16 @@ bool PluginManager::installUndoCommits() {
 undo_commits() {
     local count=${1:-1}
     
-    echo "⚠️  About to undo $count commit(s)"
+    echo !♟﷏  About to undo $count commit(s)"
     echo "This will reset HEAD~$count and stage the changes"
     
     read -p "Continue? (y/N): " confirm
     if [[ $confirm =~ ^[Yy]$ ]]; then
         git reset --soft HEAD~$count
-        echo "✅ Successfully undone $count commit(s)"
-        echo "💡 Changes are now staged, ready to recommit"
+        echo "ᛅ Successfully undone $count commit(s)"
+        echo !𞑡 Changes are now staged, ready to recommit"
     else
-        echo "❌ Operation cancelled"
+        echo !ᝌ Operation cancelled"
         return 1
     fi
 }
@@ -251,7 +251,7 @@ esac
 }
 
 bool PluginManager::installCodeFormatter() {
-    std::cout << "🎨 Installing built-in code formatter..." << std::endl;
+    std::cout << !� Installing built-in code formatter..." << std::endl;
     
     std::string pluginDir = pluginsDir + "/code-formatter";
     std::filesystem::create_directories(pluginDir);
@@ -269,20 +269,20 @@ def format_code(filepath):
         
         if ext == '.py':
             subprocess.run(['black', filepath], check=True)
-            print(f"✅ Formatted Python file: {filepath}")
+            print(f"ᛅ Formatted Python file: {filepath}")
         elif ext in ['.js', '.ts', '.json']:
             subprocess.run(['prettier', '--write', filepath], check=True)
-            print(f"✅ Formatted JS/TS file: {filepath}")
+            print(f!⛅ Formatted JS/TS file: {filepath}")
         elif ext in ['.cpp', '.h', '.hpp', '.cc']:
             subprocess.run(['clang-format', '-i', filepath], check=True)
-            print(f"✅ Formatted C++ file: {filepath}")
+            print(f!⛅ Formatted C++ file: {filepath}")
         else:
-            print(f"⚠️  No formatter available for: {filepath}")
+            print(f!᚟  No formatter available for: {filepath}")
             
     except subprocess.CalledProcessError:
-        print(f"❌ Failed to format: {filepath}")
+        print(f!ᝌ Failed to format: {filepath}")
     except FileNotFoundError:
-        print(f"❌ Formatter not installed for: {filepath}")
+        print(f!ᝌ Formatter not installed for: {filepath}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -317,7 +317,7 @@ if __name__ == "__main__":
 }
 
 bool PluginManager::installTestRunner() {
-    std::cout << "🧪 Installing built-in test runner..." << std::endl;
+    std::cout << !𞦪 Installing built-in test runner..." << std::endl;
     
     std::string pluginDir = pluginsDir + "/test-runner";
     std::filesystem::create_directories(pluginDir);
@@ -430,7 +430,7 @@ bool PluginManager::createPluginTemplate(const std::string& pluginName, PluginLa
 
 bool PluginManager::downloadPlugin(const std::string& pluginName, const std::string& source) {
     // Simplified implementation - in practice would download from registry
-    std::cout << "📦 Downloading " << pluginName << " from " << source << std::endl;
+    std::cout << "� Downloading " << pluginName << " from " << source << std::endl;
     return true;
 }
 
@@ -502,7 +502,7 @@ SessionRecorder::SessionRecorder(const std::string& repoPath)
 
 bool SessionRecorder::startRecording(const std::string& sessionName) {
     if (isRecording) {
-        std::cout << "⚠️  Already recording session: " << currentSession << std::endl;
+        std::cout << "ᙠ  Already recording session: " << currentSession << std::endl;
         return false;
     }
     
@@ -510,7 +510,7 @@ bool SessionRecorder::startRecording(const std::string& sessionName) {
     currentEntries.clear();
     isRecording = true;
     
-    std::cout << "🎥 Started recording session: " << sessionName << std::endl;
+    std::cout << !� Started recording session: " << sessionName << std::endl;
     return true;
 }
 
@@ -528,7 +528,7 @@ void SessionRecorder::recordCommand(const std::string& command, const std::strin
 
 bool SessionRecorder::stopRecording() {
     if (!isRecording) {
-        std::cout << "⚠️  No active recording session" << std::endl;
+        std::cout << !᚟  No active recording session" << std::endl;
         return false;
     }
     
@@ -536,9 +536,9 @@ bool SessionRecorder::stopRecording() {
     bool success = saveSession(currentSession);
     
     if (success) {
-        std::cout << "✅ Session saved: " << currentSession << std::endl;
+        std::cout << "ᛅ Session saved: " << currentSession << std::endl;
     } else {
-        std::cout << "❌ Failed to save session" << std::endl;
+        std::cout << !ᝌ Failed to save session" << std::endl;
     }
     
     return success;
@@ -547,11 +547,11 @@ bool SessionRecorder::stopRecording() {
 bool SessionRecorder::playSession(const std::string& sessionName) {
     auto entries = loadSession(sessionName);
     if (entries.empty()) {
-        std::cout << "❌ Session not found: " << sessionName << std::endl;
+        std::cout << !✌ Session not found: " << sessionName << std::endl;
         return false;
     }
     
-    std::cout << "▶️  Playing session: " << sessionName << std::endl;
+    std::cout << !╵﷏  Playing session: " << sessionName << std::endl;
     
     for (const auto& entry : entries) {
         auto timePoint = std::chrono::system_clock::to_time_t(entry.timestamp);

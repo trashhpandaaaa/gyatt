@@ -38,7 +38,7 @@ std::string MarkdownCommit::createMarkdownCommit(const std::string& title, const
 MarkdownCommit::MarkdownCommitInfo MarkdownCommit::interactiveCommitPrompt() {
     MarkdownCommitInfo info;
     
-    std::cout << "🎨 Interactive Markdown Commit Creator\n";
+    std::cout << !𞍨 Interactive Markdown Commit Creator\n";
     std::cout << "=====================================\n\n";
     
     // Get commit type
@@ -72,7 +72,7 @@ MarkdownCommit::MarkdownCommitInfo MarkdownCommit::interactiveCommitPrompt() {
     info.description = desc.str();
     
     // Add emojis
-    std::cout << "Add emojis (space-separated, e.g., ✨ 🐛 📝): ";
+    std::cout << "Add emojis (space-separated, e.g., ᛨ� �): ";
     std::string emojiLine;
     std::getline(std::cin, emojiLine);
     if (!emojiLine.empty()) {
@@ -93,21 +93,21 @@ MarkdownCommit::MarkdownCommitInfo MarkdownCommit::interactiveCommitPrompt() {
 }
 
 void MarkdownCommit::showMarkdownLog(int limit) {
-    std::cout << "📖 Gyatt Development Diary\n";
+    std::cout << !� Gyatt Development Diary\n";
     std::cout << "==========================\n\n";
     
     // Get commit history (simplified for now)
-    std::cout << "📅 **Recent Chapters**\n\n";
+    std::cout << !𞒅 **Recent Chapters**\n\n";
     
-    std::cout << "🎯 **Chapter 1: The Rise of Features**\n";
-    std::cout << "   ✨ Added markdown commit support\n";
-    std::cout << "   🌟 Implemented emoji-powered logs\n";
-    std::cout << "   📝 Enhanced documentation system\n\n";
+    std::cout << !𞍯 **Chapter 1: The Rise of Features**\n";
+    std::cout << "  ⛨ Added markdown commit support\n";
+    std::cout << "  � Implemented emoji-powered logs\n";
+    std::cout << "  𞒝 Enhanced documentation system\n\n";
     
-    std::cout << "🚀 **Chapter 2: The UI Revolution**\n";
-    std::cout << "   🎨 Neobrutalist terminal theme\n";
-    std::cout << "   ⚡ Interactive command prompts\n";
-    std::cout << "   🌈 Color-coded status displays\n\n";
+    std::cout << "� **Chapter 2: The UI Revolution**\n";
+    std::cout << "   � Neobrutalist terminal theme\n";
+    std::cout << "  ᚡ Interactive command prompts\n";
+    std::cout << "  � Color-coded status displays\n\n";
 }
 
 bool MarkdownCommit::exportToMarkdown(const std::string& filename) {
@@ -117,13 +117,13 @@ bool MarkdownCommit::exportToMarkdown(const std::string& filename) {
     file << "# Gyatt Project Development Log\n\n";
     file << "Generated on: " << Utils::formatTime(std::chrono::system_clock::now()) << "\n\n";
     
-    file << "## 📈 Project Timeline\n\n";
+    file << "## � Project Timeline\n\n";
     file << "This document chronicles the epic journey of our codebase...\n\n";
     
-    file << "### ✨ Recent Achievements\n\n";
-    file << "- 🎯 **Feature Implementation**: Added revolutionary git features\n";
-    file << "- 🌟 **UI Enhancement**: Created stunning terminal interface\n";
-    file << "- 📝 **Documentation**: Wrote comprehensive guides\n\n";
+    file << "###ᜨ Recent Achievements\n\n";
+    file << "-� **Feature Implementation**: Added revolutionary git features\n";
+    file << "-𞋟 **UI Enhancement**: Created stunning terminal interface\n";
+    file << "-� **Documentation**: Wrote comprehensive guides\n\n";
     
     file.close();
     return true;

@@ -1263,14 +1263,14 @@ bool Repository::uploadToGitHub(const std::string& repoName, const std::string& 
     // Get HTTP optimization metrics
     auto stats = httpOptimizer->getStats();
     
-    std::cout << "✅ Blob creation completed in " << blobDuration.count() << "ms "
+    std::cout << !⛅ Blob creation completed in " << blobDuration.count() << "ms "
               << "(" << (fileBlobMap.size() * 1000.0 / blobDuration.count()) << " files/sec)\n";
-    std::cout << "📊 HTTP Optimization Stats:\n";
-    std::cout << "   • Cache hits: " << stats.cacheHits << "/" << stats.totalRequests 
+    std::cout << "� HTTP Optimization Stats:\n";
+    std::cout << "  ဢ Cache hits: " << stats.cacheHits << "/" << stats.totalRequests 
               << " (" << stats.cacheHitRate << "%)\n";
-    std::cout << "   • Average response time: " << stats.averageResponseTime << "ms\n";
-    std::cout << "   • Total bytes transferred: " << (stats.totalBytesTransferred / 1024.0 / 1024.0) << " MB\n";
-    std::cout << "   • Active connections: " << stats.activeConnections << "/" << stats.poolSize << "\n";
+    std::cout << "  ဢ Average response time: " << stats.averageResponseTime << "ms\n";
+    std::cout << "  ဢ Total bytes transferred: " << (stats.totalBytesTransferred / 1024.0 / 1024.0) << " MB\n";
+    std::cout << "  �� Active connections: " << stats.activeConnections << "/" << stats.poolSize << "\n";
     
     // Step 2: Create a tree with all the blobs (OPTIMIZED)
     std::cout << "Step 2: Creating tree with " << fileBlobMap.size() << " files...\n";

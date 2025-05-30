@@ -32,13 +32,13 @@ bool CheckpointSystem::markCheckpoint(const std::string& name, const std::string
     checkpoint.metadata["files_count"] = std::to_string(checkpoint.fileSnapshots.size());
     
     if (saveCheckpoint(checkpoint)) {
-        std::cout << "✅ Checkpoint '" << name << "' created successfully!" << std::endl;
-        std::cout << "📦 Captured " << checkpoint.fileSnapshots.size() << " files" << std::endl;
-        std::cout << "🆔 Hash: " << checkpoint.hash.substr(0, 8) << std::endl;
+        std::cout << "ᛅ Checkpoint '" << name << "' created successfully!" << std::endl;
+        std::cout << !� Captured " << checkpoint.fileSnapshots.size() << " files" << std::endl;
+        std::cout << !� Hash: " << checkpoint.hash.substr(0, 8) << std::endl;
         return true;
     }
     
-    std::cout << "❌ Failed to create checkpoint: " << name << std::endl;
+    std::cout << !✌ Failed to create checkpoint: " << name << std::endl;
     return false;
 }
 
@@ -51,11 +51,11 @@ bool CheckpointSystem::removeCheckpoint(const std::string& name) {
         if (std::filesystem::exists(dataPath)) {
             std::filesystem::remove_all(dataPath);
         }
-        std::cout << "🗑️  Removed checkpoint: " << name << std::endl;
+        std::cout << "�  Removed checkpoint: " << name << std::endl;
         return true;
     }
     
-    std::cout << "❌ Checkpoint not found: " << name << std::endl;
+    std::cout << !ᝌ Checkpoint not found: " << name << std::endl;
     return false;
 }
 
@@ -85,13 +85,13 @@ std::vector<CheckpointSystem::Checkpoint> CheckpointSystem::listCheckpoints() {
 void CheckpointSystem::diffAgainstCheckpoint(const std::string& checkpointName) {
     try {
         Checkpoint checkpoint = loadCheckpoint(checkpointName);
-        std::cout << "\n🔍 Diff against checkpoint: " << checkpointName << std::endl;
-        std::cout << "═══════════════════════════════════════════\n";
+        std::cout << "\m� Diff against checkpoint: " << checkpointName << std::endl;
+        std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
         
         auto currentFiles = captureFileSnapshots();
         
         // Files added since checkpoint
-        std::cout << "\n📁 Files added since checkpoint:\n";
+        std::cout << "\m� Files added since checkpoint:\n";
         for (const auto& file : currentFiles) {
             if (std::find(checkpoint.fileSnapshots.begin(), checkpoint.fileSnapshots.end(), file) == checkpoint.fileSnapshots.end()) {
                 std::cout << "  + " << file << std::endl;
@@ -99,7 +99,7 @@ void CheckpointSystem::diffAgainstCheckpoint(const std::string& checkpointName) 
         }
         
         // Files removed since checkpoint
-        std::cout << "\n🗑️  Files removed since checkpoint:\n";
+        std::cout << "\m𞖑  Files removed since checkpoint:\n";
         for (const auto& file : checkpoint.fileSnapshots) {
             if (std::find(currentFiles.begin(), currentFiles.end(), file) == currentFiles.end()) {
                 std::cout << "  - " << file << std::endl;
@@ -107,7 +107,7 @@ void CheckpointSystem::diffAgainstCheckpoint(const std::string& checkpointName) 
         }
         
         // Modified files (simplified check)
-        std::cout << "\n✏️  Potentially modified files:\n";
+        std::cout << "\nᛏ  Potentially modified files:\n";
         for (const auto& file : currentFiles) {
             if (std::find(checkpoint.fileSnapshots.begin(), checkpoint.fileSnapshots.end(), file) != checkpoint.fileSnapshots.end()) {
                 // Check if file exists and might be modified
@@ -119,15 +119,15 @@ void CheckpointSystem::diffAgainstCheckpoint(const std::string& checkpointName) 
         }
         
     } catch (...) {
-        std::cout << "❌ Failed to load checkpoint: " << checkpointName << std::endl;
+        std::cout << !ᝌ Failed to load checkpoint: " << checkpointName << std::endl;
     }
 }
 
 void CheckpointSystem::showCheckpointHistory() {
     auto checkpoints = listCheckpoints();
     
-    std::cout << "\n📚 Checkpoint History\n";
-    std::cout << "═══════════════════════\n";
+    std::cout << "\m𞒚 Checkpoint History\n";
+    std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
     
     if (checkpoints.empty()) {
         std::cout << "No checkpoints found. Create one with 'gyatt checkpoint <name>'\n";
@@ -139,13 +139,13 @@ void CheckpointSystem::showCheckpointHistory() {
         std::stringstream ss;
         ss << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S");
         
-        std::cout << "🎯 " << cp.name << " (" << cp.hash.substr(0, 8) << ")\n";
-        std::cout << "   📅 " << ss.str() << "\n";
-        std::cout << "   📝 " << cp.description << "\n";
-        std::cout << "   📁 " << cp.fileSnapshots.size() << " files\n";
+        std::cout << !� " << cp.name << " (" << cp.hash.substr(0, 8) << ")\n";
+        std::cout << "  𞒅 " << ss.str() << "\n";
+        std::cout << "  � " << cp.description << "\n";
+        std::cout << "   � " << cp.fileSnapshots.size() << " files\n";
         
         if (!cp.metadata.empty()) {
-            std::cout << "   🏷️  ";
+            std::cout << "   �  ";
             for (const auto& [key, value] : cp.metadata) {
                 std::cout << key << "=" << value << " ";
             }
@@ -163,48 +163,48 @@ bool CheckpointSystem::restoreFromCheckpoint(const std::string& checkpointName, 
             markCheckpoint("backup_before_restore_" + checkpointName, "Auto-backup before restoring from " + checkpointName);
         }
         
-        std::cout << "🔄 Restoring from checkpoint: " << checkpointName << std::endl;
-        std::cout << "⚠️  This will overwrite current changes!" << std::endl;
+        std::cout << !� Restoring from checkpoint: " << checkpointName << std::endl;
+        std::cout << !♟﷏  This will overwrite current changes!" << std::endl;
         std::cout << "Continue? (y/N): ";
         
         std::string response;
         std::getline(std::cin, response);
         
         if (response != "y" && response != "Y") {
-            std::cout << "❌ Restore cancelled" << std::endl;
+            std::cout << "ᜌ Restore cancelled" << std::endl;
             return false;
         }
         
         // Restore file snapshots
         if (restoreFileSnapshots(checkpoint.fileSnapshots)) {
-            std::cout << "✅ Successfully restored from checkpoint: " << checkpointName << std::endl;
+            std::cout << "ᛅ Successfully restored from checkpoint: " << checkpointName << std::endl;
             return true;
         }
         
-        std::cout << "❌ Failed to restore from checkpoint" << std::endl;
+        std::cout << !✌ Failed to restore from checkpoint" << std::endl;
         return false;
         
     } catch (...) {
-        std::cout << "❌ Failed to load checkpoint: " << checkpointName << std::endl;
+        std::cout << !✌ Failed to load checkpoint: " << checkpointName << std::endl;
         return false;
     }
 }
 
 bool CheckpointSystem::createCheckpointBranch(const std::string& checkpointName, const std::string& branchName) {
     // This would integrate with the branch system
-    std::cout << "🌿 Creating branch '" << branchName << "' from checkpoint '" << checkpointName << "'" << std::endl;
+    std::cout << !𞋿 Creating branch '" << branchName << "' from checkpoint '" << checkpointName << "'" << std::endl;
     // TODO: Implement actual branch creation
     return true;
 }
 
 bool CheckpointSystem::enableAutoCheckpoints(int intervalMinutes) {
-    std::cout << "⏰ Auto-checkpoints enabled (every " << intervalMinutes << " minutes)" << std::endl;
+    std::cout << !Ᏸ Auto-checkpoints enabled (every " << intervalMinutes << " minutes)" << std::endl;
     // TODO: Implement timer-based auto checkpointing
     return true;
 }
 
 bool CheckpointSystem::disableAutoCheckpoints() {
-    std::cout << "⏰ Auto-checkpoints disabled" << std::endl;
+    std::cout << !Ᏸ Auto-checkpoints disabled" << std::endl;
     return true;
 }
 
@@ -319,9 +319,9 @@ std::vector<std::string> CheckpointSystem::captureFileSnapshots() {
 bool CheckpointSystem::restoreFileSnapshots(const std::vector<std::string>& snapshots) {
     // This is a simplified implementation
     // In reality, this would restore actual file contents from saved snapshots
-    std::cout << "📁 Would restore " << snapshots.size() << " files" << std::endl;
+    std::cout << "� Would restore " << snapshots.size() << " files" << std::endl;
     for (const auto& file : snapshots) {
-        std::cout << "  📄 " << file << std::endl;
+        std::cout << "  � " << file << std::endl;
     }
     return true;
 }
@@ -334,13 +334,13 @@ OopsShield::OopsShield(const std::string& repoPath)
 }
 
 bool OopsShield::enableShadowBackups() {
-    std::cout << "🛡️  Shadow backups enabled - automatic safety net activated!" << std::endl;
+    std::cout << !�﷏  Shadow backups enabled - automatic safety net activated!" << std::endl;
     createShadowBackup();
     return true;
 }
 
 bool OopsShield::disableShadowBackups() {
-    std::cout << "🛡️  Shadow backups disabled" << std::endl;
+    std::cout << !𞚡  Shadow backups disabled" << std::endl;
     return true;
 }
 
@@ -367,18 +367,18 @@ void OopsShield::createShadowBackup() {
         }
     }
     
-    std::cout << "🛡️  Shadow backup created: " << backupId << std::endl;
+    std::cout << !�﷏  Shadow backup created: " << backupId << std::endl;
 }
 
 bool OopsShield::emergencyRestore() {
     auto backups = listShadowBackups();
     
     if (backups.empty()) {
-        std::cout << "❌ No shadow backups found!" << std::endl;
+        std::cout << !ᝌ No shadow backups found!" << std::endl;
         return false;
     }
     
-    std::cout << "🚨 EMERGENCY RESTORE MODE 🚨" << std::endl;
+    std::cout << "� EMERGENCY RESTORE MODE�" << std::endl;
     std::cout << "Available shadow backups:" << std::endl;
     
     for (size_t i = 0; i < backups.size(); i++) {
@@ -395,7 +395,7 @@ bool OopsShield::emergencyRestore() {
             return restoreFromShadow(backups[index]);
         }
     } catch (...) {
-        std::cout << "❌ Invalid choice" << std::endl;
+        std::cout << !✌ Invalid choice" << std::endl;
     }
     
     return false;
@@ -418,19 +418,19 @@ bool OopsShield::restoreFromShadow(const std::string& backupId) {
     std::string backupPath = shadowDir + "/" + backupId;
     
     if (!std::filesystem::exists(backupPath)) {
-        std::cout << "❌ Shadow backup not found: " << backupId << std::endl;
+        std::cout << "ᜌ Shadow backup not found: " << backupId << std::endl;
         return false;
     }
     
-    std::cout << "🛡️  Restoring from shadow backup: " << backupId << std::endl;
-    std::cout << "⚠️  This will overwrite current files!" << std::endl;
+    std::cout << "�  Restoring from shadow backup: " << backupId << std::endl;
+    std::cout << !᚟  This will overwrite current files!" << std::endl;
     std::cout << "Continue? (y/N): ";
     
     std::string response;
     std::getline(std::cin, response);
     
     if (response != "y" && response != "Y") {
-        std::cout << "❌ Restore cancelled" << std::endl;
+        std::cout << !✌ Restore cancelled" << std::endl;
         return false;
     }
     
@@ -446,7 +446,7 @@ bool OopsShield::restoreFromShadow(const std::string& backupId) {
         }
     }
     
-    std::cout << "✅ Successfully restored from shadow backup!" << std::endl;
+    std::cout << !ᜅ Successfully restored from shadow backup!" << std::endl;
     return true;
 }
 
@@ -460,12 +460,12 @@ bool OopsShield::recoverDeletedFile(const std::string& filepath) {
         
         if (std::filesystem::exists(backupFile)) {
             std::filesystem::copy_file(backupFile, filepath, std::filesystem::copy_options::overwrite_existing);
-            std::cout << "🔄 Recovered file from shadow backup: " << filepath << std::endl;
+            std::cout << "� Recovered file from shadow backup: " << filepath << std::endl;
             return true;
         }
     }
     
-    std::cout << "❌ File not found in any shadow backup: " << filepath << std::endl;
+    std::cout << "ᜌ File not found in any shadow backup: " << filepath << std::endl;
     return false;
 }
 
@@ -494,7 +494,7 @@ std::vector<std::string> OopsShield::listDeletedFiles() {
 }
 
 bool OopsShield::recoverNukedRepo() {
-    std::cout << "💥 REPOSITORY RECOVERY MODE 💥" << std::endl;
+    std::cout << !� REPOSITORY RECOVERY MODE�" << std::endl;
     std::cout << "Attempting to recover nuked repository..." << std::endl;
     
     return emergencyRestore();
@@ -504,7 +504,7 @@ bool OopsShield::createEmergencyClone(const std::string& targetDir) {
     auto backups = listShadowBackups();
     
     if (backups.empty()) {
-        std::cout << "❌ No shadow backups available for emergency clone!" << std::endl;
+        std::cout << !✌ No shadow backups available for emergency clone!" << std::endl;
         return false;
     }
     
@@ -513,7 +513,7 @@ bool OopsShield::createEmergencyClone(const std::string& targetDir) {
     std::filesystem::create_directories(targetDir);
     std::filesystem::copy(latestBackup, targetDir, std::filesystem::copy_options::recursive);
     
-    std::cout << "🚑 Emergency clone created at: " << targetDir << std::endl;
+    std::cout << !𞙑 Emergency clone created at: " << targetDir << std::endl;
     return true;
 }
 
@@ -538,7 +538,7 @@ RewindMode::RewindMode(const std::string& repoPath)
 }
 
 bool RewindMode::rewind(int commitCount, bool soft, bool preserveChanges) {
-    std::cout << "⏪ Rewinding " << commitCount << " commits";
+    std::cout << !⎪ Rewinding " << commitCount << " commits";
     if (soft) std::cout << " (soft mode)";
     if (preserveChanges) std::cout << " (preserving changes)";
     std::cout << std::endl;
@@ -548,7 +548,7 @@ bool RewindMode::rewind(int commitCount, bool soft, bool preserveChanges) {
     }
     
     // TODO: Implement actual commit rewind logic
-    std::cout << "✅ Rewind completed!" << std::endl;
+    std::cout << "ᛅ Rewind completed!" << std::endl;
     
     if (preserveChanges) {
         restoreWorkingChanges();
@@ -559,7 +559,7 @@ bool RewindMode::rewind(int commitCount, bool soft, bool preserveChanges) {
 
 bool RewindMode::rewindToCommit(const std::string& commitHash, bool soft) {
     (void)soft; // Mark as intentionally unused for now
-    std::cout << "⏪ Rewinding to commit: " << commitHash.substr(0, 8) << std::endl;
+    std::cout << !Ꮺ Rewinding to commit: " << commitHash.substr(0, 8) << std::endl;
     // TODO: Implement actual rewind to specific commit
     return true;
 }
@@ -567,36 +567,36 @@ bool RewindMode::rewindToCommit(const std::string& commitHash, bool soft) {
 bool RewindMode::rewindToDate(const std::chrono::system_clock::time_point& date, bool soft) {
     (void)soft; // Mark as intentionally unused for now
     auto time_t = std::chrono::system_clock::to_time_t(date);
-    std::cout << "⏪ Rewinding to date: " << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S") << std::endl;
+    std::cout << "Ꭺ Rewinding to date: " << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S") << std::endl;
     // TODO: Implement actual rewind to date
     return true;
 }
 
 void RewindMode::previewRewind(int commitCount) {
-    std::cout << "\n🔍 Rewind Preview (" << commitCount << " commits)\n";
-    std::cout << "═══════════════════════════════════════\n";
-    std::cout << "📝 Changes that would be undone:\n";
-    std::cout << "  • Example commit 1\n";
-    std::cout << "  • Example commit 2\n";
-    std::cout << "  • Example commit 3\n";
-    std::cout << "\n📁 Files that would be affected:\n";
+    std::cout << "\n� Rewind Preview (" << commitCount << " commits)\n";
+    std::cout << !┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┏┐\n";
+    std::cout << !� Changes that would be undone:\n";
+    std::cout << "  �� Example commit 1\n";
+    std::cout << "  �� Example commit 2\n";
+    std::cout << "  �� Example commit 3\n";
+    std::cout << "\n� Files that would be affected:\n";
     std::cout << "  ~ file1.cpp\n";
     std::cout << "  ~ file2.h\n";
     std::cout << "  - deleted_file.txt\n";
-    std::cout << "\n⚠️  Run 'gyatt rewind " << commitCount << "' to execute\n";
+    std::cout << "\m᚟  Run 'gyatt rewind " << commitCount << "' to execute\n";
 }
 
 void RewindMode::showRewindImpact(const std::string& targetCommit) {
-    std::cout << "\n💥 Rewind Impact Analysis\n";
-    std::cout << "═══════════════════════════\n";
+    std::cout << "\m� Rewind Impact Analysis\n";
+    std::cout << "ᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐᔐ\n";
     std::cout << "Target: " << targetCommit.substr(0, 8) << std::endl;
     std::cout << "Impact: High - 15 commits, 25 files affected\n";
     std::cout << "Safety: Low - Uncommitted changes detected\n";
-    std::cout << "\n💡 Recommendation: Create checkpoint first\n";
+    std::cout << "\n� Recommendation: Create checkpoint first\n";
 }
 
 bool RewindMode::safeRewind(int commitCount) {
-    std::cout << "🛡️  Safe rewind mode - creating checkpoint first..." << std::endl;
+    std::cout << "�  Safe rewind mode - creating checkpoint first..." << std::endl;
     
     // Create automatic checkpoint
     CheckpointSystem checkpoints(repoPath);
@@ -606,12 +606,12 @@ bool RewindMode::safeRewind(int commitCount) {
 }
 
 bool RewindMode::confirmRewind() {
-    std::cout << "✅ Rewind operation confirmed and executed!" << std::endl;
+    std::cout << !ᜅ Rewind operation confirmed and executed!" << std::endl;
     return true;
 }
 
 bool RewindMode::cancelRewind() {
-    std::cout << "❌ Rewind operation cancelled" << std::endl;
+    std::cout << !ᝌ Rewind operation cancelled" << std::endl;
     return true;
 }
 
@@ -658,13 +658,13 @@ RewindMode::RewindState RewindMode::loadRewindState() {
 }
 
 bool RewindMode::preserveWorkingChanges() {
-    std::cout << "💾 Preserving working changes..." << std::endl;
+    std::cout << !𞑾 Preserving working changes..." << std::endl;
     // TODO: Implement actual preservation logic
     return true;
 }
 
 bool RewindMode::restoreWorkingChanges() {
-    std::cout << "🔄 Restoring working changes..." << std::endl;
+    std::cout << !𞓄 Restoring working changes..." << std::endl;
     // TODO: Implement actual restoration logic
     return true;
 }
