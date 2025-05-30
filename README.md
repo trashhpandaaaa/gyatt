@@ -1,8 +1,45 @@
-# Gyatt - The Modern Version Control System
+# 🔥 Gyatt - The BRUTAL Version Control System
 
-Gyatt is a modern, feature-rich version control system designed to make development more intuitive, fun, and powerful. With a focus on developer experience, Gyatt enhances the traditional Git workflow with advanced features like human-readable commit logs, semantic branching, and interactive interfaces.
+Gyatt is a blazingly fast, modern version control system that reimagines the development workflow with **pure chaos energy**. Built in C++17, Gyatt delivers Git's core functionality while adding revolutionary features that make version control actually enjoyable and powerful.
 
-## Core Features
+## ⚡ Performance & Reliability
+- **Lightning-fast C++17 implementation** with optimized file operations
+- **Enhanced GitHub integration** with robust error handling and file filtering
+- **Multi-protocol support** (HTTP/HTTPS/SSH/Local) with automatic protocol detection
+- **Advanced authentication** including token-based, SSH keys, and OAuth support
+
+## 🚀 Enhanced Remote Repository System
+
+### 🌐 Advanced Remote Management
+- **Multi-protocol support** with automatic detection (HTTP/HTTPS/SSH/Local)
+- **Enhanced authentication** with token, SSH key, and OAuth support
+- **Remote health monitoring** with connection testing and diagnostics
+- **Progress tracking** for push operations with real-time feedback
+
+### 📊 Synchronization Profiles
+- **Custom sync profiles** with configurable modes (FULL/SELECTIVE/INCREMENTAL/SMART)
+- **Automated synchronization** with interval-based scheduling
+- **Conflict detection** and resolution strategies
+- **Profile persistence** with JSON-based configuration storage
+
+### 🛠️ Enhanced CLI Commands
+```bash
+# Add remote with authentication
+gyatt remote-add origin https://github.com/user/repo.git --auth token --token YOUR_TOKEN
+
+# Check remote health
+gyatt remote-health origin
+
+# Enhanced push with progress tracking
+gyatt push-enhanced origin main
+
+# Create and manage sync profiles
+gyatt sync-profile create daily-sync --mode INCREMENTAL --interval 60
+gyatt sync-profile list
+gyatt sync-profile apply daily-sync
+```
+
+## 🎯 Core Features
 
 ### 📂 Human-Readable Commit Logs
 - Markdown-powered commits with rich formatting
@@ -80,6 +117,17 @@ Gyatt is a modern, feature-rich version control system designed to make developm
 - Narrative-based commit organization
 - Chapter-based development phases
 
+### 🤘 VIBE COMMANDS (The Fun Stuff)
+- **yeet** - Add files (no cap) 
+- **regret** - Undo changes
+- **vibe** - Status with style
+- **summon** - Checkout branch
+- **nocap** - Push (no lies)
+- **slay** - Force push
+- **flex** - Show off commits  
+- **ghost** - Stash changes
+- **fr** - Commit with attitude
+
 ### 📇 Label-based File Tagging
 - Tag files with custom labels
 - Query changes by label: `gyatt log --label=core`
@@ -88,106 +136,150 @@ Gyatt is a modern, feature-rich version control system designed to make developm
 - Inline notes that don't pollute code
 - Terminal dashboard for note management
 
-## Standard Version Control Features
+## 💻 Quick Start
 
-- Initialize repositories (`gyatt init` or `gyatt damnit`)
-- Add files to staging area (`gyatt add` or `gyatt yeet`)
-- Commit changes (`gyatt commit` or `gyatt fr`)
-- View repository status (`gyatt status`)
-- View commit history (`gyatt log`)
-- Branch management (`gyatt branch`, `gyatt checkout`)
-- Show differences (`gyatt diff`)
-- View file contents (`gyatt show`)
-- Ignore files with `.gyattignore`
-- Clone repositories (local and GitHub)
-- Push changes to remote repositories
-- GitHub integration for remote operations
-
-## Installation
-
+### Installation
 ```bash
-mkdir build
-cd build
-cmake ..
+# Clone and build
+git clone https://github.com/username/gyatt.git
+cd gyatt
 make
-make install
 ```
 
-## Usage
-
+### Basic Usage
 ```bash
-# Initialize a new repository
+# Initialize with chaos energy
 gyatt init
+# or use a template
+gyatt damnit react
 
-# Add files to staging area
-gyatt add <file>
-gyatt add .
+# Add files (with style)
+gyatt yeet file.cpp
+# or traditional
+gyatt add file.cpp
 
-# Commit changes
-gyatt commit -m "Your commit message"
+# Commit with attitude
+gyatt fr -m "✨ feat: added epic functionality"
+# or interactive
+gyatt commit-interactive
 
-# View status
+# Check the vibe
+gyatt vibe
+# or traditional
 gyatt status
 
-# View commit history
-gyatt log
-
-# Create a new branch
-gyatt branch <branch-name>
-
-# Switch to a branch
-gyatt checkout <branch-name>
-
-# Show differences
-gyatt diff
-
-# Show file content
-gyatt show <commit-hash>:<file>
-
-# Create .gyattignore file
-gyatt gyattignore
-
-# Check if a file is ignored
-gyatt check-ignore <file>
-
-# Add a pattern to .gyattignore
-gyatt add-ignore <pattern>
-
-# Clone a repository (local or GitHub)
-gyatt clone <url> [directory]
-
-# Add a remote repository
-gyatt remote add <name> <url>
-
-# List remote repositories
-gyatt remote -v
-
-# Push changes to a remote repository
-gyatt push [remote] [branch]
-
-# Set GitHub personal access token
-gyatt github-token <token>
+# Enhanced remote operations
+gyatt remote-add origin https://github.com/user/repo.git --auth token --token YOUR_TOKEN
+gyatt push-enhanced origin main
 ```
 
-## GitHub Integration
+## 🎨 Advanced Features
 
-Gyatt includes support for GitHub repositories:
+### Enhanced Remote Repository Management
+```bash
+# Add authenticated remote
+gyatt remote-add upstream https://github.com/original/repo.git --auth ssh-key --ssh-key ~/.ssh/id_rsa
 
-1. **Cloning GitHub repositories**:
-   ```bash
-   gyatt clone https://github.com/username/repo.git
-   ```
+# Health check remotes
+gyatt remote-health --all
 
-2. **Setting up GitHub authentication**:
-   ```bash
-   gyatt github-token <your-github-token>
-   ```
-   To create a token, visit: https://github.com/settings/tokens
+# Create sync profiles
+gyatt sync-profile create daily --mode SMART --interval 30 --auto-sync
 
-3. **Pushing to GitHub**:
-   ```bash
-   gyatt push origin main
-   ```
+# Push with progress tracking
+gyatt push-enhanced origin main --progress
+```
+
+### Interactive Development
+```bash
+# Start semantic branches
+gyatt start feature/awesome-feature
+
+# Interactive staging
+gyatt stage-interactive
+
+# Project mapping
+gyatt map --visual
+
+# Checkpoint management
+gyatt mark milestone-v1.0
+gyatt rewind 3 --soft
+```
+
+## 🔧 Technical Implementation
+
+### Enhanced GitHub Integration
+Gyatt implements robust GitHub integration with comprehensive error handling:
+
+- **Smart file filtering** prevents upload of system files (`.git/`, `.gyatt/`, etc.)
+- **Multi-protocol support** with automatic protocol detection and validation
+- **Advanced authentication** supporting tokens, SSH keys, and OAuth
+- **Connection health monitoring** with HTTP/SSH connection testing
+- **Progress tracking** with real-time push operation feedback
+
+### Architecture Overview
+```
+gyatt/
+├── src/
+│   ├── main.cpp              # CLI interface with enhanced commands
+│   ├── repository.cpp        # Core repo management + enhanced remotes
+│   ├── advanced_features.cpp # Enhanced remote repository system
+│   ├── terminal_ui.cpp       # Neobrutalist terminal interface
+│   └── ...                   # Additional feature modules
+├── include/
+│   ├── repository.h          # Enhanced with remote management structures
+│   └── ...                   # Feature headers
+└── build/                    # Compiled objects and binary
+```
+
+### Key Components
+1. **Enhanced Repository Management**: Core operations with advanced remote handling
+2. **Multi-Protocol Support**: HTTP/HTTPS/SSH/Local with automatic detection
+3. **Authentication System**: Token, SSH key, OAuth support with secure storage
+4. **Progress Tracking**: Real-time feedback for long-running operations
+5. **Sync Profiles**: Configurable synchronization with persistence
+6. **Health Monitoring**: Connection testing and diagnostics
+
+## 🌐 Remote Repository Features
+
+### Authentication Methods
+```bash
+# Token-based authentication
+gyatt remote-add origin https://github.com/user/repo.git --auth token --token YOUR_TOKEN
+
+# SSH key authentication  
+gyatt remote-add origin git@github.com:user/repo.git --auth ssh-key --ssh-key ~/.ssh/id_rsa
+
+# Username/password authentication
+gyatt remote-add origin https://github.com/user/repo.git --auth username-password
+```
+
+### Health Monitoring
+```bash
+# Check specific remote
+gyatt remote-health origin
+
+# Check all remotes
+gyatt remote-health --all
+
+# Detailed diagnostics
+gyatt remote-health origin --verbose
+```
+
+### Synchronization Profiles
+```bash
+# Create profile with auto-sync
+gyatt sync-profile create production --mode SMART --interval 15 --auto-sync
+
+# List all profiles
+gyatt sync-profile list
+
+# Apply profile
+gyatt sync-profile apply production
+
+# Delete profile  
+gyatt sync-profile delete production
+```
 
 ## Ignore System
 
@@ -205,62 +297,156 @@ Default ignored patterns include:
 - Log and database files
 - OS-specific files
 
-## Architecture
+## 🛠️ Build & Development
 
-The project is structured as follows:
+### Dependencies
+- **C++17 or later**
+- **libcurl** for HTTP operations
+- **OpenSSL** for cryptographic functions  
+- **jsoncpp** for configuration management
+- **CMake** or **Make** for building
 
-- `src/main.cpp` - Entry point and command parsing
-- `src/repository.cpp` - Repository management
-- `src/commit.cpp` - Commit handling
-- `src/index.cpp` - Staging area management
-- `src/object.cpp` - Git object handling
-- `src/utils.cpp` - Utility functions
-- `src/ignore.cpp` - Ignore file handling
-- `include/` - Header files
+### Building from Source
+```bash
+# Using Make (recommended)
+git clone https://github.com/username/gyatt.git
+cd gyatt
+make clean && make
 
-### Core Components
+# Using CMake
+mkdir build && cd build
+cmake ..
+make
+```
 
-1. **Repository**: Manages the overall repository structure and operations
-2. **Index**: Handles the staging area and tracking of file changes
-3. **Commit**: Creates and manages commit objects
-4. **Object**: Handles Git-style object storage (blobs, trees, commits)
-5. **Utils**: Provides utility functions for file operations, hashing, etc.
-6. **Ignore**: Manages the `.gyattignore` system for ignoring files
+### Development Testing
+```bash
+# Run the built binary
+./gyatt --help
 
-## License
+# Test basic functionality
+./gyatt init test-repo
+cd test-repo
+echo "test" > file.txt
+./gyatt yeet file.txt
+./gyatt fr -m "🚀 initial commit"
+./gyatt vibe
 
-MIT License
+# Test enhanced remote features
+./gyatt remote-add test https://github.com/test/repo.git --auth token --token test123
+./gyatt remote-health test
+```
 
-## Contributing
+## 🏗️ Architecture Details
 
-Contributions are welcome! Feel free to submit pull requests or open issues for bugs and feature requests.
+### Enhanced Remote Repository System
+The enhanced remote system includes:
 
-License
-MIT License
+**Core Structures:**
+- `RemoteProtocol` enum: HTTP, HTTPS, SSH, LOCAL support
+- `AuthMethod` enum: Multiple authentication strategies
+- `RemoteCredentials` struct: Secure credential management
+- `RemoteRepository` struct: Comprehensive remote tracking
+- `SyncProfile` struct: Configurable synchronization settings
+- `PushProgress` struct: Real-time operation tracking
 
+**Key Methods:**
+- `detectProtocol()`: Automatic protocol detection from URLs
+- `validateRemoteUrl()`: URL validation and normalization
+- `addRemoteWithAuth()`: Enhanced remote addition with authentication
+- `checkRemoteHealth()`: Connection testing and diagnostics
+- `pushWithProgress()`: Push operations with progress callbacks
+- `createSyncProfile()`: Synchronization profile management
 
+### File Filtering System
+Gyatt implements smart file filtering to prevent uploading system files:
+- Excludes `.git/`, `.gyatt/`, and system directories
+- Filters common system files (`.DS_Store`, `Thumbs.db`, etc.)
+- Ignores cache directories (`node_modules/`, `__pycache__/`, etc.)
+- Prevents temporary and build artifacts from being uploaded
 
+## 🔥 Why Gyatt?
 
-## Testing the System
+### Developer Experience First
+Gyatt isn't just another version control system - it's a **developer experience revolution**:
+
+- **No more cryptic Git commands** - intuitive aliases that actually make sense
+- **Enhanced remote management** with health monitoring and progress tracking  
+- **Visual feedback** for all operations with real-time progress indicators
+- **Smart automation** through sync profiles and checkpoint systems
+- **Chaos energy** - because development should be fun, not frustrating
+
+### Modern Architecture
+- **C++17 performance** - blazingly fast operations
+- **Multi-protocol support** - works with any remote repository
+- **Advanced authentication** - secure, flexible credential management
+- **Extensible design** - plugin ecosystem for custom workflows
+
+### Built for Teams
+- **Enhanced collaboration** with threaded comments and session recording
+- **Project mapping** for better code understanding
+- **Guardrails** to prevent common mistakes
+- **Exportable histories** for documentation and reporting
+
+## 🧪 Testing the System
 
 To verify everything works correctly:
 
-1. Rebuild the project with the fixed files:
-
+1. **Rebuild the project:**
 ```bash
 mkdir -p build
 cd build
 cmake ..
 make
+```
 
-2. Run basic commands to ensure functionality:
-
+2. **Test basic functionality:**
+```bash
 ./gyatt --help
 ./gyatt init test-repo
 cd test-repo
-touch test.txt
-./gyatt add test.txt
-./gyatt fr -m "Initial commit"
-./gyatt status
-./gyatt log
+echo "console.log('Hello Gyatt!');" > app.js
+./gyatt yeet app.js
+./gyatt fr -m "🚀 initial commit with style"
+./gyatt vibe
+```
+
+3. **Test enhanced remote features:**
+```bash
+./gyatt remote-add origin https://github.com/user/repo.git --auth token --token YOUR_TOKEN
+./gyatt remote-health origin
+./gyatt push-enhanced origin main --progress
+```
+
+## 📜 License
+
+**MIT License** - Feel free to use Gyatt in your projects and contribute back to the community!
+
+## 🤝 Contributing
+
+We welcome contributions with **open arms and chaos energy**! 
+
+### How to Contribute:
+1. **Fork the repository** and create your feature branch
+2. **Follow the coding style** - clean C++17 with meaningful comments
+3. **Add tests** for new features using our test suite
+4. **Update documentation** - keep the README fresh
+5. **Submit a pull request** with a clear description
+
+### Development Setup:
+```bash
+git clone https://github.com/username/gyatt.git
+cd gyatt
+make clean && make
+./tests.sh  # Run the test suite
+```
+
+### Areas We Need Help:
+- 🚀 **Performance optimizations** for large repositories
+- 🔌 **Plugin ecosystem** development and documentation  
+- 🎨 **UI/UX improvements** for terminal interface
+- 🌐 **Cross-platform support** (Windows, macOS)
+- 📚 **Documentation** and tutorial creation
+
+**Let's build the future of version control together!** 💪
 

@@ -1,0 +1,17 @@
+{
+  "name": "daily-sync",
+  "mode": 1,
+  "autoSync": false,
+  "syncInterval": 60,
+  "includePaths": [
+    "src/",
+    "include/",
+    "*.cpp",
+    "*.h"
+  ],
+  "excludePaths": [
+    "build/",
+    "*.o",
+    "*.tmp"
+  ]
+}

@@ -69,13 +69,20 @@ struct SyncProfile {
 };
 
 struct PushProgress {
+    std::string phase;
+    std::string message;
+    size_t current = 0;
+    size_t total = 0;
     size_t totalFiles = 0;
     size_t processedFiles = 0;
     size_t totalBytes = 0;
     size_t transferredBytes = 0;
+    double percentComplete = 0.0;
     std::string currentOperation;
     bool isComplete = false;
     std::string errorMessage;
+    std::chrono::system_clock::time_point startTime;
+    std::chrono::milliseconds elapsedTime{0};
 };
 
 }
@@ -124,26 +131,27 @@ public:
     // File operations
     bool show(const std::string& objectRef);
     
-    // Enhanced Remote operations
+        // Enhanced Remote operations
     bool clone(const std::string& sourceUrl, const std::string& targetDir = "");
     bool push(const std::string& remoteName = "origin", const std::string& branchName = "");
     bool addRemote(const std::string& name, const std::string& url);
-    bool listRemotes();
+    std::vector<RemoteRepository> listRemotes();
+    void printRemotes();  // For CLI display
     
-    // Enhanced Remote Repository Management
+    // Enhanced remote repository methods
     bool addRemoteWithAuth(const std::string& name, const std::string& url, const RemoteCredentials& credentials);
-    bool removeRemote(const std::string& name);
-    bool renameRemote(const std::string& oldName, const std::string& newName);
     std::vector<RemoteRepository> getRemoteRepositories() const;
-    RemoteRepository* getRemote(const std::string& name);
-    bool updateRemoteCredentials(const std::string& remoteName, const RemoteCredentials& credentials);
     
-    // Remote Repository Health and Diagnostics
-    bool checkRemoteHealth(const std::string& remoteName);
-    std::string getRemoteHealthReport(const std::string& remoteName);
-    bool runRemoteDiagnostics(const std::string& remoteName);
-    std::vector<std::string> getRemoteIssues(const std::string& remoteName);
-    bool fixRemoteIssues(const std::string& remoteName, bool autoFix = false);
+    // GitHub-specific methods
+    bool cloneFromGitHub(const std::string& repoUrl, const std::string& targetDir);
+    bool pushToGitHub(const std::string& remoteName, const std::string& branchName);
+    bool downloadGitHubRepo(const std::string& repoName, const std::string& targetDir);
+    bool uploadToGitHub(const std::string& repoName, const std::string& branch);
+    
+    // Protocol Detection and URL Validation
+    RemoteProtocol detectProtocol(const std::string& url);
+    bool validateRemoteUrl(const std::string& url);
+    std::string normalizeRemoteUrl(const std::string& url);
     
     // Enhanced Push/Pull with Progress
     bool pushWithProgress(const std::string& remoteName, const std::string& branchName, 
@@ -168,47 +176,51 @@ public:
     
     // Sync Profiles and Automation
     bool createSyncProfile(const SyncProfile& profile);
+    SyncProfile createSyncProfile(const std::string& name, SyncMode mode, 
+                                const std::vector<std::string>& includePaths,
+                                const std::vector<std::string>& excludePaths);
     bool deleteSyncProfile(const std::string& profileName);
     std::vector<SyncProfile> getSyncProfiles() const;
     bool applySyncProfile(const std::string& profileName, const std::string& remoteName);
     bool enableAutoSync(const std::string& remoteName, const std::string& profileName);
     bool disableAutoSync(const std::string& remoteName);
     
-    // Protocol Detection and URL Validation
-    RemoteProtocol detectProtocol(const std::string& url);
-    bool validateRemoteUrl(const std::string& url);
-    bool isRemoteAccessible(const std::string& url, const RemoteCredentials& credentials);
-    std::string normalizeRemoteUrl(const std::string& url);
+    // Missing methods needed for CLI
+    bool setGitHubToken(const std::string& token);
+    bool createIgnoreFile();
+    bool isIgnored(const std::string& filepath);
+    bool addIgnorePattern(const std::string& pattern);
     
-    // Credential Management
-    bool storeCredentials(const std::string& remoteName, const RemoteCredentials& credentials);
-    RemoteCredentials loadCredentials(const std::string& remoteName);
-    bool clearCredentials(const std::string& remoteName);
-    bool refreshCredentials(const std::string& remoteName);
+    // Helper methods for UI
+    std::string getProtocolName(RemoteProtocol protocol);
+    std::string getAuthMethodName(AuthMethod method);
+    std::string getSyncModeName(SyncMode mode);
     
-    // Enhanced Remote Repository Management
-    bool addRemoteWithAuth(const std::string& name, const std::string& url, const RemoteCredentials& credentials);
-    bool removeRemote(const std::string& name);
-    bool renameRemote(const std::string& oldName, const std::string& newName);
-    std::vector<RemoteRepository> getRemoteRepositories() const;
-    RemoteRepository* getRemote(const std::string& name);
-    bool updateRemoteCredentials(const std::string& remoteName, const RemoteCredentials& credentials);
+    // Enhanced remote repository management with overloaded methods
+    bool checkRemoteHealth(const RemoteRepository& remote);
+    bool authenticateWithRemote(const RemoteRepository& remote);
+    bool uploadFileToRemote(const RemoteRepository& remote, const std::string& filePath);
+    std::vector<std::string> getModifiedFiles();
+    RemoteRepository loadRemoteConfig(const std::string& name);
+    void updateLastSyncTime(const std::string& remoteName);
+    std::time_t getLastSyncTime(const std::string& remoteName);
     
-    // Remote Repository Health and Diagnostics
-    bool checkRemoteHealth(const std::string& remoteName);
-    std::string getRemoteHealthReport(const std::string& remoteName);
-    bool runRemoteDiagnostics(const std::string& remoteName);
-    std::vector<std::string> getRemoteIssues(const std::string& remoteName);
-    bool fixRemoteIssues(const std::string& remoteName, bool autoFix = false);
+    // HTTP/SSH connection testing
+    bool testHttpConnection(const std::string& url);
+    bool testSshConnection(const std::string& url, const RemoteCredentials& credentials);
+    std::string extractHostFromSshUrl(const std::string& url);
     
-    // Enhanced Push/Pull with Progress
-    bool pushWithProgress(const std::string& remoteName, const std::string& branchName, 
-                         std::function<void(const PushProgress&)> progressCallback = nullptr);
-    bool pullWithProgress(const std::string& remoteName, const std::string& branchName,
-                         std::function<void(const PushProgress&)> progressCallback = nullptr);
-    bool pushWithRetry(const std::string& remoteName, const std::string&
-    PluginManager* getPluginManager() const { return pluginManager.get(); }
-    SessionRecorder* getSessionRecorder() const { return sessionRecorder.get(); }
+    // Sync profile persistence
+    void saveSyncProfile(const SyncProfile& profile, const std::string& path);
+    SyncProfile loadSyncProfile(const std::string& path) const;
+    
+    // Additional methods for enhanced push functionality
+    bool pushToRemoteWithProgress(const std::string& remoteName, const std::string& branch,
+                                 std::function<void(const PushProgress&)> progressCallback);
+    bool hasConflicts(const RemoteRepository& remote, const std::string& branch);
+    
+    // Public getter for repo path
+    std::string getRepoPath() const { return repoPath; }
     CommentThread* getCommentSystem() const { return commentSystem.get(); }
     StickyNotes* getStickyNotes() const { return stickyNotes.get(); }
     LabelSystem* getLabelSystem() const { return labelSystem.get(); }
@@ -217,8 +229,7 @@ public:
     ContainerizedSnapshots* getSnapshots() const { return snapshots.get(); }
     TerminalUI* getTerminalUI() const { return terminalUI.get(); }
     
-    // Getters
-    std::string getRepoPath() const { return repoPath; }
+    // Other getters
     std::string getCurrentBranch() const;
     bool isRepository() const;
     

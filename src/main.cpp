@@ -1,3 +1,20 @@
+/*
+    * Gyatt - A modern, human-readable Git CLI tool
+    * 
+    * This tool enhances the Git experience with features like:
+    * - Human-readable commits with emojis
+    * - Semantic branching and auto-naming
+    * - Section-based staging
+    * - Project mapping and visualization
+    * - Checkpoints and snapshots
+    * - Guardrails for safety
+    * - Plugin ecosystem for extensibility
+    * - Session recording and playback
+    * 
+    * Built with love and chaos energy.
+*/
+
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -95,19 +112,15 @@ int main(int argc, char* argv[]) {
         args.push_back(argv[i]);
     }
     
-    // Initialize all systems
     gyatt::Repository repo;
     gyatt::TerminalUI ui;
     gyatt::CommandAliases aliases(repo.getRepoPath());
     gyatt::NeobrutalistTheme theme;
     
-    // Resolve command aliases
     std::string originalCommand = command;
-    // Note: resolveAlias method doesn't exist, using translateVibeCommand for vibe commands
     if (command == "yeet" || command == "regret" || command == "vibe" || command == "summon" || 
         command == "fr" || command == "nocap" || command == "slay" || command == "spill" || 
         command == "ghost-mode") {
-        // Handle vibe commands directly in switch statements below
     }
     
     try {
@@ -119,7 +132,6 @@ int main(int argc, char* argv[]) {
                     std::cout << ui.colorize("✅ Initialized empty Gyatt repository in " + repo.getRepoPath() + "/.gyatt", 
                                            ui.Color::GREEN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
                     
-                    // Install built-in plugins
                     gyatt::PluginManager plugins(repo.getRepoPath());
                     plugins.installChangelogGenerator();
                     plugins.installUndoCommits();
@@ -132,7 +144,6 @@ int main(int argc, char* argv[]) {
                     return 1;
                 }
             } else {
-                // Initialize with template
                 gyatt::InitTemplates templates(repo.getRepoPath());
                 std::string templateName = args[0];
                 
@@ -171,14 +182,12 @@ int main(int argc, char* argv[]) {
             return 0;
         }
         
-        // Check if we're in a gyatt repository for all other commands
         if (!repo.isRepository()) {
             std::cerr << ui.colorize("💀 fatal: not a gyatt repository (or any of the parent directories): .gyatt", 
                                    ui.Color::RED, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
             return 1;
         }
         
-        // Initialize feature systems after confirming we're in a repo
         gyatt::MarkdownCommit markdownCommit(repo.getRepoPath());
         gyatt::SemanticBranching semanticBranching(repo.getRepoPath());
         gyatt::SectionBasedStaging sectionStaging(repo.getRepoPath());
@@ -221,7 +230,6 @@ int main(int argc, char* argv[]) {
                 // Note: CommitStoryMode doesn't have isEnabled/enhanceCommitMessage methods
                 // Using direct commit for now
                 
-                // Run guardrails
                 std::vector<std::string> files; // Empty for now, could get from staging area
                 if (!guardrails.runPreCommitChecks(files)) {
                     if (!ui.showConfirmDialog("Guardrails detected issues. Continue anyway?", false)) {
@@ -553,7 +561,6 @@ int main(int argc, char* argv[]) {
             std::string location = args[1];
             std::string message = args[2];
             
-            // Parse location string (format: file:line)
             size_t colonPos = location.find(':');
             if (colonPos == std::string::npos) {
                 std::cerr << "Invalid location format. Use file:line" << std::endl;
@@ -562,7 +569,7 @@ int main(int argc, char* argv[]) {
             
             std::string filepath = location.substr(0, colonPos);
             int lineNumber = std::stoi(location.substr(colonPos + 1));
-            std::string author = "current-user"; // Could be improved to get actual git user
+            std::string author = "current-user"; 
             
             if (comments.addComment(filepath, lineNumber, message, author)) {
                 std::cout << ui.colorize("✅ Comment added", ui.Color::GREEN) << std::endl;
@@ -661,7 +668,7 @@ int main(int argc, char* argv[]) {
         
         else if (command == "remote") {
             if (args.empty()) {
-                std::cerr << "Usage: gyatt remote add <name> <url> | gyatt remote -v" << std::endl;
+                std::cerr << "Usage: gyatt remote add <name> <url> | gyatt remote -v | gyatt remote --enhanced" << std::endl;
                 return 1;
             }
             
@@ -679,11 +686,152 @@ int main(int argc, char* argv[]) {
                 }
             }
             else if (args[0] == "-v") {
-                repo.listRemotes();
+                repo.printRemotes();
+                return 0;
+            }
+            else if (args[0] == "--enhanced") {
+                auto remotes = repo.getRemoteRepositories();
+                std::cout << ui.colorize("🌐 Enhanced Remote Repository Information", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                for (const auto& remote : remotes) {
+                    std::cout << "\n" << ui.colorize("Remote: " + remote.name, ui.Color::GREEN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                    std::cout << "  URL: " << remote.url << std::endl;
+                    std::cout << "  Protocol: " << repo.getProtocolName(remote.protocol) << std::endl;
+                    std::cout << "  Auth: " << repo.getAuthMethodName(remote.credentials.method) << std::endl;
+                    std::cout << "  Health: " << (remote.isHealthy ? "✅ Healthy" : "❌ Unhealthy") << std::endl;
+                    auto syncTime = std::chrono::system_clock::to_time_t(remote.lastSync);
+                    if (syncTime > 0) {
+                        std::cout << "  Last Sync: " << std::ctime(&syncTime);
+                    } else {
+                        std::cout << "  Last Sync: Never" << std::endl;
+                    }
+                }
                 return 0;
             }
             else {
                 std::cerr << "Unknown remote command: " << args[0] << std::endl;
+                return 1;
+            }
+        }
+        
+        // ============== ENHANCED REMOTE REPOSITORY MANAGEMENT ==============
+        else if (command == "remote-add") {
+            if (args.size() < 2) {
+                std::cerr << "Usage: gyatt remote-add <name> <url> [--auth <method>] [--token <token>] [--ssh-key <path>]" << std::endl;
+                return 1;
+            }
+            
+            std::string name = args[0];
+            std::string url = args[1];
+            
+            gyatt::RemoteCredentials credentials;
+            credentials.method = gyatt::AuthMethod::NONE;
+            
+            for (size_t i = 2; i < args.size(); i += 2) {
+                if (i + 1 < args.size()) {
+                    if (args[i] == "--auth") {
+                        std::string method = args[i + 1];
+                        if (method == "token") {
+                            credentials.method = gyatt::AuthMethod::TOKEN;
+                        } else if (method == "ssh") {
+                            credentials.method = gyatt::AuthMethod::SSH_KEY;
+                        } else if (method == "password") {
+                            credentials.method = gyatt::AuthMethod::USERNAME_PASSWORD;
+                        }
+                    } else if (args[i] == "--token") {
+                        credentials.token = args[i + 1];
+                        credentials.method = gyatt::AuthMethod::TOKEN;
+                    } else if (args[i] == "--ssh-key") {
+                        credentials.sshKeyPath = args[i + 1];
+                        credentials.method = gyatt::AuthMethod::SSH_KEY;
+                    } else if (args[i] == "--username") {
+                        credentials.username = args[i + 1];
+                        credentials.method = gyatt::AuthMethod::USERNAME_PASSWORD;
+                    }
+                }
+            }
+            
+            if (repo.addRemoteWithAuth(name, url, credentials)) {
+                std::cout << ui.colorize("✅ Enhanced remote added successfully", ui.Color::GREEN) << std::endl;
+                return 0;
+            } else {
+                std::cerr << ui.colorize("❌ Failed to add enhanced remote", ui.Color::RED) << std::endl;
+                return 1;
+            }
+        }
+        
+        else if (command == "remote-health") {
+            if (args.empty()) {
+                auto remotes = repo.listRemotes();
+                std::cout << ui.colorize("🏥 Remote Health Check", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                for (const auto& remote : remotes) {
+                    bool healthy = repo.checkRemoteHealth(remote);
+                    std::string status = healthy ? "✅ Healthy" : "❌ Unhealthy";
+                    std::cout << remote.name << ": " << status << std::endl;
+                }
+            } else {
+                auto remote = repo.loadRemoteConfig(args[0]);
+                if (remote.name.empty()) {
+                    std::cerr << "Remote '" << args[0] << "' not found" << std::endl;
+                    return 1;
+                }
+                
+                bool healthy = repo.checkRemoteHealth(remote);
+                std::string status = healthy ? "✅ Healthy" : "❌ Unhealthy";
+                std::cout << "Remote '" << args[0] << "': " << status << std::endl;
+            }
+            return 0;
+        }
+        
+        else if (command == "push-enhanced") {
+            std::string remoteName = args.size() > 0 ? args[0] : "origin";
+            std::string branchName = args.size() > 1 ? args[1] : "main";
+            
+            std::cout << ui.colorize("🚀 Enhanced Push with Progress Tracking", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+            
+            bool success = repo.pushWithProgress(remoteName, branchName, 
+                [&ui](const gyatt::PushProgress& progress) {
+                    std::cout << "\r" << ui.colorize(progress.phase, ui.Color::YELLOW) 
+                             << ": " << progress.message 
+                             << " [" << progress.current << "/" << progress.total << "]" << std::flush;
+                });
+            
+            std::cout << std::endl; // New line after progress
+            
+            if (success) {
+                std::cout << ui.colorize("✅ Enhanced push completed successfully!", ui.Color::GREEN) << std::endl;
+                return 0;
+            } else {
+                std::cerr << ui.colorize("❌ Enhanced push failed", ui.Color::RED) << std::endl;
+                return 1;
+            }
+        }
+        
+        else if (command == "sync-profile") {
+            if (args.empty()) {
+                std::cerr << "Usage: gyatt sync-profile create <name> | list | apply <name>" << std::endl;
+                return 1;
+            }
+            
+            if (args[0] == "create" && args.size() >= 2) {
+                std::string profileName = args[1];
+                std::vector<std::string> includePaths = {"src/", "include/", "*.cpp", "*.h"};
+                std::vector<std::string> excludePaths = {"build/", "*.o", "*.tmp"};
+                
+                auto profile = repo.createSyncProfile(profileName, gyatt::SyncMode::SELECTIVE, includePaths, excludePaths);
+                std::cout << ui.colorize("✅ Sync profile '" + profileName + "' created", ui.Color::GREEN) << std::endl;
+                return 0;
+            }
+            else if (args[0] == "list") {
+                auto profiles = repo.getSyncProfiles();
+                std::cout << ui.colorize("📋 Sync Profiles", ui.Color::CYAN, ui.Color::BLACK, ui.Style::BOLD) << std::endl;
+                for (const auto& profile : profiles) {
+                    std::cout << "  " << ui.colorize(profile.name, ui.Color::GREEN) 
+                             << " (" << repo.getSyncModeName(profile.mode) << ")" << std::endl;
+                }
+                return 0;
+            }
+            else {
+                std::cerr << "Unknown sync-profile command: " << args[0] << std::endl;
                 return 1;
             }
         }

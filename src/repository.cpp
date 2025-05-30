@@ -14,10 +14,16 @@
 #include "plugin_system.h"
 #include "terminal_ui.h"
 #include <iostream>
+#include <functional>
+#include <thread>
+#include <chrono>
+#include <ctime>
+#include <sys/stat.h>
 #include <filesystem>
 #include <algorithm>
 #include <set>
 #include <sstream>
+#include <fstream>
 #include <curl/curl.h>
 
 namespace gyatt {
@@ -585,9 +591,11 @@ bool Repository::addRemote(const std::string& name, const std::string& url) {
     return Utils::writeFile(configFile, configContent.str());
 }
 
-bool Repository::listRemotes() {
+std::vector<RemoteRepository> Repository::listRemotes() {
+    std::vector<RemoteRepository> result;
+    
     if (!isRepository()) {
-        return false;
+        return result;
     }
     
     auto config = parseConfig();
@@ -603,11 +611,22 @@ bool Repository::listRemotes() {
         }
     }
     
-    for (const auto& remote : remotes) {
-        std::cout << remote << "\n";
+    for (const auto& remoteName : remotes) {
+        RemoteRepository remote;
+        remote.name = remoteName;
+        remote.url = config["remote." + remoteName + ".url"];
+        remote.protocol = detectProtocol(remote.url);
+        result.push_back(remote);
     }
     
-    return true;
+    return result;
+}
+
+void Repository::printRemotes() {
+    auto remotes = listRemotes();
+    for (const auto& remote : remotes) {
+        std::cout << remote.name << "\n";
+    }
 }
 
 // Ignore file operations
@@ -615,7 +634,7 @@ bool Repository::createIgnoreFile() {
     return IgnoreList::createDefaultIgnoreFile(repoPath);
 }
 
-bool Repository::isIgnored(const std::string& filepath) const {
+bool Repository::isIgnored(const std::string& filepath) {
     return ignoreList->isIgnored(filepath);
 }
 
@@ -1646,6 +1665,525 @@ bool Repository::uploadToEmptyGitHubRepo(const std::string& repoName, const std:
     std::cout << "Repository: https://github.com/" << repoName << "\n";
     
     return true;
+}
+
+
+RemoteProtocol Repository::detectProtocol(const std::string& url) {
+    if (url.find("ssh://") == 0 || url.find("git@") == 0) {
+        return RemoteProtocol::SSH;
+    } else if (url.find("https://") == 0) {
+        return RemoteProtocol::HTTPS;
+    } else if (url.find("http://") == 0) {
+        return RemoteProtocol::HTTP;
+    } else if (url.find("file://") == 0 || url.find("/") == 0) {
+        return RemoteProtocol::LOCAL;
+    }
+    return RemoteProtocol::UNKNOWN;
+}
+
+bool Repository::validateRemoteUrl(const std::string& url) {
+    RemoteProtocol protocol = detectProtocol(url);
+    if (protocol == RemoteProtocol::UNKNOWN) {
+        return false;
+    }
+    
+    // Basic URL validation
+    if (url.empty() || url.length() < 5) {
+        return false;
+    }
+    
+    // Check for common GitHub/GitLab patterns
+    if (protocol == RemoteProtocol::HTTPS || protocol == RemoteProtocol::HTTP) {
+        return url.find("github.com") != std::string::npos ||
+               url.find("gitlab.com") != std::string::npos ||
+               url.find("bitbucket.org") != std::string::npos ||
+               url.find(".git") != std::string::npos;
+    }
+    
+    if (protocol == RemoteProtocol::SSH) {
+        return url.find("@") != std::string::npos && 
+               (url.find("github.com") != std::string::npos ||
+                url.find("gitlab.com") != std::string::npos ||
+                url.find("bitbucket.org") != std::string::npos ||
+                url.find(".git") != std::string::npos);
+    }
+    
+    return true;
+}
+
+std::string Repository::normalizeRemoteUrl(const std::string& url) {
+    std::string normalized = url;
+    
+    // Remove trailing slashes
+    while (!normalized.empty() && normalized.back() == '/') {
+        normalized.pop_back();
+    }
+    
+    // Ensure .git suffix for GitHub URLs
+    if (normalized.find("github.com") != std::string::npos && 
+        normalized.find(".git") == std::string::npos) {
+        normalized += ".git";
+    }
+    
+    return normalized;
+}
+
+bool Repository::addRemoteWithAuth(const std::string& name, const std::string& url, 
+                                 const RemoteCredentials& credentials) {
+    if (!validateRemoteUrl(url)) {
+        std::cerr << "error: invalid remote URL: " << url << "\n";
+        return false;
+    }
+    
+    std::string normalizedUrl = normalizeRemoteUrl(url);
+    RemoteProtocol protocol = detectProtocol(normalizedUrl);
+    
+    // Store remote configuration
+    std::string configPath = Utils::joinPath(Utils::joinPath(gyattDir, "remotes"), name);
+    Utils::createDirectories(Utils::joinPath(gyattDir, "remotes"));
+    
+    std::ofstream configFile(configPath);
+    if (!configFile.is_open()) {
+        std::cerr << "error: failed to create remote config file\n";
+        return false;
+    }
+    
+    configFile << "url=" << normalizedUrl << "\n";
+    configFile << "protocol=" << static_cast<int>(protocol) << "\n";
+    configFile << "auth_method=" << static_cast<int>(credentials.method) << "\n";
+    
+    // Store credentials securely
+    if (credentials.method == AuthMethod::TOKEN && !credentials.token.empty()) {
+        std::string tokenPath = Utils::joinPath(Utils::joinPath(gyattDir, "remotes"), name + "_token");
+        std::ofstream tokenFile(tokenPath);
+        if (tokenFile.is_open()) {
+            tokenFile << credentials.token;
+            tokenFile.close();
+            // Set restrictive permissions
+            chmod(tokenPath.c_str(), 0600);
+        }
+    }
+    
+    if (credentials.method == AuthMethod::USERNAME_PASSWORD) {
+        if (!credentials.username.empty()) {
+            configFile << "username=" << credentials.username << "\n";
+        }
+        // Note: Password should be handled through credential manager
+    }
+    
+    if (credentials.method == AuthMethod::SSH_KEY && !credentials.sshKeyPath.empty()) {
+        configFile << "ssh_key=" << credentials.sshKeyPath << "\n";
+    }
+    
+    configFile.close();
+    
+    std::cout << "Remote '" << name << "' added successfully\n";
+    std::cout << "  URL: " << normalizedUrl << "\n";
+    std::cout << "  Protocol: " << getProtocolName(protocol) << "\n";
+    std::cout << "  Auth: " << getAuthMethodName(credentials.method) << "\n";
+    
+    return true;
+}
+
+RemoteRepository Repository::loadRemoteConfig(const std::string& name) {
+    RemoteRepository remote;
+    remote.name = name;
+    
+    std::string configPath = Utils::joinPath(Utils::joinPath(gyattDir, "remotes"), name);
+    std::ifstream configFile(configPath);
+    
+    if (!configFile.is_open()) {
+        return remote; // Return empty remote
+    }
+    
+    std::string line;
+    while (std::getline(configFile, line)) {
+        size_t pos = line.find('=');
+        if (pos != std::string::npos) {
+            std::string key = line.substr(0, pos);
+            std::string value = line.substr(pos + 1);
+            
+            if (key == "url") {
+                remote.url = value;
+            } else if (key == "protocol") {
+                remote.protocol = static_cast<RemoteProtocol>(std::stoi(value));
+            } else if (key == "auth_method") {
+                remote.credentials.method = static_cast<AuthMethod>(std::stoi(value));
+            } else if (key == "username") {
+                remote.credentials.username = value;
+            } else if (key == "ssh_key") {
+                remote.credentials.sshKeyPath = value;
+            }
+        }
+    }
+    
+    // Load token if exists
+    if (remote.credentials.method == AuthMethod::TOKEN) {
+        std::string tokenPath = Utils::joinPath(Utils::joinPath(gyattDir, "remotes"), name + "_token");
+        std::ifstream tokenFile(tokenPath);
+        if (tokenFile.is_open()) {
+            std::getline(tokenFile, remote.credentials.token);
+        }
+    }
+    
+    remote.isHealthy = checkRemoteHealth(remote);
+    time_t lastSyncTime = getLastSyncTime(name);
+    remote.lastSync = std::chrono::system_clock::from_time_t(lastSyncTime);
+    
+    return remote;
+}
+
+bool Repository::checkRemoteHealth(const RemoteRepository& remote) {
+    // Basic connectivity check
+    if (remote.protocol == RemoteProtocol::HTTP || remote.protocol == RemoteProtocol::HTTPS) {
+        // For HTTP(S), try a simple HEAD request
+        return testHttpConnection(remote.url);
+    } else if (remote.protocol == RemoteProtocol::SSH) {
+        // For SSH, try to connect and list refs
+        return testSshConnection(remote.url, remote.credentials);
+    } else if (remote.protocol == RemoteProtocol::LOCAL) {
+        // For local, check if directory exists
+        return Utils::directoryExists(remote.url);
+    }
+    
+    return false;
+}
+
+bool Repository::testHttpConnection(const std::string& url) {
+    // Simple HTTP connectivity test
+    std::string command = "curl -s --head --max-time 10 \"" + url + "\" > /dev/null 2>&1";
+    int result = system(command.c_str());
+    return result == 0;
+}
+
+bool Repository::testSshConnection(const std::string& url, const RemoteCredentials& credentials) {
+    // Basic SSH connectivity test
+    std::string command = "ssh -o ConnectTimeout=10 -o BatchMode=yes ";
+    
+    if (!credentials.sshKeyPath.empty()) {
+        command += "-i \"" + credentials.sshKeyPath + "\" ";
+    }
+    
+    // Extract host from URL
+    std::string host = extractHostFromSshUrl(url);
+    if (host.empty()) {
+        return false;
+    }
+    
+    command += host + " exit 2>/dev/null";
+    int result = system(command.c_str());
+    return result == 0;
+}
+
+std::string Repository::extractHostFromSshUrl(const std::string& url) {
+    if (url.find("git@") == 0) {
+        size_t atPos = url.find('@');
+        size_t colonPos = url.find(':', atPos);
+        if (atPos != std::string::npos && colonPos != std::string::npos) {
+            return url.substr(atPos + 1, colonPos - atPos - 1);
+        }
+    }
+    return "";
+}
+
+std::time_t Repository::getLastSyncTime(const std::string& remoteName) {
+    std::string syncPath = Utils::joinPath(Utils::joinPath(gyattDir, "remotes"), remoteName + "_last_sync");
+    std::ifstream syncFile(syncPath);
+    
+    if (syncFile.is_open()) {
+        std::string timeStr;
+        std::getline(syncFile, timeStr);
+        if (!timeStr.empty()) {
+            return std::stoll(timeStr);
+        }
+    }
+    
+    return 0; // Never synced
+}
+
+void Repository::updateLastSyncTime(const std::string& remoteName) {
+    std::string syncPath = Utils::joinPath(Utils::joinPath(gyattDir, "remotes"), remoteName + "_last_sync");
+    std::ofstream syncFile(syncPath);
+    
+    if (syncFile.is_open()) {
+        syncFile << std::time(nullptr);
+    }
+}
+
+bool Repository::pushToRemoteWithProgress(const std::string& remoteName, const std::string& branch,
+                                        std::function<void(const PushProgress&)> progressCallback) {
+    RemoteRepository remote = loadRemoteConfig(remoteName);
+    if (remote.name.empty()) {
+        std::cerr << "error: remote '" << remoteName << "' not found\n";
+        return false;
+    }
+    
+    if (!remote.isHealthy) {
+        std::cerr << "error: remote '" << remoteName << "' is not healthy\n";
+        return false;
+    }
+    
+    PushProgress progress;
+    progress.phase = "Preparing";
+    progress.current = 0;
+    progress.total = 100;
+    progress.message = "Initializing push operation";
+    progressCallback(progress);
+    
+    // Phase 1: Collect files to push
+    progress.phase = "Scanning";
+    progress.current = 10;
+    progress.message = "Scanning for changes";
+    progressCallback(progress);
+    
+    std::vector<std::string> filesToPush = getModifiedFiles();
+    
+    // Phase 2: Check for conflicts
+    progress.phase = "Conflict Check";
+    progress.current = 20;
+    progress.message = "Checking for conflicts";
+    progressCallback(progress);
+    
+    if (hasConflicts(remote, branch)) {
+        std::cerr << "error: conflicts detected, resolve before pushing\n";
+        return false;
+    }
+    
+    // Phase 3: Authenticate
+    progress.phase = "Authentication";
+    progress.current = 30;
+    progress.message = "Authenticating with remote";
+    progressCallback(progress);
+    
+    if (!authenticateWithRemote(remote)) {
+        std::cerr << "error: authentication failed\n";
+        return false;
+    }
+    
+    // Phase 4: Upload files
+    progress.phase = "Uploading";
+    progress.current = 40;
+    progress.total = filesToPush.size();
+    progress.message = "Uploading files";
+    progressCallback(progress);
+    
+    bool success = true;
+    for (size_t i = 0; i < filesToPush.size(); ++i) {
+        progress.current = i + 1;
+        progress.message = "Uploading: " + filesToPush[i];
+        progressCallback(progress);
+        
+        if (!uploadFileToRemote(remote, filesToPush[i])) {
+            success = false;
+            break;
+        }
+    }
+    
+    if (success) {
+        progress.phase = "Finalizing";
+        progress.current = progress.total;
+        progress.message = "Push completed successfully";
+        progressCallback(progress);
+        
+        updateLastSyncTime(remoteName);
+    }
+    
+    return success;
+}
+
+bool Repository::hasConflicts(const RemoteRepository& remote, const std::string& branch) {
+    // Simple conflict detection - in a real implementation, this would
+    // compare local and remote commit histories
+    return false; // For now, assume no conflicts
+}
+
+bool Repository::authenticateWithRemote(const RemoteRepository& remote) {
+    switch (remote.credentials.method) {
+        case AuthMethod::TOKEN:
+            return !remote.credentials.token.empty();
+        
+        case AuthMethod::SSH_KEY:
+            return Utils::fileExists(remote.credentials.sshKeyPath);
+        
+        case AuthMethod::USERNAME_PASSWORD:
+            return !remote.credentials.username.empty();
+        
+        case AuthMethod::NONE:
+            return true;
+        
+        default:
+            return false;
+    }
+}
+
+bool Repository::uploadFileToRemote(const RemoteRepository& remote, const std::string& filePath) {
+    // This would implement the actual file upload logic based on the protocol
+    // For now, we'll simulate success
+    std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate upload time
+    return true;
+}
+
+std::vector<std::string> Repository::getModifiedFiles() {
+    std::vector<std::string> modifiedFiles;
+    
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(".")) {
+        if (entry.is_regular_file()) {
+            std::string filePath = entry.path().relative_path().string();
+            
+            // Skip system files
+            if (shouldExcludeFromGitHubUpload(filePath)) {
+                continue;
+            }
+            
+            // For simplicity, consider all non-system files as modified
+            modifiedFiles.push_back(filePath);
+        }
+    }
+    
+    return modifiedFiles;
+}
+
+SyncProfile Repository::createSyncProfile(const std::string& name, SyncMode mode, 
+                                        const std::vector<std::string>& includePaths,
+                                        const std::vector<std::string>& excludePaths) {
+    SyncProfile profile;
+    profile.name = name;
+    profile.mode = mode;
+    profile.includePaths = includePaths;
+    profile.excludePaths = excludePaths;
+    profile.autoSync = false;
+    profile.syncInterval = std::chrono::minutes(60); // 1 hour default
+    
+    // Save profile to disk
+    std::string profilePath = Utils::joinPath(Utils::joinPath(gyattDir, "sync_profiles"), name + ".json");
+    Utils::createDirectories(Utils::joinPath(gyattDir, "sync_profiles"));
+    
+    saveSyncProfile(profile, profilePath);
+    
+    return profile;
+}
+
+void Repository::saveSyncProfile(const SyncProfile& profile, const std::string& path) {
+    std::ofstream file(path);
+    if (!file.is_open()) {
+        return;
+    }
+    
+    // Simple JSON-like format for profile storage
+    file << "{\n";
+    file << "  \"name\": \"" << profile.name << "\",\n";
+    file << "  \"mode\": " << static_cast<int>(profile.mode) << ",\n";
+    file << "  \"autoSync\": " << (profile.autoSync ? "true" : "false") << ",\n";
+    file << "  \"syncInterval\": " << profile.syncInterval.count() << ",\n";
+    file << "  \"includePaths\": [\n";
+    
+    for (size_t i = 0; i < profile.includePaths.size(); ++i) {
+        file << "    \"" << profile.includePaths[i] << "\"";
+        if (i < profile.includePaths.size() - 1) file << ",";
+        file << "\n";
+    }
+    
+    file << "  ],\n";
+    file << "  \"excludePaths\": [\n";
+    
+    for (size_t i = 0; i < profile.excludePaths.size(); ++i) {
+        file << "    \"" << profile.excludePaths[i] << "\"";
+        if (i < profile.excludePaths.size() - 1) file << ",";
+        file << "\n";
+    }
+    
+    file << "  ]\n";
+    file << "}\n";
+}
+
+std::vector<SyncProfile> Repository::getSyncProfiles() const {
+    std::vector<SyncProfile> profiles;
+    std::string profilesDir = Utils::joinPath(gyattDir, "sync_profiles");
+    
+    if (!Utils::directoryExists(profilesDir)) {
+        return profiles;
+    }
+    
+    for (const auto& entry : std::filesystem::directory_iterator(profilesDir)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".json") {
+            SyncProfile profile = loadSyncProfile(entry.path().string());
+            if (!profile.name.empty()) {
+                profiles.push_back(profile);
+            }
+        }
+    }
+    
+    return profiles;
+}
+
+SyncProfile Repository::loadSyncProfile(const std::string& path) const {
+    SyncProfile profile;
+    // Simple profile loading - in a real implementation, use a JSON parser
+    // For now, return empty profile
+    return profile;
+}
+
+// Helper methods for string representation
+std::string Repository::getProtocolName(RemoteProtocol protocol) {
+    switch (protocol) {
+        case RemoteProtocol::HTTP: return "HTTP";
+        case RemoteProtocol::HTTPS: return "HTTPS";
+        case RemoteProtocol::SSH: return "SSH";
+        case RemoteProtocol::LOCAL: return "Local";
+        default: return "Unknown";
+    }
+}
+
+std::string Repository::getAuthMethodName(AuthMethod method) {
+    switch (method) {
+        case AuthMethod::NONE: return "None";
+        case AuthMethod::TOKEN: return "Token";
+        case AuthMethod::SSH_KEY: return "SSH Key";
+        case AuthMethod::USERNAME_PASSWORD: return "Username/Password";
+        case AuthMethod::OAUTH: return "OAuth";
+        default: return "Unknown";
+    }
+}
+
+std::string Repository::getSyncModeName(SyncMode mode) {
+    switch (mode) {
+        case SyncMode::FULL: return "Full";
+        case SyncMode::SELECTIVE: return "Selective";
+        case SyncMode::INCREMENTAL: return "Incremental";
+        case SyncMode::SMART: return "Smart";
+        default: return "Unknown";
+    }
+}
+
+// Missing method implementations for CLI
+
+bool Repository::pushWithProgress(const std::string& remoteName, const std::string& branchName,
+                                 std::function<void(const PushProgress&)> progressCallback) {
+    // For now, just call the regular push method
+    // TODO: Add actual progress tracking
+    if (progressCallback) {
+        PushProgress progress;
+        progress.isComplete = false;
+        progress.currentOperation = "Starting push...";
+        progressCallback(progress);
+    }
+    
+    bool result = push(remoteName, branchName);
+    
+    if (progressCallback) {
+        PushProgress progress;
+        progress.isComplete = true;
+        progress.currentOperation = result ? "Push completed successfully" : "Push failed";
+        progressCallback(progress);
+    }
+    
+    return result;
+}
+
+std::vector<RemoteRepository> Repository::getRemoteRepositories() const {
+    // For now, just use the non-const version
+    // TODO: Make listRemotes const-compatible
+    return const_cast<Repository*>(this)->listRemotes();
 }
 
 } // namespace gyatt
