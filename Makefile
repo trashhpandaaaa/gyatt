@@ -12,6 +12,9 @@ BIN_DIR = bin
 # Source files
 SOURCES = $(SRC_DIR)/main.c \
           $(SRC_DIR)/utils.c \
+          $(SRC_DIR)/hash.c \
+          $(SRC_DIR)/object.c \
+          $(SRC_DIR)/buffer.c \
           $(SRC_DIR)/commands/init.c \
           $(SRC_DIR)/commands/add.c \
           $(SRC_DIR)/commands/commit.c \
