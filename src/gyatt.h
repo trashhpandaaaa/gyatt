@@ -45,10 +45,19 @@ int cmd_push(int argc, char *argv[]);
 int cmd_pull(int argc, char *argv[]);
 int cmd_server(int argc, char *argv[]);
 
-// Utility functions
-void hash_to_hex(const gyatt_hash_t *hash, char *hex);
-void hex_to_hash(const char *hex, gyatt_hash_t *hash);
+// Repository functions
 int is_gyatt_repo(void);
 char *get_gyatt_dir(void);
+char *find_repo_root(void);
+
+// Config structure
+typedef struct {
+    char user_name[256];
+    char user_email[256];
+    int compression_level;
+} gyatt_config_t;
+
+int config_read(gyatt_config_t *config);
+int config_write(const gyatt_config_t *config);
 
 #endif // GYATT_H

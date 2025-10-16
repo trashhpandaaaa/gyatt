@@ -1,0 +1,19 @@
+# Gyatt internal files
+.gyatt/
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.exe
+*.out
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*~
+*.swp
+.vscode/
+.idea/

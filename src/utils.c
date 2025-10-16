@@ -167,3 +167,61 @@ char *get_current_dir(void) {
     
     return buffer;
 }
+
+// Find the root of the Gyatt repository
+char *find_repo_root(void) {
+    char *current = get_current_dir();
+    if (!current) return NULL;
+    
+    char *search = str_duplicate(current);
+    free(current);
+    
+    while (1) {
+        char *gyatt_dir = path_join(search, ".gyatt");
+        
+        if (dir_exists(gyatt_dir)) {
+            free(gyatt_dir);
+            return search;
+        }
+        
+        free(gyatt_dir);
+        
+        // Go up one directory
+        char *parent = search;
+        char *last_sep = strrchr(parent, '/');
+        
+        #ifdef _WIN32
+        char *last_sep_win = strrchr(parent, '\\');
+        if (last_sep_win > last_sep) last_sep = last_sep_win;
+        #endif
+        
+        if (!last_sep || last_sep == parent) {
+            // Reached root without finding .gyatt
+            free(search);
+            return NULL;
+        }
+        
+        *last_sep = '\0';
+    }
+}
+
+// Check if we're in a Gyatt repository
+int is_gyatt_repo(void) {
+    char *root = find_repo_root();
+    if (root) {
+        free(root);
+        return 1;
+    }
+    return 0;
+}
+
+// Get the .gyatt directory path
+char *get_gyatt_dir(void) {
+    char *root = find_repo_root();
+    if (!root) return NULL;
+    
+    char *gyatt_dir = path_join(root, ".gyatt");
+    free(root);
+    
+    return gyatt_dir;
+}

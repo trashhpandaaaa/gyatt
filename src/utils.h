@@ -19,5 +19,8 @@ void str_trim(char *str);
 // Path utilities
 char *path_join(const char *p1, const char *p2);
 char *get_current_dir(void);
+char *find_repo_root(void);
+int is_gyatt_repo(void);
+char *get_gyatt_dir(void);
 
 #endif // UTILS_H
