@@ -1,0 +1,33 @@
+# Build artifacts
+build/
+bin/
+*.o
+*.exe
+*.out
+*.app
+
+# Gyatt repositories (for testing)
+.gyatt/
+test-repo/
+
+# IDE and editor files
+.vscode/
+.vs/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Compiled files
+*.dll
+*.so
+*.dylib
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Dependencies
+*.d
