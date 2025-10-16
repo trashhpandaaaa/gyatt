@@ -2,7 +2,7 @@
 
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -std=c11
-LDFLAGS = 
+LDFLAGS = -lz 
 
 # Directories
 SRC_DIR = src

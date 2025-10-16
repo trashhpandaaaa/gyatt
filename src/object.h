@@ -64,4 +64,23 @@ void tree_add_entry(tree_object_t *tree, const char *name, uint32_t mode,
                     const gyatt_hash_t *hash, object_type_t type);
 tree_entry_t *tree_find_entry(tree_object_t *tree, const char *name);
 
+// Object storage functions
+int object_write(const void *data, size_t size, object_type_t type, gyatt_hash_t *hash);
+void *object_read(const gyatt_hash_t *hash, object_type_t *type, size_t *size);
+int object_exists(const gyatt_hash_t *hash);
+char *object_path(const gyatt_hash_t *hash);
+
+// Blob storage
+int blob_write(blob_object_t *blob);
+blob_object_t *blob_read(const gyatt_hash_t *hash);
+blob_object_t *blob_from_file(const char *path);
+
+// Tree storage
+int tree_write(tree_object_t *tree);
+tree_object_t *tree_read(const gyatt_hash_t *hash);
+
+// Commit storage
+int commit_write(commit_object_t *commit);
+commit_object_t *commit_read(const gyatt_hash_t *hash);
+
 #endif // OBJECT_H
