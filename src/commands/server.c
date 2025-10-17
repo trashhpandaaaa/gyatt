@@ -232,9 +232,9 @@ int cmd_server(int argc, char *argv[]) {
     printf("║           GYATT SERVER - STARTED                       ║\n");
     printf("╚════════════════════════════════════════════════════════╝\n");
     printf("\n");
-    printf("📁 Repository: %s\n", repo_path ? repo_path : ".");
-    printf("🌐 Listening on: 0.0.0.0:%d\n", port);
-    printf("✨ Server is ready to accept connections!\n");
+    printf("Repository: %s\n", repo_path ? repo_path : ".");
+    printf("Listening on: 0.0.0.0:%d\n", port);
+    printf("Server is ready to accept connections!\n");
     printf("\n");
     printf("Commands:\n");
     printf("  HELLO          - Handshake\n");

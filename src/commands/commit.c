@@ -215,7 +215,7 @@ int cmd_commit(int argc, char *argv[]) {
     commit->tree = tree_hash;
     commit->parent = parent_hash;
     
-    // Set author info (for now, use placeholder)
+    // Set info (for now, I'll use a placeholder)
     // TODO: Read from config
     strncpy(commit->author.name, "Gyatt User", sizeof(commit->author.name) - 1);
     strncpy(commit->author.email, "user@gyatt.local", sizeof(commit->author.email) - 1);
