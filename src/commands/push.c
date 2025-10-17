@@ -1,3 +1,4 @@
+// Push command - Yeet your code to a server
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,6 +11,7 @@
 
 #define BUFFER_SIZE 4096
 
+// Parse URLs like "hostname:port" or just "hostname"
 int parse_remote_url(const char *url, char *hostname, int *port) {
     char *colon = strchr(url, ':');
     if (colon) {

@@ -1,10 +1,11 @@
+// Gyatt - Because reinventing the wheel is fun
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "gyatt.h"
 
 void print_usage(const char *prog_name) {
-    printf("Gyatt - A better version control system\n\n");
+    printf("Gyatt - Like Git, but with personality\n\n");
     printf("Usage: %s <command> [options]\n\n", prog_name);
     printf("Commands:\n");
     printf("  init        Initialize a new Gyatt repository\n");
@@ -28,6 +29,7 @@ int main(int argc, char *argv[]) {
 
     const char *command = argv[1];
 
+    // The world's longest if-else chain (TODO: use a hash map when we're feeling fancy)
     if (strcmp(command, "init") == 0) {
         return cmd_init(argc - 1, argv + 1);
     } else if (strcmp(command, "add") == 0) {
@@ -52,10 +54,10 @@ int main(int argc, char *argv[]) {
         print_usage(argv[0]);
         return 0;
     } else {
-        fprintf(stderr, "Error: Unknown command '%s'\n\n", command);
-        print_usage(argv[0]);
+        fprintf(stderr, "Error: Unknown command '%s'\n", command);
+        fprintf(stderr, "Try 'gyatt help' if you're lost\n");
         return 1;
     }
 
-    return 0;
+    return 0; // We'll never get here but the compiler gets anxious without it
 }

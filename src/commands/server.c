@@ -1,3 +1,4 @@
+// Gyatt Server - Your personal Git server without the GitHub drama
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,30 +18,30 @@
     #define PATH_MAX 4096
 #endif
 
-#define DEFAULT_PORT 9418
+#define DEFAULT_PORT 9418  // Same as Git, because why not?
 #define BUFFER_SIZE 8192
 
 static volatile int server_running = 1;
 
-// Signal handler for graceful shutdown
+// Gracefully handle Ctrl+C because we're polite like that
 static void signal_handler(int signum) {
     (void)signum;
-    printf("\nShutting down server...\n");
+    printf("\n👋 Shutting down server...\n");
     server_running = 0;
 }
 
-// Protocol commands
+// Our super sophisticated protocol (v1.0)
 #define CMD_HELLO       "HELLO"
 #define CMD_LIST_REFS   "LIST-REFS"
 #define CMD_GET_OBJECT  "GET-OBJECT"
 #define CMD_PUT_OBJECT  "PUT-OBJECT"
 #define CMD_QUIT        "QUIT"
 
-// Handle client connection
+// Handle client connection (and their existential questions)
 static void handle_client(int client_socket) {
     char buffer[BUFFER_SIZE];
     
-    // Send welcome message
+    // Be friendly!
     const char *welcome = "GYATT-SERVER 1.0\n";
     send(client_socket, welcome, strlen(welcome), 0);
     

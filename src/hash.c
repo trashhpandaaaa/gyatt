@@ -1,11 +1,10 @@
+// SHA-1: Because we're keeping it old school (for Git compatibility)
+// Yes, SHA-1 is "broken" but Git still uses it, so here we are
 #include "hash.h"
 #include "utils.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-
-// SHA-1 implementation based on RFC 3174
-// Optimized for performance
 
 #define SHA1_BLOCK_SIZE 64
 #define SHA1_DIGEST_SIZE 20

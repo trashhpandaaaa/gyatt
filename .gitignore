@@ -10,6 +10,12 @@ bin/
 .gyatt/
 test-repo/
 
+# Test files
+test_client
+test_client.c
+test*.txt
+develop.txt
+
 # IDE and editor files
 .vscode/
 .vs/

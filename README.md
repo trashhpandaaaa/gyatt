@@ -1,40 +1,79 @@
 # Gyatt
 
-A version control system built from scratch in C. Like Git, but with built-in private server support.
+A version control system built from scratch in C. Like Git, but with some cool extras.
 
-## Why?
+## Why though?
 
-Git is great, but what if you want to collaborate with your team without relying on GitHub or GitLab? Gyatt lets you host your own repositories on any computer and work together over your local network.
+Git is great, but I wanted to build something that:
+- Has a **built-in server** (no GitHub needed for private projects)
+- Will support **IPFS** for free decentralized hosting (coming soon!)
+- Works with Git repos too (also coming soon)
+- Is actually understandable
 
-## Features
+Plus, building your own VCS is just fun
 
-- All the basics: init, add, commit, status, log, branch, checkout
-- Built-in server mode - turn any computer into a Git-like server
-- Push/pull to your private server AND to GitHub
-- Fast and lightweight
+## What works right now
+
+All the basics: `init`, `add`, `commit`, `status`, `log`, `branch`, `checkout`  
+**Built-in server** - `gyatt server 9999` and you have your own Git-like server  
+Network push/pull (basic version working)  
+
+## What's coming
+
+IPFS integration - host your code on the decentralized web for free  
+Git compatibility - push to GitHub, pull from any Git repo  
+Web UI - browse repos in your browser  
+Real-time collaboration features  
 
 ## Building
-
-You need GCC and Make:
 
 ```bash
 make
 ./bin/gyatt help
 ```
 
-## Usage
+You need GCC, Make, and zlib.
 
-Just like Git, but simpler:
+## Quick start
 
 ```bash
+# Basic workflow
 gyatt init
 gyatt add .
 gyatt commit -m "first commit"
-gyatt server start          # start your own server
-gyatt push myserver         # push to your server
-gyatt push github           # also push to GitHub
+gyatt status
+
+# Branches
+gyatt branch feature
+gyatt checkout feature
+
+# Run your own server
+gyatt server 9999
+
+# Push to it (from another machine)
+gyatt push 192.168.1.100:9999
 ```
 
-## Status
+## The plan
 
-Work in progress. Building it step by step.
+I'm building this in 30 steps:
+1. Core VCS features (init, add, commit, etc.)
+2. Built-in TCP server
+3. IPFS integration (next!)
+4. Git protocol support
+5. Web UI on IPFS
+6. Advanced features (encryption, collaboration, etc.)
+
+Check out the full roadmap in the code.
+
+## Why "Gyatt"?
+
+Why not? 
+
+## Contributing
+
+Found a bug? Have an idea? PRs welcome!
+
+---
+
+Built with C and curiosity. Star if you think decentralized version control is cool 
