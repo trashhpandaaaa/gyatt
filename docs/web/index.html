@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gyatt - Distributed Version Control System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>Gyatt</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="#ipfs">IPFS Integration</a></li>
+                <li><a href="https://github.com/trashhpandaaaa/gyatt" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Gyatt</h1>
+                <p class="subtitle">A distributed version control system with built-in server and IPFS integration</p>
+                <div class="hero-buttons">
+                    <a href="#installation" class="btn btn-primary">Get Started</a>
+                    <a href="#documentation" class="btn btn-secondary">Read Docs</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Version Control</h3>
+                    <p>Complete Git-compatible VCS implementation with commits, branches, and merge support</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Built-in Server</h3>
+                    <p>No need for external hosting. Run your own Git server with a single command</p>
+                </div>
+                <div class="feature-card">
+                    <h3>IPFS Integration</h3>
+                    <p>Store and distribute repositories on the decentralized IPFS network</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Lightweight</h3>
+                    <p>Written in C for minimal resource usage and maximum performance</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Cross-Platform</h3>
+                    <p>Works on Linux, macOS, and Windows through WSL</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Open Source</h3>
+                    <p>Free and open source under permissive licensing</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="installation" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Installation</h2>
+            
+            <div class="install-method">
+                <h3>From Source</h3>
+                <pre><code>git clone https://github.com/trashhpandaaaa/gyatt.git
+cd gyatt
+make
+sudo make install</code></pre>
+            </div>
+
+            <div class="install-method">
+                <h3>Arch Linux (AUR)</h3>
+                <pre><code>yay -S gyatt-git</code></pre>
+            </div>
+
+            <div class="install-method">
+                <h3>Dependencies</h3>
+                <ul>
+                    <li>gcc or compatible C compiler</li>
+                    <li>zlib development headers</li>
+                    <li>libcurl development headers</li>
+                    <li>IPFS daemon (optional, for IPFS features)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="documentation" class="section">
+        <div class="container">
+            <h2 class="section-title">Documentation</h2>
+            
+            <div class="docs-grid">
+                <div class="doc-section">
+                    <h3>Basic Commands</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>gyatt init</code>
+                            <p>Initialize a new repository</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt add &lt;files&gt;</code>
+                            <p>Stage files for commit</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt commit -m "message"</code>
+                            <p>Create a new commit</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt status</code>
+                            <p>Show working tree status</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt log</code>
+                            <p>Display commit history</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3>Branch Management</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>gyatt branch</code>
+                            <p>List all branches</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt branch &lt;name&gt;</code>
+                            <p>Create a new branch</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt checkout &lt;branch&gt;</code>
+                            <p>Switch to a different branch</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3>Remote Operations</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>gyatt server [port]</code>
+                            <p>Start a server on specified port</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt push &lt;remote&gt; [branch]</code>
+                            <p>Push changes to remote server</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt pull &lt;remote&gt; [branch]</code>
+                            <p>Pull changes from remote server</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ipfs" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">IPFS Integration</h2>
+            
+            <div class="ipfs-intro">
+                <p>Gyatt integrates with IPFS (InterPlanetary File System) to provide decentralized repository storage and distribution.</p>
+            </div>
+
+            <div class="docs-grid">
+                <div class="doc-section">
+                    <h3>IPFS Commands</h3>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>gyatt ipfs init</code>
+                            <p>Check IPFS daemon status and initialize storage</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt ipfs push</code>
+                            <p>Upload all objects to IPFS</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt ipfs push &lt;branch&gt;</code>
+                            <p>Upload specific branch to IPFS</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt ipfs publish</code>
+                            <p>Create and publish repository manifest</p>
+                        </div>
+                        <div class="command-item">
+                            <code>gyatt ipfs status</code>
+                            <p>Show IPFS storage statistics</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3>Setup</h3>
+                    <ol class="setup-steps">
+                        <li>Install IPFS daemon from <a href="https://docs.ipfs.tech/install/" target="_blank">docs.ipfs.tech</a></li>
+                        <li>Initialize IPFS: <code>ipfs init</code></li>
+                        <li>Start daemon: <code>ipfs daemon</code></li>
+                        <li>Verify: <code>gyatt ipfs init</code></li>
+                    </ol>
+                </div>
+
+                <div class="doc-section">
+                    <h3>Benefits</h3>
+                    <ul class="benefits-list">
+                        <li>Content-addressed storage</li>
+                        <li>Permanent, immutable history</li>
+                        <li>Distributed worldwide via IPFS gateways</li>
+                        <li>No centralized server required</li>
+                        <li>Automatic deduplication</li>
+                        <li>SHA-1 integrity verification</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example Workflow</h3>
+                <pre><code># Initialize and commit
+gyatt init
+echo "Hello World" > README.md
+gyatt add README.md
+gyatt commit -m "Initial commit"
+
+# Push to IPFS
+gyatt ipfs init
+gyatt ipfs push
+
+# Publish and share
+gyatt ipfs publish
+# Output: QmXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Anyone can now access via:
+# https://ipfs.io/ipfs/QmXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="technical" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Details</h2>
+            
+            <div class="tech-intro">
+                <p>Gyatt is built from the ground up in C11, implementing a complete distributed version control system with content-addressable storage and decentralized distribution capabilities.</p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Core Architecture</h3>
+                    <ul>
+                        <li>Language: C11 standard</li>
+                        <li>Build system: GNU Make</li>
+                        <li>Compression: zlib (deflate algorithm)</li>
+                        <li>Hashing: SHA-1 (20 bytes)</li>
+                        <li>Network: TCP sockets (BSD)</li>
+                        <li>IPFS: HTTP API via libcurl</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Object Types</h3>
+                    <ul>
+                        <li><strong>Blob:</strong> File content storage</li>
+                        <li><strong>Tree:</strong> Directory structure</li>
+                        <li><strong>Commit:</strong> Repository snapshots</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Storage Layout</h3>
+                    <ul>
+                        <li>Objects: <code>.gyatt/objects/ab/cdef...</code></li>
+                        <li>IPFS refs: <code>.gyatt/ipfs-refs/</code></li>
+                        <li>Branches: <code>.gyatt/refs/heads/</code></li>
+                        <li>Index: <code>.gyatt/index</code></li>
+                        <li>HEAD: <code>.gyatt/HEAD</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mechanism-section">
+                <h3>How Gyatt Works: Core Mechanisms</h3>
+                
+                <div class="mechanism-card">
+                    <h4>1. Content-Addressable Storage</h4>
+                    <p>Gyatt uses SHA-1 hashing to create unique identifiers for all objects. Every file, directory tree, and commit is stored based on its content hash, making the system inherently deduplicating.</p>
+                    <div class="algorithm-box">
+                        <h5>Algorithm:</h5>
+                        <pre><code>1. Read file content
+2. Compute SHA-1 hash (20 bytes)
+3. Convert to hex string (40 characters)
+4. Store in .gyatt/objects/[first 2 chars]/[remaining 38 chars]
+5. Compress content with zlib before writing</code></pre>
+                    </div>
+                    <p><strong>Why SHA-1?</strong> Despite known collision vulnerabilities in cryptographic contexts, SHA-1 is sufficient for content addressing in VCS due to the astronomical improbability of accidental collisions in typical repositories.</p>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>2. Object Model</h4>
+                    
+                    <h5>Blob Objects</h5>
+                    <p>Blobs store raw file content. The object format is:</p>
+                    <pre><code>blob [size]\0[content]</code></pre>
+                    <p>Example: A file containing "Hello World" becomes:</p>
+                    <pre><code>blob 11\0Hello World</code></pre>
+                    
+                    <h5>Tree Objects</h5>
+                    <p>Trees represent directories and store references to blobs and other trees:</p>
+                    <pre><code>tree [size]\0[mode] [name]\0[20-byte hash]...</code></pre>
+                    <p>Each entry contains:
+                        <ul>
+                            <li><strong>Mode:</strong> Unix permissions (e.g., 100644 for regular file)</li>
+                            <li><strong>Name:</strong> Filename or directory name</li>
+                            <li><strong>Hash:</strong> 20-byte SHA-1 of the referenced object</li>
+                        </ul>
+                    </p>
+
+                    <h5>Commit Objects</h5>
+                    <p>Commits are snapshots of the repository at a point in time:</p>
+                    <pre><code>commit [size]\0
+tree [tree-hash]
+parent [parent-commit-hash]
+author [name] &lt;[email]&gt; [timestamp] [timezone]
+committer [name] &lt;[email]&gt; [timestamp] [timezone]
+
+[commit message]</code></pre>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>3. Staging Area (Index)</h4>
+                    <p>The index is a binary file that tracks which files are staged for the next commit. It stores:</p>
+                    <ul>
+                        <li>File path</li>
+                        <li>File mode (permissions)</li>
+                        <li>SHA-1 hash of content</li>
+                        <li>File size</li>
+                        <li>Timestamps (ctime, mtime)</li>
+                    </ul>
+                    <div class="algorithm-box">
+                        <h5>Add Algorithm:</h5>
+                        <pre><code>1. Read file from working directory
+2. Compute SHA-1 hash
+3. Create blob object and store in .gyatt/objects/
+4. Update index with file metadata and hash
+5. Write index back to disk</code></pre>
+                    </div>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>4. Commit Process</h4>
+                    <div class="algorithm-box">
+                        <h5>Commit Algorithm:</h5>
+                        <pre><code>1. Read current index (staged files)
+2. For each staged file path:
+   a. Get file hash from index
+   b. Build tree structure recursively
+3. Create tree object for root directory
+4. Get current branch HEAD commit
+5. Create commit object with:
+   - tree hash
+   - parent commit hash (if exists)
+   - author information
+   - timestamp
+   - commit message
+6. Compute commit hash
+7. Store commit object
+8. Update branch reference (.gyatt/refs/heads/[branch])
+9. Clear index</code></pre>
+                    </div>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>5. Branch Management</h4>
+                    <p>Branches are lightweight references to commits. Each branch is simply a file containing a commit hash:</p>
+                    <pre><code>.gyatt/refs/heads/main → 7c667537496c7a1365cade2e2432a0b6db6649f4</code></pre>
+                    <p>The current branch is tracked by HEAD:</p>
+                    <pre><code>.gyatt/HEAD → ref: refs/heads/main</code></pre>
+                    <p><strong>Checkout Algorithm:</strong></p>
+                    <div class="algorithm-box">
+                        <pre><code>1. Read target branch commit hash
+2. Read commit object
+3. Read tree object from commit
+4. Recursively extract all files from tree
+5. Write files to working directory
+6. Update HEAD to point to new branch
+7. Rebuild index with new tree contents</code></pre>
+                    </div>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>6. Network Protocol</h4>
+                    <p>Gyatt implements a custom TCP protocol for push/pull operations:</p>
+                    <div class="protocol-box">
+                        <h5>Server Commands:</h5>
+                        <ul>
+                            <li><code>HELLO</code> - Client identification</li>
+                            <li><code>LIST-REFS</code> - Get all branch references</li>
+                            <li><code>GET-OBJECT [hash]</code> - Download object by hash</li>
+                            <li><code>PUT-OBJECT [hash] [size]</code> - Upload object</li>
+                            <li><code>QUIT</code> - Close connection</li>
+                        </ul>
+                    </div>
+                    <p><strong>Push Algorithm:</strong></p>
+                    <div class="algorithm-box">
+                        <pre><code>1. Connect to remote server (TCP port 9418)
+2. Send HELLO with client info
+3. Send LIST-REFS to get remote branches
+4. Compare local and remote commit histories
+5. Identify missing objects (commits, trees, blobs)
+6. For each missing object:
+   a. Read object from local storage
+   b. Send PUT-OBJECT with hash and size
+   c. Send object data
+7. Update remote branch reference
+8. Send QUIT and close connection</code></pre>
+                    </div>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>7. IPFS Integration</h4>
+                    <p>IPFS (InterPlanetary File System) integration provides decentralized storage:</p>
+                    
+                    <h5>Storage Mapping</h5>
+                    <p>Gyatt maintains a mapping between SHA-1 hashes and IPFS CIDs:</p>
+                    <pre><code>.gyatt/ipfs-refs/ab/cdef... → QmXXXXXXXXXXXXXXXXXXXXXXXX</code></pre>
+                    
+                    <h5>Upload Algorithm:</h5>
+                    <div class="algorithm-box">
+                        <pre><code>1. Scan .gyatt/objects/ directory
+2. For each object:
+   a. Read object content
+   b. Check if already uploaded (CID exists)
+   c. If not, POST to IPFS daemon:
+      POST /api/v0/add
+      Content-Type: multipart/form-data
+      Body: object data
+   d. Parse JSON response to get CID
+   e. Save SHA-1 → CID mapping
+   f. Pin CID to keep in local storage:
+      POST /api/v0/pin/add?arg=[CID]</code></pre>
+                    </div>
+
+                    <h5>Download Algorithm:</h5>
+                    <div class="algorithm-box">
+                        <pre><code>1. Look up CID from SHA-1 hash
+2. Request from IPFS daemon:
+   POST /api/v0/cat?arg=[CID]
+3. Receive object data
+4. Verify SHA-1 hash matches expected
+5. Store in local .gyatt/objects/
+6. Decompress if needed</code></pre>
+                    </div>
+
+                    <h5>Manifest Format</h5>
+                    <p>Repository manifests are published as JSON to IPFS:</p>
+                    <pre><code>{
+  "version": "1.0",
+  "type": "gyatt-repository",
+  "branches": {
+    "main": {
+      "commit": "7c667537496c7a...",
+      "cid": "QmXXXXXXXXXXXXXXXX"
+    }
+  }
+}</code></pre>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>8. Compression Strategy</h4>
+                    <p>All objects are compressed using zlib (DEFLATE algorithm) before storage:</p>
+                    <div class="algorithm-box">
+                        <pre><code>1. Create object header: "[type] [size]\0"
+2. Append object content
+3. Compress entire buffer with zlib (level 6)
+4. Write compressed data to disk
+5. On read:
+   a. Read compressed data
+   b. Decompress with zlib
+   c. Parse header to get type and size
+   d. Extract content</code></pre>
+                    </div>
+                    <p><strong>Compression Ratios:</strong> Text files typically achieve 50-70% compression, while binary files vary based on content redundancy.</p>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>9. Collision Handling</h4>
+                    <p>While SHA-1 collisions are theoretically possible, Gyatt handles them:</p>
+                    <ul>
+                        <li><strong>Detection:</strong> When reading objects, verify the hash matches</li>
+                        <li><strong>Prevention:</strong> Content-based addressing means identical content gets the same hash (intentional deduplication)</li>
+                        <li><strong>Probability:</strong> ~2^80 operations needed for collision (practically impossible in normal use)</li>
+                    </ul>
+                </div>
+
+                <div class="mechanism-card">
+                    <h4>10. Performance Optimizations</h4>
+                    <ul>
+                        <li><strong>Lazy Loading:</strong> Objects only read when needed</li>
+                        <li><strong>Two-Level Directory:</strong> First 2 hex chars as subdirectory prevents filesystem limits</li>
+                        <li><strong>Delta Compression:</strong> (Planned) Store diffs for similar objects</li>
+                        <li><strong>Pack Files:</strong> (Planned) Combine objects for efficient storage</li>
+                        <li><strong>Index Caching:</strong> Keep index in memory during operations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="data-structures">
+                <h3>Key Data Structures</h3>
+                
+                <div class="structure-card">
+                    <h4>gyatt_hash_t</h4>
+                    <pre><code>typedef struct {
+    unsigned char hash[20];  // 20-byte SHA-1
+} gyatt_hash_t;</code></pre>
+                </div>
+
+                <div class="structure-card">
+                    <h4>object_header_t</h4>
+                    <pre><code>typedef struct {
+    object_type_t type;      // OBJ_BLOB, OBJ_TREE, OBJ_COMMIT
+    size_t size;             // Uncompressed size
+    gyatt_hash_t hash;       // SHA-1 hash
+} object_header_t;</code></pre>
+                </div>
+
+                <div class="structure-card">
+                    <h4>tree_entry_t</h4>
+                    <pre><code>typedef struct {
+    char name[256];          // Filename
+    uint32_t mode;           // Unix permissions
+    gyatt_hash_t hash;       // Object hash
+    object_type_t type;      // Entry type
+} tree_entry_t;</code></pre>
+                </div>
+
+                <div class="structure-card">
+                    <h4>commit_object_t</h4>
+                    <pre><code>typedef struct {
+    object_header_t header;
+    gyatt_hash_t tree;       // Root tree hash
+    gyatt_hash_t parent;     // Parent commit hash
+    author_info_t author;    // Author details
+    author_info_t committer; // Committer details
+    char message[4096];      // Commit message
+} commit_object_t;</code></pre>
+                </div>
+            </div>
+
+            <div class="comparison">
+                <h3>Gyatt vs Git</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Feature</th>
+                        <th>Gyatt</th>
+                        <th>Git</th>
+                    </tr>
+                    <tr>
+                        <td>Core Language</td>
+                        <td>C11</td>
+                        <td>C (with shell scripts)</td>
+                    </tr>
+                    <tr>
+                        <td>Object Storage</td>
+                        <td>Same (SHA-1 based)</td>
+                        <td>SHA-1 (migrating to SHA-256)</td>
+                    </tr>
+                    <tr>
+                        <td>Built-in Server</td>
+                        <td>Yes (TCP port 9418)</td>
+                        <td>git-daemon (separate)</td>
+                    </tr>
+                    <tr>
+                        <td>IPFS Support</td>
+                        <td>Native integration</td>
+                        <td>Third-party tools only</td>
+                    </tr>
+                    <tr>
+                        <td>Pack Files</td>
+                        <td>Planned</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Delta Compression</td>
+                        <td>Planned</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Merge Algorithms</td>
+                        <td>Planned</td>
+                        <td>Multiple strategies</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Gyatt</h4>
+                    <p>Distributed version control with personality</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/trashhpandaaaa/gyatt">GitHub</a></li>
+                        <li><a href="https://github.com/trashhpandaaaa/gyatt/issues">Issues</a></li>
+                        <li><a href="https://aur.archlinux.org/packages/gyatt-git">AUR Package</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Documentation</h4>
+                    <ul>
+                        <li><a href="#installation">Installation Guide</a></li>
+                        <li><a href="#documentation">Command Reference</a></li>
+                        <li><a href="#ipfs">IPFS Integration</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gyatt. Open source project.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

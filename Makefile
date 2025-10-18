@@ -17,6 +17,7 @@ SOURCES = $(SRC_DIR)/main.c \
           $(SRC_DIR)/buffer.c \
           $(SRC_DIR)/index.c \
           $(SRC_DIR)/ipfs/ipfs.c \
+          $(SRC_DIR)/ipfs/ipfs_storage.c \
           $(SRC_DIR)/commands/init.c \
           $(SRC_DIR)/commands/add.c \
           $(SRC_DIR)/commands/commit.c \
@@ -26,7 +27,8 @@ SOURCES = $(SRC_DIR)/main.c \
           $(SRC_DIR)/commands/checkout.c \
           $(SRC_DIR)/commands/push.c \
           $(SRC_DIR)/commands/pull.c \
-          $(SRC_DIR)/commands/server.c
+          $(SRC_DIR)/commands/server.c \
+          $(SRC_DIR)/commands/ipfs.c
 
 # Object files
 OBJECTS = $(SOURCES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)

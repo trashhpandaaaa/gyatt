@@ -4,7 +4,7 @@
 
 ---
 
-## ✅ **Completed: Foundation (Steps 1-10)**
+## **Completed: Foundation (Steps 1-10)**
 
 - [x] **Step 1-3**: Project setup, SHA-1 hashing, repository initialization
 - [x] **Step 4-6**: Object storage (blobs/trees/commits), staging area, commit functionality
@@ -15,7 +15,7 @@
 
 ---
 
-## 🚧 **Phase 1: IPFS Integration (Steps 11-15)**
+## **Phase 1: IPFS Integration (Steps 11-15)**
 
 ### **Step 11: IPFS Setup & Research**
 - [ ] Install IPFS daemon
@@ -49,7 +49,7 @@
 
 ---
 
-## 🌐 **Phase 2: Web UI (Steps 16-20)**
+## **Phase 2: Web UI (Steps 16-20)**
 
 ### **Step 16: Static Web Interface**
 - [ ] Create `web/` directory
@@ -83,7 +83,7 @@
 
 ---
 
-## 🎨 **Phase 3: Advanced Web Features (Steps 21-25)**
+## **Phase 3: Advanced Web Features (Steps 21-25)**
 
 ### **Step 21: Host UI on IPFS**
 - [ ] Build static web bundle
@@ -117,7 +117,7 @@
 
 ---
 
-## 🔗 **Phase 4: Git Compatibility (Steps 26-30)**
+##  **Phase 4: Git Compatibility (Steps 26-30)**
 
 ### **Step 26: Read Git Repos**
 - [ ] Implement Git pack format parser
@@ -148,11 +148,11 @@
 - [ ] Push to IPFS + Git remotes simultaneously
 - [ ] Show progress for each
 - [ ] Handle partial failures
-- [ ] **Release v1.0** 🎉
+- [ ] **Release v1.0** 
 
 ---
 
-## 🚀 **Phase 5: Advanced Features (Future)**
+## **Phase 5: Advanced Features (Future)**
 
 Ideas for after v1.0:
 
@@ -168,10 +168,10 @@ Ideas for after v1.0:
 
 ---
 
-## 📊 **Progress Tracking**
+## **Progress Tracking**
 
 ```
-Phase 1: Foundation        [██████████] 10/10 (100%) ✅
+Phase 1: Foundation        [██████████] 10/10 (100%) 
 Phase 2: IPFS Core         [░░░░░░░░░░]  0/5  (0%)
 Phase 3: Web UI            [░░░░░░░░░░]  0/5  (0%)
 Phase 4: Advanced Web      [░░░░░░░░░░]  0/5  (0%)
@@ -182,7 +182,7 @@ Overall: [██░░░░░░░░░░░░░░░░░░] 10/30 (3
 
 ---
 
-## 🎯 **Milestones**
+## **Milestones**
 
 - **M1: Foundation** ✅ - Basic VCS working
 - **M2: IPFS Integration** - After Step 15
@@ -193,7 +193,7 @@ Overall: [██░░░░░░░░░░░░░░░░░░] 10/30 (3
 
 ---
 
-## ⏱️ **Estimated Timeline**
+## **Estimated Timeline**
 
 - Steps 11-15 (IPFS): ~2-3 weeks
 - Steps 16-20 (Web UI): ~2 weeks
@@ -204,8 +204,8 @@ Overall: [██░░░░░░░░░░░░░░░░░░] 10/30 (3
 
 ---
 
-## 💡 **Current Focus**
+## **Current Focus**
 
 **Next Up**: Step 11 - IPFS Setup & Research
 
-Stay tuned! We're building something awesome here. 🚀
+Stay tuned! We're building something awesome here. 

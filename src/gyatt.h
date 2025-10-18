@@ -44,6 +44,7 @@ int cmd_checkout(int argc, char *argv[]);
 int cmd_push(int argc, char *argv[]);
 int cmd_pull(int argc, char *argv[]);
 int cmd_server(int argc, char *argv[]);
+int cmd_ipfs(int argc, char *argv[]);
 
 // Repository functions
 int is_gyatt_repo(void);

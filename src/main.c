@@ -18,6 +18,7 @@ void print_usage(const char *prog_name) {
     printf("  push        Push changes to remote server\n");
     printf("  pull        Pull changes from remote server\n");
     printf("  server      Start Gyatt server mode\n");
+    printf("  ipfs        IPFS integration commands\n");
     printf("  help        Show this help message\n");
 }
 
@@ -50,6 +51,8 @@ int main(int argc, char *argv[]) {
         return cmd_pull(argc - 1, argv + 1);
     } else if (strcmp(command, "server") == 0) {
         return cmd_server(argc - 1, argv + 1);
+    } else if (strcmp(command, "ipfs") == 0) {
+        return cmd_ipfs(argc - 2, argv + 2);
     } else if (strcmp(command, "help") == 0 || strcmp(command, "--help") == 0) {
         print_usage(argv[0]);
         return 0;
