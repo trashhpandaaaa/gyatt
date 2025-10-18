@@ -13,6 +13,7 @@ test-repo/
 # Test files
 test_client
 test_client.c
+test_ipfs
 test*.txt
 develop.txt
 

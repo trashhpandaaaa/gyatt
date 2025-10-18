@@ -2,7 +2,7 @@
 
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -std=c11 -D_DEFAULT_SOURCE
-LDFLAGS = -lz 
+LDFLAGS = -lz -lcurl 
 
 # Directories
 SRC_DIR = src
@@ -16,6 +16,7 @@ SOURCES = $(SRC_DIR)/main.c \
           $(SRC_DIR)/object.c \
           $(SRC_DIR)/buffer.c \
           $(SRC_DIR)/index.c \
+          $(SRC_DIR)/ipfs/ipfs.c \
           $(SRC_DIR)/commands/init.c \
           $(SRC_DIR)/commands/add.c \
           $(SRC_DIR)/commands/commit.c \
@@ -65,6 +66,7 @@ $(BIN_DIR):
 $(BUILD_DIR):
 	@$(MKDIR) $(call FIXPATH,$(BUILD_DIR))
 	@$(MKDIR) $(call FIXPATH,$(BUILD_DIR)/commands)
+	@$(MKDIR) $(call FIXPATH,$(BUILD_DIR)/ipfs)
 
 clean:
 ifeq ($(OS),Windows_NT)
