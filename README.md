@@ -6,7 +6,7 @@ A version control system built from scratch in C. Like Git, but with some cool e
 
 Git is great, but I wanted to build something that:
 - Has a **built-in server** (no GitHub needed for private projects)
-- Will support **IPFS** for free decentralized hosting (coming soon!)
+- Supports **IPFS** for free decentralized hosting
 - Works with Git repos too (also coming soon)
 - Is actually understandable
 
@@ -19,8 +19,7 @@ All the basics: `init`, `add`, `commit`, `status`, `log`, `branch`, `checkout`
 Network push/pull (basic version working)  
 
 ## What's coming
-
-IPFS integration - host your code on the decentralized web for free  
+ 
 Git compatibility - push to GitHub, pull from any Git repo  
 Web UI - browse repos in your browser  
 Real-time collaboration features  
@@ -59,10 +58,9 @@ gyatt push 192.168.1.100:9999
 I'm building this in 30 steps:
 1. Core VCS features (init, add, commit, etc.)
 2. Built-in TCP server
-3. IPFS integration (next!)
-4. Git protocol support
-5. Web UI on IPFS
-6. Advanced features (encryption, collaboration, etc.)
+3. Git protocol support
+4. Web UI on IPFS
+5. Advanced features (encryption, collaboration, etc.)
 
 Check out the full roadmap in the code.
 
@@ -77,3 +75,4 @@ Found a bug? Have an idea? PRs welcome!
 ---
 
 Built with C and curiosity. Star if you think decentralized version control is cool 
+
